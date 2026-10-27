@@ -1,0 +1,200 @@
+/* ==========================================================================
+   GuardHai · assets/css/13-hero.css
+   Home hero slideshow — additive only.
+
+   The base hero (radius, gold shadow, the two-line copy, the brand chip) is
+   defined in 10-showcase.css / 11-refine.css and stays as it is. This sheet adds
+   the photo stack, the crossfade, a stronger scrim for legibility and the
+   dots/pause controls. Every value comes from 00-tokens.css.
+   ========================================================================== */
+
+.gh-hero {
+    position: relative;
+    height: 232px;
+    overflow: hidden;
+}
+
+/* photo stack: absolutely stacked so a crossfade never shifts the layout */
+.gh-hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.gh-hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity .9s ease;
+    background: linear-gradient(135deg, #0B4A38 0%, #0E6B52 55%, #123B63 100%);
+}
+
+.gh-hero-slide.is-active { opacity: 1; }
+
+/* each slide has its own fallback gradient, so a missing photo still looks
+   intentional instead of showing a broken image */
+.gh-hero-slide:nth-child(1) { background: linear-gradient(135deg, #0B4A38 0%, #12775A 60%, #15467A 100%); }
+.gh-hero-slide:nth-child(2) { background: linear-gradient(135deg, #123B63 0%, #14507A 55%, #0B4A38 100%); }
+.gh-hero-slide:nth-child(3) { background: linear-gradient(135deg, #0E5A6B 0%, #12775A 60%, #0B4A38 100%); }
+.gh-hero-slide:nth-child(4) { background: linear-gradient(135deg, #0B4A38 0%, #0D6E7A 55%, #123B63 100%); }
+.gh-hero-slide:nth-child(5) { background: linear-gradient(135deg, #123B63 0%, #0B4A38 60%, #12775A 100%); }
+
+.gh-hero .gh-hero-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+
+/* a photo that failed: keep the gradient, drop the <img> (no broken glyph) */
+.gh-hero-slide.is-failed img { display: none; }
+
+/* scrim: darker on the left where the copy sits, plus a floor for the meta line */
+.gh-hero::after {
+    z-index: 1;
+    /* green → blue identity overlay; the right third stays light so the event in
+       the photo is still recognisable */
+    background:
+        linear-gradient(96deg, rgba(6, 40, 32, .92) 0%, rgba(8, 46, 62, .74) 42%, rgba(16, 58, 96, .34) 100%),
+        linear-gradient(0deg, rgba(3, 22, 24, .52) 0%, rgba(3, 22, 24, .04) 62%);
+}
+
+.gh-hero-inner { z-index: 2; }
+
+.gh-hero-copy { max-width: 76%; }
+
+.gh-hero-title {
+    font-size: 20px;
+    line-height: 1.16;
+    letter-spacing: -0.2px;
+    text-shadow: 0 1px 8px rgba(3, 22, 18, .45);
+}
+
+.gh-hero-sub {
+    font-size: 16px;
+    line-height: 1.24;
+    margin-top: 2px;
+    color: #E8FFF7;
+    text-shadow: 0 1px 8px rgba(3, 22, 18, .45);
+}
+
+.gh-hero-desc {
+    margin-top: var(--gh-s2);
+    max-width: 34ch;
+    font-size: var(--gh-fs-caption);
+    line-height: 1.45;
+    font-weight: var(--gh-fw-regular);
+    color: rgba(240, 255, 250, .92);
+    text-shadow: 0 1px 6px rgba(3, 22, 18, .5);
+}
+
+.gh-hero-meta {
+    margin-top: var(--gh-s2);
+    color: rgba(234, 255, 247, .84);
+}
+
+.gh-hero-chip { align-self: flex-start; }
+
+/* ---------------------------------------------------------------- controls */
+.gh-hero-controls {
+    position: absolute;
+    bottom: var(--gh-s3);
+    right: var(--gh-s3);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s3);
+}
+
+.gh-hero-toggle {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--gh-r-pill);
+    border: 1px solid rgba(255, 255, 255, .34);
+    background: rgba(6, 32, 26, .42);
+    color: #FFFFFF;
+    backdrop-filter: blur(3px);
+    cursor: pointer;
+    transition: background .2s ease;
+}
+
+.gh-hero-toggle:hover { background: rgba(6, 32, 26, .62); }
+.gh-hero-toggle .ic { width: 14px; height: 14px; stroke-width: 2.1; }
+
+.gh-hero-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 8px;
+    border-radius: var(--gh-r-pill);
+    background: rgba(6, 32, 26, .42);
+    border: 1px solid rgba(255, 255, 255, .22);
+    backdrop-filter: blur(3px);
+}
+
+.gh-hero-dot {
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--gh-r-pill);
+    background: rgba(255, 255, 255, .45);
+    cursor: pointer;
+    transition: width .25s ease, background .25s ease;
+}
+
+.gh-hero-dot.is-active {
+    width: 16px;
+    background: #FFFFFF;
+}
+
+/* Touch targets stay comfortable even though the dot reads small. */
+.gh-hero-dot::before {
+    content: "";
+    position: absolute;
+    inset: -9px;
+}
+
+.gh-hero-dot { position: relative; }
+
+/* ------------------------------------------------------------- responsive */
+@media (max-width: 619px) {
+    /* the icon mark and the meta strip are decorative: on a phone the three
+       required lines get the whole width instead */
+    .gh-hero-mark { display: none; }
+    .gh-hero-meta { display: none; }
+    .gh-hero-copy { max-width: 100%; padding-bottom: 14px; }
+    /* copy is bottom-anchored on a phone, so the controls take the free top
+       corner instead of sitting on top of the last text line */
+    .gh-hero-controls { top: var(--gh-s3); bottom: auto; }
+}
+
+@media (max-width: 359px) {
+    .gh-hero { height: 244px; }
+}
+
+@media (min-width: 620px) {
+    .gh-hero { height: 288px; }
+    .gh-hero-inner { align-items: center; }
+    .gh-hero-title { font-size: 24px; }
+    .gh-hero-sub { font-size: 19px; }
+    .gh-hero-desc { font-size: var(--gh-fs-small); max-width: 40ch; }
+    .gh-hero-copy { max-width: 62%; }
+}
+
+@media (min-width: 1024px) {
+    .gh-hero { height: 332px; }
+    .gh-hero-title { font-size: 28px; }
+    .gh-hero-sub { font-size: 21px; }
+    .gh-hero-desc { font-size: var(--gh-fs-body); max-width: 44ch; }
+}
+
+/* --------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .gh-hero-slide { transition: none; }
+    .gh-hero-dot { transition: none; }
+}

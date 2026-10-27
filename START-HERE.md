@@ -18,7 +18,7 @@ Fungua `http://127.0.0.1:8123/index.html`.
 
 ```
 index.html                  markup + sprite + <script type="module" src="./src/main.js">
-assets/css/                 01-core … 09-profile (hupakiwa kwa mpangilio)
+assets/css/                 01-core … 11-refine (hupakiwa kwa mpangilio)
 src/core/                   bus, store, dom, format, id, logger
 src/domain/                 Post, media, engagement, comment, profile/roles — sheria pekee
 src/data/                   IndexedDB + repositories + personas/posts za sampuli
@@ -28,7 +28,7 @@ src/i18n/                   sw/en
 src/engines/                shield (mixes 7), auth, navigation, boot
 src/features/               home, feed, composer, engagement, profile, emergency, map
 src/mocks/                  SOS, push, BLE, guardians — sehemu pekee ya kuiga
-tests/                      home · composer · bugfix · profile (Playwright)
+tests/                      home · composer · bugfix · profile · showcase · refine (Playwright)
 tools/                      verify_app.py · run_tests.sh · pkg_redact.py
 docs/                       ARCHITECTURE.md na ripoti zote
 backup/                     toleo la faili moja (kumbukumbu) + checkpoints
@@ -39,6 +39,9 @@ backup/                     toleo la faili moja (kumbukumbu) + checkpoints
 **Halisi (kwenye kifaa hiki):** uwanja, wasifu wenye majukumu na rangi zake,
 kihariri, viambatisho (IndexedDB), engagement (Imenisaidia/Maoni/Shiriki/Hifadhi),
 majibu ya maoni, report, rasimu, Shield, i18n, ramani.
+
+**Picha:** kumi zilizotengenezwa kwa ajili ya build hii ziko `assets/img/` —
+ni faili za ndani, si viungo vya mtandaoni.
 
 **Ni ombi tu:** uthibitisho wa leseni/taasisi. Mtu anaweza kuomba; hakuna
 mthibitishaji, kwa hiyo hakuna beji inayotokea kwa kuchagua jukumu.
@@ -51,7 +54,7 @@ ukweli (`{ ok: false, simulated: true }`) — hakuna ufanisi wa kughushi.
 
 ```bash
 python3 tools/verify_app.py        # 12/12
-bash tools/run_tests.sh            # 175/175 (home 60, composer 72, bugfix 23, profile 20)
+bash tools/run_tests.sh            # 307/307 (home 62, composer 72, bugfix 23, profile 20, showcase 20, refine 29, posttypes 33, hero 23, identity 25)
 ```
 
 ## 5. Usomaji wa lazima

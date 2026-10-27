@@ -50,7 +50,7 @@ def main() -> int:
     print("\n1. layout")
     css_parts = sorted((ROOT / "assets" / "css").glob("*.css"))
     linked = re.findall(r'<link rel="stylesheet" href="assets/css/([^"]+)">', html)
-    check("8 CSS parts, loaded in filename order",
+    check(f"{len(css_parts)} CSS parts, loaded in filename order",
           [p.name for p in css_parts] == linked,
           ", ".join(linked))
     check("one module entry, no classic script tags for app code",
@@ -117,7 +117,14 @@ def main() -> int:
     # ---------------------------------------------------------------- 7 wording
     print("\n7. product wording")
     offenders = []
-    pattern = re.compile(r"prototype|demo mode|\bDEMO\b", re.I)
+    pattern = re.compile(r"prototype|demo mode", re.I)
+    # The word DEMO is allowed only as an honesty marker: it must sit on a line
+    # that also says the action is not real (haitumwi / not transmitted / ...).
+    # This keeps the visible DEMO badge on the SOS card from turning into demo
+    # framing, which is what this check exists to stop.
+    demo_token = re.compile(r"\bDEMO\b")
+    demo_honest = re.compile(
+        r"haitumwi|haijathibitishwa|not transmitted|not verified|demo-chip|gh_demo", re.I)
     for path, text in list(sources.items()) + [(INDEX, html)]:
         rel = path.relative_to(ROOT)
         if str(rel).startswith(("src/mocks", "backup")):
@@ -125,6 +132,8 @@ def main() -> int:
         for lineno, line in enumerate(text.splitlines(), 1):
             if pattern.search(line):
                 offenders.append(f"{rel}:{lineno}")
+            elif demo_token.search(line) and not demo_honest.search(line):
+                offenders.append(f"{rel}:{lineno} (unqualified DEMO)")
     check("no prototype/demo framing in shipped code", not offenders, ", ".join(offenders[:5]))
 
     # ------------------------------------------------------------------- 8 size

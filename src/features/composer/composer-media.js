@@ -28,12 +28,18 @@ export function renderTray(attachments, errors) {
   }
   if (!host) return;
 
+  const addTile = `<li class="ghc-tile-add-wrap"><button type="button" class="ghc-tile-add" data-add-media
+      aria-label="Ongeza picha zaidi">
+      <svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>
+      <span>Ongeza zaidi</span>
+    </button></li>`;
+
   if (!attachments.length) {
     host.innerHTML = '<li class="ghc-tray-empty">Hakuna kiambatisho bado.</li>';
     return;
   }
 
-  host.innerHTML = attachments.map((a) => {
+  host.innerHTML = addTile + attachments.map((a) => {
     const busy = a.status === 'preparing';
     let preview;
     if (a.kind === 'image' && a.url) {

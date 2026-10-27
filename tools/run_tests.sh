@@ -19,7 +19,7 @@ echo
 python3 "${ROOT}/tools/verify_app.py" || fail=1
 echo
 
-for suite in home composer bugfix profile; do
+for suite in home composer bugfix profile showcase refine posttypes hero identity; do
   echo "── ${suite}.spec.js"
   node "${ROOT}/tests/${suite}.spec.js" "${URL}" | tail -3
   status=${PIPESTATUS[0]}

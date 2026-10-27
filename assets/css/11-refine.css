@@ -1,0 +1,649 @@
+/* ==========================================================================
+   GuardHai · assets/css/11-refine.css
+   Third visual pass — "UI design reference implementation".
+
+   Additive only: nothing here removes a control that 01–10 already style.
+   It reorganises three surfaces so they read like the reference board:
+
+     1. topic tiles on Home        (icon + label, 3 per row)
+     2. the post card head         (author left, Fuata + ⋮ right, chips below)
+     3. profile info cards         (role-shaped: facility, hours, area, service)
+     4. composer choice chips      (Mada / Watazamaji) + attachment tiles
+     5. the full action sheet      (all seven engagement actions as tiles)
+
+   Loaded last, so every rule below is a deliberate override of an earlier one.
+   ========================================================================== */
+
+/* ==================================================== 1. TOPIC TILES */
+.gh-topics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 2px 0 4px;
+    overflow: visible;
+}
+
+.gh-topic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 78px;
+    white-space: normal;          /* 04-home folds topics into a nowrap pill row */
+    flex-shrink: 1;
+    font-size: 10.4px;
+    padding: 10px 6px;
+    border: 1px solid #E4EFEA;
+    border-radius: 16px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(9, 30, 46, .04);
+    text-align: center;
+    line-height: 1.15;
+    transition: transform .12s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.gh-topic-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    background: #F1F7F5;
+    color: #0E8F6E;
+}
+
+.gh-topic-ico .ic { width: 17px; height: 17px; stroke-width: 1.9; }
+
+.gh-topic-label {
+    font-size: 10.4px;
+    font-weight: 700;
+    color: #2C3A4B;
+    letter-spacing: .1px;
+}
+
+.gh-topic[data-topic="health"] .gh-topic-ico { background: #E9F0FE; color: #2563EB; }
+.gh-topic[data-topic="disaster"] .gh-topic-ico { background: #FDEBEA; color: #DC2626; }
+.gh-topic[data-topic="digital"] .gh-topic-ico { background: #F1EBFE; color: #7C3AED; }
+.gh-topic[data-topic="crime"] .gh-topic-ico { background: #EAF6EF; color: #127A5B; }
+
+.gh-topic:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(9, 30, 46, .08); }
+
+.gh-topic.is-active {
+    border-color: var(--gh-green, #18A982);
+    background: #F4FBF8;
+    box-shadow: 0 0 0 2px rgba(24, 169, 130, .12);
+}
+
+.gh-topic.is-active .gh-topic-ico { background: var(--gh-green, #18A982); color: #FFFFFF; }
+.gh-topic.is-active .gh-topic-label { color: #0B5C46; }
+
+/* ==================================================== 2. POST CARD HEAD */
+.gh-post-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.gh-post-author {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+    flex: 1 1 auto;
+    text-align: left;
+}
+
+.gh-post-avatar {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.gh-post-who {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.gh-post-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--gh-ink, #0B1F2A);
+    line-height: 1.25;
+}
+
+.gh-post-role {
+    font-size: 11.4px;
+    font-weight: 700;
+    color: var(--gh-role-ink, #127A5B);
+}
+
+.gh-post-time {
+    font-size: 10.8px;
+    font-weight: 500;
+    color: var(--gh-muted, #6B7C88);
+}
+
+.gh-post-headend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 0 0 auto;
+}
+
+/* the header ⋮ is deliberately NOT .gh-act: the five-button rail keeps its
+   own ⋮ so the rail stays a five-control group (test S9). */
+.gh-post-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid #E4EFEA;
+    border-radius: 12px;
+    background: #FFFFFF;
+    color: #4A5B67;
+}
+
+.gh-post-more .ic { width: 18px; height: 18px; }
+.gh-post-more:hover { background: #F4FBF8; border-color: #CFE7DD; }
+
+/* chips row (type + Sampuli + topic + audience) — was the old topline */
+.gh-post-topline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;   /* 10-showcase spread the chips apart */
+    gap: 6px;
+    margin: 8px 0 0;
+}
+
+.gh-post-audience {
+    font-size: 10.4px;
+    font-weight: 600;
+    color: var(--gh-muted, #6B7C88);
+    background: #F4F7F6;
+    border-radius: 999px;
+    padding: 4px 9px;
+}
+
+.gh-post-topic {
+    font-size: 10.4px;
+    font-weight: 700;
+    color: #127A5B;
+    background: #EAF6EF;
+    border-radius: 999px;
+    padding: 4px 9px;
+}
+
+/* ==================================================== 3. PROFILE INFO CARDS */
+.gh-profile-infocards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 10px 0 2px;
+}
+
+.gh-profile-infocard {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid #E4EFEA;
+    border-radius: 14px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(9, 30, 46, .04);
+}
+
+.gh-profile-infocard-ico {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    background: var(--gh-role-soft, #F1F7F5);
+    color: var(--gh-role-ink, #127A5B);
+}
+
+.gh-profile-infocard-ico .ic { width: 16px; height: 16px; stroke-width: 1.9; }
+
+.gh-profile-infocard-txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.gh-profile-infocard-txt b { font-size: 10.6px; font-weight: 700; color: #6B7C88; letter-spacing: .1px; }
+.gh-profile-infocard-txt span { font-size: 12.2px; font-weight: 700; color: #16202A; line-height: 1.3; overflow-wrap: anywhere; }
+
+.gh-profile-infocard-note {
+    margin: 6px 2px 0;
+    font-size: 10.4px;
+    color: #8A97A1;
+    line-height: 1.35;
+}
+
+.gh-profile-affil {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.2px;
+    font-weight: 600;
+    color: #3B4A55;
+    margin: 4px 0 0;
+    overflow-wrap: anywhere;
+}
+
+/* ==================================================== 4a. COMPOSER CHOICES */
+.ghc-choice { display: flex; flex-direction: column; gap: 7px; margin: 12px 0 2px; }
+
+.ghc-topicchips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.ghc-topicchip {
+    padding: 8px 13px;
+    border: 1px solid #E1EAE6;
+    border-radius: 999px;
+    background: #FFFFFF;
+    font-size: 11.6px;
+    font-weight: 700;
+    color: #40515C;
+    line-height: 1;
+}
+
+.ghc-topicchip.is-active {
+    border-color: transparent;
+    color: #FFFFFF;
+    background: var(--gh-green, #18A982);
+    box-shadow: 0 4px 10px rgba(24, 169, 130, .24);
+}
+
+.ghc-topicchip.is-topic-disaster.is-active { background: #DC2626; box-shadow: 0 4px 10px rgba(220, 38, 38, .22); }
+.ghc-topicchip.is-topic-health.is-active { background: #2563EB; box-shadow: 0 4px 10px rgba(37, 99, 235, .22); }
+.ghc-topicchip.is-topic-crime.is-active { background: #B45309; box-shadow: 0 4px 10px rgba(180, 83, 9, .22); }
+.ghc-topicchip.is-topic-digital.is-active { background: #7C3AED; box-shadow: 0 4px 10px rgba(124, 58, 237, .22); }
+
+.ghc-audchips { display: flex; flex-wrap: wrap; gap: 7px; }
+
+.ghc-audchip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 13px;
+    border: 1px solid #E1EAE6;
+    border-radius: 999px;
+    background: #FFFFFF;
+    font-size: 11.6px;
+    font-weight: 700;
+    color: #40515C;
+    line-height: 1;
+}
+
+.ghc-audchip .ic { width: 15px; height: 15px; }
+
+.ghc-audchip.is-active {
+    background: var(--gh-green, #18A982);
+    border-color: transparent;
+    color: #FFFFFF;
+    box-shadow: 0 4px 10px rgba(24, 169, 130, .24);
+}
+
+/* the native selects stay in the DOM (drafts, validation, HomeUI) but are
+   visually replaced by the chips above — still reachable by keyboard. */
+.ghc-native {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.ghc-native:focus-within {
+    position: static;
+    width: auto;
+    height: auto;
+    clip: auto;
+    clip-path: none;
+    white-space: normal;
+}
+
+.ghc-native .ghc-select { width: 100%; }
+
+.ghc-checkline {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 12px 0 2px;
+    font-size: 12.4px;
+    font-weight: 600;
+    color: #3B4A55;
+}
+
+.ghc-checkline input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--gh-green, #18A982);
+}
+
+/* ==================================================== 4b. ATTACHMENT TILES */
+.ghc-tray {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 0;
+    margin: 10px 0 0;
+    list-style: none;
+}
+
+.ghc-att {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #E4EFEA;
+    border-radius: 14px;
+    background: #FFFFFF;
+    overflow: hidden;
+    padding: 0 0 8px;
+}
+
+.ghc-att .ghc-thumb {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+    display: block;
+}
+
+.ghc-att .ghc-thumb-audio { width: 100%; height: 34px; margin-top: 6px; }
+
+.ghc-att .ghc-thumb-ico {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    background: #F4F8F6;
+    color: #4A5B67;
+    border-radius: 12px 12px 0 0;
+}
+
+.ghc-att .ghc-thumb-ico .ic { width: 24px; height: 24px; }
+
+.ghc-att-meta { padding: 6px 8px 0; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ghc-att-meta b { font-size: 10.4px; font-weight: 700; color: #16202A; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ghc-att-meta span { font-size: 9.6px; color: #7A8994; }
+.ghc-att-tag { font-size: 9.4px !important; color: #9AA7AF !important; }
+
+.ghc-att-actions {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    display: flex;
+    gap: 4px;
+}
+
+.ghc-att-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(11, 31, 42, .72);
+    color: #FFFFFF;
+    backdrop-filter: blur(2px);
+}
+
+.ghc-att-btn .ic { width: 13px; height: 13px; }
+.ghc-att-btn:hover { background: rgba(11, 31, 42, .9); }
+.ghc-att-del { background: #DC2626; }
+.ghc-att-del:hover { background: #B91C1C; }
+
+/* the "add more" tile is first in the DOM (so :last-child still means the
+   last attachment) and last on screen via order. */
+.ghc-att { order: 1; }
+.ghc-tile-add-wrap { display: flex; order: 2; }
+
+.ghc-tile-add {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    aspect-ratio: 1 / 1;
+    border: 1.5px dashed #C9DCD4;
+    border-radius: 14px;
+    background: #FAFDFB;
+    color: #4A7C6B;
+    font-size: 10.4px;
+    font-weight: 700;
+}
+
+.ghc-tile-add .ic { width: 20px; height: 20px; }
+.ghc-tile-add:hover { border-color: var(--gh-green, #18A982); background: #F2FAF7; }
+
+.ghc-tray-empty { grid-column: 1 / -1; }
+
+/* ==================================================== 5. ACTION SHEET */
+.gh-actionsheet {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 6px 0 10px;
+}
+
+.gh-actionsheet-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px;
+    border: 1px solid #E4EFEA;
+    border-radius: 14px;
+    background: #FFFFFF;
+    text-align: left;
+    min-height: 60px;
+}
+
+.gh-actionsheet-item[disabled] { opacity: .5; }
+
+.gh-actionsheet-ico {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    background: #EAF6EF;
+    color: #0E8F6E;
+}
+
+.gh-actionsheet-ico .ic { width: 18px; height: 18px; stroke-width: 1.9; }
+
+.gh-actionsheet-txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.gh-actionsheet-txt b { font-size: 12px; font-weight: 800; color: #16202A; }
+.gh-actionsheet-txt span { font-size: 10.2px; color: #7A8994; line-height: 1.25; }
+
+.gh-sheet-fine { font-size: 10.6px; color: #8A97A1; }
+
+/* ==================================================== 6. SMALL SCREENS */
+@media (max-width: 380px) {
+    .gh-topics { gap: 6px; }
+    .gh-topic { min-height: 72px; padding: 8px 4px; }
+    .gh-topic-label { font-size: 9.8px; }
+    .gh-profile-infocards { grid-template-columns: 1fr; }
+    .ghc-tray { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+    .ghc-att-meta b { font-size: 9.8px; }
+    .gh-actionsheet { grid-template-columns: 1fr; }
+    .gh-post-avatar { width: 40px; height: 40px; }
+    .gh-post-name { font-size: 13.2px; }
+}
+
+@media (min-width: 720px) {
+    .gh-topics { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .ghc-tray { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* respect a reduced-motion preference for the new transforms */
+@media (prefers-reduced-motion: reduce) {
+    .gh-topic, .gh-topic-ico { transition: none; }
+    .gh-topic:hover { transform: none; }
+}
+
+/* ==================================================== 7. HEADER AVATAR */
+/* Replaces the old external ui-avatars.com hotlink: initials of the real
+   profile, or a neutral person glyph before anyone registers. */
+.gh-avatar-fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #EAF6EF;
+    color: #0E8F6E;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .2px;
+    line-height: 1;
+}
+
+.gh-avatar-fallback .ic { width: 17px; height: 17px; stroke-width: 2; }
+
+/* ==================================================== 8. FIT & POLISH PASS */
+/* Topic labels wrap inside their tile instead of pushing the grid wider. */
+.gh-topic-label {
+    max-width: 100%;
+    font-size: 10px;
+    line-height: 1.18;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    text-wrap: balance;
+}
+
+.gh-topic { overflow: hidden; }
+
+/* Attachment tiles share one track width, whatever the file name is. */
+.ghc-att, .ghc-tile-add-wrap { min-width: 0; }
+.ghc-att-meta b { max-width: 100%; }
+
+/* Five media buttons on one row like the reference, three per row on the
+   narrowest phones. All five controls stay — nothing is dropped. */
+.ghc-media { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.ghc-media-btn { width: 100%; }
+
+@media (min-width: 360px) {
+    .ghc-media { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+    .ghc-media-btn { padding: 9px 4px; }
+    .ghc-media-btn span { font-size: 9.8px; }
+    .ghc-media-btn .ic { width: 20px; height: 20px; }
+}
+
+/* Quick actions become the reference's rounded-square pastel tiles. The six
+   destinations and their handlers are unchanged. */
+.gh-qa-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 6px; }
+
+.gh-qa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.gh-qa-ico {
+    width: 52px;
+    height: 52px;
+    border-radius: 18px;
+}
+
+.gh-qa-ico .ic { width: 24px; height: 24px; }
+.gh-qa-label { max-width: 100%; text-align: center; overflow-wrap: anywhere; line-height: 1.15; }
+
+@media (min-width: 360px) {
+    .gh-qa-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px 4px; }
+    .gh-qa-ico { width: 46px; height: 46px; border-radius: 16px; }
+    .gh-qa-ico .ic { width: 22px; height: 22px; }
+    .gh-qa-label { font-size: 9.4px; }
+}
+
+/* The detected-device line belongs in the safety sheet, not on the home strip:
+   on the strip it reads like leftover machine text. */
+.gh-safety .gh-safety-device { display: none !important; }
+
+/* Info-card typography: small quiet label, strong value (as in the reference). */
+.gh-profile-infocard-txt b { font-weight: 600; letter-spacing: .2px; }
+.gh-profile-infocard-txt span { font-weight: 700; font-size: 11.8px; }
+
+/* Hero: copy reads left-aligned with the brand chip under it, like the board. */
+.gh-hero-inner { justify-content: flex-start; align-items: flex-end; text-align: left; }
+.gh-hero-copy { align-items: flex-start; text-align: left; }
+.gh-hero-chip {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .18);
+    border: 1px solid rgba(255, 255, 255, .34);
+    color: #FFFFFF;
+    font-size: 10.6px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    backdrop-filter: blur(2px);
+}
+
+/* Safety strip: text gets the full width, the action sits under it (as on the
+   board) instead of squeezing the sentence into a 14-character column. */
+.gh-safety-row {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    grid-template-areas: "ico text" "cta cta";
+    align-items: start;
+    gap: 8px 10px;
+}
+
+.gh-safety-ico { grid-area: ico; }
+.gh-safety-text { grid-area: text; min-width: 0; }
+.gh-safety-row .gh-btn-outline {
+    grid-area: cta;
+    justify-self: stretch;
+    width: 100%;
+    height: 38px;
+    border-radius: 999px;
+    background: var(--gh-green, #18A982);
+    border-color: var(--gh-green, #18A982);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 12px;
+    justify-content: center;
+}
+
+.gh-safety-row .gh-btn-outline:hover { background: #128D6D; border-color: #128D6D; }
+.gh-safety-row .gh-btn-outline .ic { width: 15px; height: 15px; }
+.gh-safety-desc { font-size: 11.6px; line-height: 1.45; }
+
+/* Keep the six tile icons on one baseline even when a label needs two lines. */
+.gh-topic-label {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 2.4em;
+}
+
+@media (min-width: 720px) {
+    .gh-safety-row {
+        grid-template-columns: 34px minmax(0, 1fr) auto;
+        grid-template-areas: "ico text cta";
+        align-items: center;
+    }
+    .gh-safety-row .gh-btn-outline { justify-self: end; width: auto; padding: 0 18px; }
+}

@@ -1,0 +1,130 @@
+/* ==========================================================================
+   GuardHai · assets/css/00-tokens.css
+   P1 — single source of truth for the visual language.
+
+   Loaded before every other sheet. It only *defines* variables (plus three
+   safe global defaults: font stack, focus ring, icon stroke) so no existing
+   layout changes unless a rule opts in by using a token.
+   ========================================================================== */
+
+:root {
+    /* ---------------------------------------------------------------- brand */
+    --gh-green: #18A982;          /* primary — actions, trust, success      */
+    --gh-green-ink: #0B7A5F;      /* text on soft green                     */
+    --gh-green-deep: #0E8F6E;     /* gradient end                           */
+    --gh-green-soft: #EAF6EF;     /* tinted surface                         */
+    --gh-blue: #2563EB;           /* secondary — information, health        */
+    --gh-blue-soft: #E9F0FE;
+    --gh-amber: #B8860B;          /* institutions, warnings                 */
+    --gh-amber-soft: #FBF3E0;
+    --gh-red: #DC2626;            /* emergency only: SOS, disaster, danger  */
+    --gh-red-soft: #FDEBEA;
+    --gh-purple: #7C3AED;         /* education                              */
+    --gh-purple-soft: #F1EBFE;
+    --gh-teal: #0D9488;           /* volunteers                             */
+
+    /* ----------------------------------------------------------- neutrals */
+    --gh-ink: #0B1F2A;            /* headings                               */
+    --gh-text: #16202A;           /* body                                   */
+    --gh-muted: #6B7C88;          /* secondary text                         */
+    --gh-faint: #8A97A1;          /* captions                               */
+    --gh-line: #E4EFEA;           /* borders                                */
+    --gh-line-strong: #CFE0D9;
+    --gh-surface: #FFFFFF;
+    --gh-canvas: #F6FAF8;         /* page background                        */
+
+    /* ------------------------------------------------------------ spacing */
+    --gh-s1: 4px;
+    --gh-s2: 6px;
+    --gh-s3: 8px;
+    --gh-s4: 10px;
+    --gh-s5: 12px;
+    --gh-s6: 16px;
+    --gh-s7: 20px;
+    --gh-s8: 24px;
+
+    /* -------------------------------------------------------------- radii */
+    --gh-r-sm: 10px;
+    --gh-r-md: 14px;
+    --gh-r-lg: 18px;
+    --gh-r-xl: 22px;
+    --gh-r-pill: 999px;
+
+    /* ---------------------------------------------------------- typography */
+    --gh-font: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --gh-fs-micro: 9.6px;
+    --gh-fs-caption: 10.6px;
+    --gh-fs-small: 11.6px;
+    --gh-fs-body: 13px;
+    --gh-fs-lead: 14px;
+    --gh-fs-title: 16px;
+    --gh-fs-display: 20px;
+    --gh-fw-regular: 500;
+    --gh-fw-medium: 600;
+    --gh-fw-bold: 700;
+    --gh-fw-black: 800;
+
+    /* ------------------------------------------------------------ elevation */
+    --gh-shadow-1: 0 1px 2px rgba(9, 30, 46, .05);
+    --gh-shadow-2: 0 6px 16px rgba(9, 30, 46, .08);
+    --gh-shadow-3: 0 12px 26px rgba(9, 30, 46, .12);
+    --gh-ring: 0 0 0 3px rgba(24, 169, 130, .28);
+
+    /* ------------------------------------------------------ identity system */
+    /* the one green→blue gradient used by identity surfaces (hero, profile
+       header, page bands). Never used behind body copy. */
+    --gh-grad-identity: linear-gradient(135deg, #0E8F6E 0%, #0F7D8C 48%, #1D5FD1 100%);
+    --gh-grad-band: linear-gradient(135deg, rgba(234, 246, 239, .96) 0%, rgba(233, 240, 254, .96) 100%);
+    --gh-grad-band-line: #D9EAE4;
+    --gh-surface-alt: #F3F8F6;   /* light neutral behind cards                */
+
+    /* type chips: one hue per post type, always soft fill + dark ink so the
+       badge reads as metadata instead of a coloured block */
+    --gh-type-soft-disaster: #FDECEC; --gh-type-ink-disaster: #A11818;
+    --gh-type-soft-health:   #EAF1FE; --gh-type-ink-health:   #1D4ED8;
+    --gh-type-soft-safety:   #E7F6F0; --gh-type-ink-safety:   #0B6B52;
+    --gh-type-soft-org:      #FBF1DA; --gh-type-ink-org:      #8A5B00;
+    --gh-type-soft-learn:    #F0EAFE; --gh-type-ink-learn:    #5B21B6;
+    --gh-type-soft-aid:      #E6F7F5; --gh-type-ink-aid:      #0B6E63;
+
+    /* one icon scale — every context picks from these, never a raw px value */
+    --gh-icon-xs: 13px;          /* meta rows, chips                          */
+    --gh-icon-sm: 16px;          /* rails inside cards                        */
+    --gh-icon-md: 20px;          /* header actions                            */
+    --gh-icon-lg: 22px;          /* bottom navigation                         */
+    --gh-icon-xl: 24px;          /* quick actions, topic tiles                */
+
+    /* ------------------------------------------------------------- controls */
+    --gh-tap: 44px;               /* minimum touch target                    */
+    --gh-tap-sm: 36px;            /* compact controls inside cards           */
+    --gh-icon-stroke: 1.9;        /* one icon family → one stroke weight     */
+    --gh-icon-stroke-tiny: 2.1;   /* optical correction only under 14px      */
+
+    /* ------------------------------------- aliases so old CSS keeps working */
+    --gh-r-md-legacy: 16px;
+}
+
+/* One font stack + one icon weight for the whole product. */
+body,
+button,
+input,
+select,
+textarea {
+    font-family: var(--gh-font);
+}
+
+.ic {
+    stroke-width: var(--gh-icon-stroke);
+}
+
+/* Visible, consistent keyboard focus on every interactive surface. */
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: none;
+    box-shadow: var(--gh-ring);
+    border-radius: var(--gh-r-sm);
+}

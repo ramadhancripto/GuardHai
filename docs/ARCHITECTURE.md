@@ -122,7 +122,7 @@ is `appConfig.dataDriver = 'http'`, not a refactor.
 
 | File | Public API |
 |---|---|
-| `posts.service.js` | `listPosts`, `getPost`, `publishPost`, `deletePost`, `countPosts` |
+| `posts.service.js` | `listPosts`, `getPost`, `publishPost`, `deletePost`, `countPosts`, `findMyRepost`, `repost`, `undoRepost` |
 | `engagement.service.js` | `flagsFor`, `toggleFlag`, `listComments`, `addComment`, `commentCount`, `fileReport`, `listReports` |
 | `drafts.service.js` | `saveDraft`, `listDrafts`, `latestDraft`, `deleteDraft`, `countDrafts` |
 | `media.service.js` | `prepareAttachment`, `resolveUrl`, `primeUrls`, `getCachedUrl`, `releaseAttachment`, `releaseAll`, `storageUsage` |
@@ -136,11 +136,11 @@ Each write emits an event; nothing else needs to know who else is listening.
 
 | Folder | Files | Owns |
 |---|---|---|
-| `home/` | `home-controller.js`, `home-sheets.js` | navigation, menus, backdrops, sheet actions, `HomeUI` façade |
+| `home/` | `home-controller.js`, `home-sheets.js`, `search-bar.js` | navigation, menus, backdrops, sheet actions, the quick search row under the top nav, `HomeUI` façade |
 | `feed/` | `feed-view.js`, `post-card.js` | feed loading/rendering, topic filter, expand, lightbox |
 | `composer/` | `composer-view.js`, `composer-media.js` | form state, steps, attachments, recording, publish, drafts |
 | `engagement/` | `engagement-actions.js`, `comment-thread.js` | like/save/follow/share/report, comments |
-| `profile/` | `profile-view.js`, `profile-edit.js` | the profile overlay (cover, role accent, tabs, posts, evidence panel) and the edit/verification sheet |
+| `profile/` | `profile-view.js`, `profile-edit.js` | the profile overlay (photo cover, role accent, four tabs, evidence panel) and the edit/verification sheet with a local photo picker |
 | `emergency/` | `sos.js` | the single shared SOS handler (no dispatch claim, real numbers) |
 | `map/` | `map-view.js` | Leaflet initialisation and safety layers |
 
@@ -233,16 +233,20 @@ the smoke tests wait on it.
 
 ```bash
 python3 tools/verify_app.py                  # static integrity, 12 checks
-bash tools/run_tests.sh                      # 175 browser checks
+bash tools/run_tests.sh                      # 307 browser checks
 NODE_PATH=/tmp/pw/node_modules node tests/home.spec.js http://127.0.0.1:8123/index.html
 ```
 
 | Suite | Covers |
 |---|---|
-| `tests/home.spec.js` (60) | hero, safety sheet, SOS, quick actions, feed, composer basics, drafts, nav, English switch, responsive widths, duplicate ids, page errors |
+| `tests/home.spec.js` (62) | hero, safety sheet, SOS, quick actions, feed, repost + undo, composer basics, drafts, nav, English switch, responsive widths, duplicate ids, page errors |
 | `tests/composer.spec.js` (72) | attachment contract, validation (size/type/count), preview, publish, drafts, engagement, report, long text, gallery, recording UI, a11y |
-| `tests/profile.spec.js` (20) | five role personas, distinct accents/icons, profile sheet, licence ≠ institution, role never grants a badge, follow persistence, honest messaging, profile edit + reload, replies, five engagement actions intact |
+| `tests/showcase.spec.js` (20) | photo hero, SOS card + DEMO marker, six circular quick actions, type badges, warning band, photo profile + four tabs, local photo picker, in-device search, composer header, 320→1024px without overflow |
+| `tests/profile.spec.js` (20) | five role personas, distinct accents/icons, profile sheet, licence ≠ institution, role never grants a badge, follow persistence, honest messaging, profile edit + reload, replies, six engagement actions intact |
+| `tests/refine.spec.js` (29) | topic tiles, post head (author left / Fuata + ⋮ right), the six-action rail, the full action sheet, role-shaped profile info cards, editing the optional profile fields, composer topic/audience chips, the 2,000-character limit, attachment tiles, keep-a-draft, 320→1024px without overflow, no undocumented external request |
 | `tests/bugfix.spec.js` (23) | status bar, zoom, language symmetry, SOS honesty, dead references, sprite symbols, GHIcon, navigation, map, health tab, overflow |
+| `tests/hero.spec.js` (23) | five-photo hero: structure, crossfade timing, loop, pause/reduced-motion/visibility, missing-photo fallback, responsive widths, SOS + nav still work |
+| `tests/identity.spec.js` (25) | single search icon inside the search field + live filtering + scope, one icon family (sprite refs, 5-step sizes, single stroke), single identity gradient, hero overlay green+blue, white hero text, white content surfaces, profile band, chip contrast, SOS red, repost + undo, page/console errors |
 
 Tests read the shipped code (all of `src/`) rather than a single bundle, so a
 module that disappears is caught.
@@ -258,7 +262,7 @@ module that disappears is caught.
 5. Wire it in `home-controller.js` (or the owning controller) — no inline `onclick`
    for new work; use `data-*` + delegation.
 6. Add i18n keys to **both** dictionaries.
-7. Add a check to `tools/verify_app.py` or a test, then run all four suites.
+7. Add a check to `tools/verify_app.py` or a test, then run all nine suites (`tools/run_tests.sh`).
 
 ### Trust rules that new work must keep
 
@@ -269,4 +273,11 @@ module that disappears is caught.
   `{ ok: false, reason: 'not-connected' }` from `src/mocks/`; the UI says so.
 * **Sample data is labelled.** `sample: true` rows and personas always carry the
   `Sampuli` badge and are never written into storage.
+* **No invented numbers.** Followers, likes and comment counts render only from
+  rows that exist in IndexedDB. The design's headline figures are deliberately
+  not reproduced.
+* **Photographs are shipped files.** `assets/img/*.jpg` are local; nothing is
+  hotlinked, so the app has no external image dependency.
+* **Colour is never the only cue.** Type badges, verification states and alert
+  bands all carry a word next to the colour.
 8. Keep every file under ~600 lines; if it grows, split by responsibility.

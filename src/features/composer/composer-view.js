@@ -13,7 +13,7 @@ import {
 import { publishPost } from '../../services/posts.service.js';
 import { saveDraft, latestDraft, countDrafts } from '../../services/drafts.service.js';
 import { postCard } from '../feed/post-card.js';
-import { validateDraft, POST_TYPES } from '../../domain/post.js';
+import { validateDraft, POST_TYPES, normalizeTopic, topicLabel, DEFAULT_TOPIC } from '../../domain/post.js';
 import { currentUser } from '../../services/session.service.js';
 import { toast } from '../../ui/toast.js';
 import { escapeHtml } from '../../core/dom.js';
@@ -41,10 +41,43 @@ export function wireComposer() {
   bindCount('ghcTitleInput', 'ghcTitleCount');
 
   document.querySelectorAll('#ghcTypes .ghc-chip').forEach((chip) => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('#ghcTypes .ghc-chip').forEach((c) => c.classList.remove('is-active'));
-      chip.classList.add('is-active');
-      composerState.type = chip.dataset.type;
+    chip.addEventListener('click', () => setType(chip.dataset.type));
+  });
+
+  // Mada / Watazamaji chips drive the native <select> that remains the single
+  // source of truth for drafts, validation and the public HomeUI API.
+  document.querySelectorAll('#ghcTopicChips [data-topic-chip]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const select = $('ghcTopic');
+      if (select) { select.value = btn.dataset.topicChip; select.dispatchEvent(new Event('change', { bubbles: true })); }
+      syncChoiceChips();
+    });
+  });
+  document.querySelectorAll('#ghcAudienceChips [data-aud-chip]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const select = $('ghcAudience');
+      if (select) { select.value = btn.dataset.audChip; select.dispatchEvent(new Event('change', { bubbles: true })); }
+      syncChoiceChips();
+    });
+  });
+  ['ghcTopic', 'ghcAudience'].forEach((id) => {
+    const select = $(id);
+    if (select) select.addEventListener('change', syncChoiceChips);
+  });
+  syncChoiceChips();
+
+  /* Shortcut chips touch exactly one field each: "Elimu" sets the type, the
+     other five set the topic. Neither changes the other axis. */
+  document.querySelectorAll('#ghcShortcuts [data-shortcut]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.shortcut;
+      if (key === 'elimu') {
+        setType('elimu');
+      } else {
+        const select = $('ghcTopic');
+        if (select) { select.value = key; select.dispatchEvent(new Event('change', { bubbles: true })); }
+      }
+      syncChoiceChips();
     });
   });
 
@@ -67,6 +100,7 @@ export function wireComposer() {
   const tray = $('ghcAttachments');
   if (tray) {
     tray.addEventListener('click', async (ev) => {
+      if (ev.target.closest('[data-add-media]')) { pickMedia('image'); return; }
       const remove = ev.target.closest('[data-att-remove]');
       if (remove) {
         removeAttachment(remove.dataset.attRemove, composerState.attachments);
@@ -86,8 +120,42 @@ export function wireComposer() {
   }
 }
 
+/** paint the visible chips from the native selects (no second state) */
+export function syncChoiceChips() {
+  const topic = $('ghcTopic');
+  const audience = $('ghcAudience');
+  document.querySelectorAll('#ghcTopicChips [data-topic-chip]').forEach((btn) => {
+    const on = !!topic && btn.dataset.topicChip === topic.value;
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-pressed', String(on));
+  });
+  document.querySelectorAll('#ghcAudienceChips [data-aud-chip]').forEach((btn) => {
+    const on = !!audience && btn.dataset.audChip === audience.value;
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-pressed', String(on));
+  });
+  document.querySelectorAll('#ghcShortcuts [data-shortcut]').forEach((btn) => {
+    const key = btn.dataset.shortcut;
+    const on = key === 'elimu' ? composerState.type === 'elimu' : (!!topic && topic.value === key);
+    btn.classList.toggle('is-active', on);
+    btn.setAttribute('aria-pressed', String(on));
+  });
+}
+
+/** Set the post type (one axis) and repaint both chip groups. */
+export function setType(type) {
+  composerState.type = type;
+  document.querySelectorAll('#ghcTypes .ghc-chip').forEach((chip) => {
+    const on = chip.dataset.type === type;
+    chip.classList.toggle('is-active', on);
+    chip.setAttribute('aria-pressed', String(on));
+  });
+  syncChoiceChips();
+}
+
 function render() {
   renderTray(composerState.attachments, composerState.errors);
+  syncChoiceChips();
   const row = $('ghcDraftRow');
   if (row && composerState.step === 'edit') renderDraftRow();
 }
@@ -96,6 +164,7 @@ function render() {
 export async function openComposer() {
   composerState.attachments = [];
   composerState.errors = [];
+  syncChoiceChips();
   setStep('edit');
   const modal = $('ghComposer');
   if (modal) modal.classList.add('open');
@@ -161,7 +230,7 @@ export function setStep(step) {
   const label = $('ghcStepLabel');
   if (label) label.textContent = preview ? '2/2' : '1/2';
   const title = $('ghcTitle');
-  if (title) title.textContent = preview ? 'Hakiki chapisho' : 'Shiriki Elimu';
+  if (title) title.textContent = preview ? 'Hakiki chapisho' : 'Tuma Chapisho';
   const publish = $('ghcPublish');
   if (publish) {
     const span = publish.querySelector('span');
@@ -236,8 +305,10 @@ export function readForm() {
     title: $('ghcTitleInput')?.value.trim() || '',
     text: $('ghcText')?.value.trim() || '',
     type: composerState.type,
-    topic: topicSel ? topicSel.value : 'people',
-    topicLabel: topicSel ? topicSel.options[topicSel.selectedIndex].textContent.trim() : 'Usalama wa Watu',
+    topic: topicSel ? normalizeTopic(topicSel.value) : DEFAULT_TOPIC,
+    topicLabel: topicSel
+      ? topicSel.options[topicSel.selectedIndex].textContent.trim()
+      : topicLabel(DEFAULT_TOPIC),
     audience: audSel ? audSel.value : 'public',
     media: composerState.attachments.filter((a) => a.status !== 'error')
   };
@@ -292,6 +363,10 @@ export async function publish() {
     button.classList.add('is-loading');
     const span = button.querySelector('span');
     if (span) span.textContent = 'Inaandaa…';
+  }
+
+  if ($('ghcKeepDraft')?.checked) {
+    try { await saveDraft(form); await renderDraftRow(); } catch { /* the draft copy is optional */ }
   }
 
   const result = await publishPost(form);
@@ -352,8 +427,10 @@ export async function loadLatestDraft() {
   if (text) { text.value = draft.text || ''; text.dispatchEvent(new Event('input')); }
   if (title) { title.value = draft.title || ''; title.dispatchEvent(new Event('input')); }
 
-  const topic = $('ghcTopic'); if (topic && draft.topic) topic.value = draft.topic;
+  const topic = $('ghcTopic');
+  if (topic && draft.topic) topic.value = normalizeTopic(draft.topic);   // schema v1 → v2
   const audience = $('ghcAudience'); if (audience && draft.audience) audience.value = draft.audience;
+  syncChoiceChips();
   document.querySelectorAll('#ghcTypes .ghc-chip').forEach((chip) => {
     chip.classList.toggle('is-active', chip.dataset.type === draft.type);
   });

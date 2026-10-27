@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+    <link rel="stylesheet" href="assets/css/00-tokens.css">
     <link rel="stylesheet" href="assets/css/01-core.css">
     <link rel="stylesheet" href="assets/css/02-shield.css">
     <link rel="stylesheet" href="assets/css/03-ui-kit.css">
@@ -26,6 +27,11 @@
     <link rel="stylesheet" href="assets/css/07-responsive.css">
     <link rel="stylesheet" href="assets/css/08-composer.css">
     <link rel="stylesheet" href="assets/css/09-profile.css">
+    <link rel="stylesheet" href="assets/css/10-showcase.css">
+    <link rel="stylesheet" href="assets/css/11-refine.css">
+    <link rel="stylesheet" href="assets/css/12-posttypes.css">
+    <link rel="stylesheet" href="assets/css/13-hero.css">
+    <link rel="stylesheet" href="assets/css/14-identity.css">
 </head>
 <body>
     <!-- SYSTEM STATUS BAR: always visible, states plainly which services are not connected -->
@@ -57,6 +63,8 @@
         <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
         <symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
         <symbol id="i-play" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></symbol>
+        <symbol id="i-repost" viewBox="0 0 24 24"><path d="m2 9 3-3 3 3"/><path d="M13 18H7a2 2 0 0 1-2-2V6"/><path d="m22 15-3 3-3-3"/><path d="M11 6h6a2 2 0 0 1 2 2v10"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></symbol>
         <symbol id="i-hdd" viewBox="0 0 24 24"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></symbol>
         <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
         <symbol id="i-more-vertical" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></symbol>
@@ -241,7 +249,7 @@
                     <label class="form-label" for="reg-name">First Name *</label>
                     <div class="input-wrap">
                         <span class="lead"><svg class="ic"><use href="#i-user"/></svg></span>
-                        <input id="reg-name" type="text" class="input-field" required placeholder="DR KAPAMA" autocomplete="name" spellcheck="false">
+                        <input id="reg-name" type="text" class="input-field" required placeholder="Jina lako kamili" autocomplete="name" spellcheck="false">
                     </div>
                 </div>
                 <div class="form-group">
@@ -363,7 +371,9 @@
              onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();HomeUI.go('home');}"
              aria-label="GuardHai — nyumbani">
             <span class="gh-logo" aria-hidden="true"><svg class="ic"><use href="#i-shield-check"/></svg></span>
-            <span class="gh-brand-name">GuardHai</span>
+            <span class="gh-brand-block">
+                <span class="gh-brand-name">GuardHai</span>
+            </span>
         </div>
 
         <!-- Order is fixed: Storage, Notifications, Account, More -->
@@ -374,9 +384,12 @@
             <button type="button" class="gh-icon-btn" onclick="HomeUI.openNotifications()" aria-label="Notifications" title="Notifications">
                 <svg class="ic"><use href="#i-bell"/></svg>
                 <span class="gh-dot" id="ghNotifDot" aria-hidden="true"></span>
+                <span class="gh-count-dot" id="ghNotifCount" hidden>0</span>
             </button>
             <button type="button" class="gh-icon-btn gh-icon-btn-avatar" onclick="HomeUI.openAccount()" aria-label="Account" title="Account">
-                <img id="topNavUserPic" class="gh-avatar" alt="" src="https://ui-avatars.com/api/?name=DR+KAPAMA&background=1565FF&color=fff">
+                <span id="topNavUserPic" class="gh-avatar gh-avatar-fallback" aria-hidden="true">
+                    <svg class="ic"><use href="#i-user"/></svg>
+                </span>
             </button>
             <button type="button" class="gh-icon-btn" id="ghMoreBtn" onclick="HomeUI.toggleMore(event)"
                     aria-label="More" aria-haspopup="true" aria-expanded="false" title="More">
@@ -406,12 +419,37 @@
         </div>
     </header>
 
+    <!-- Quick search — the single search entry point, sitting just under the top
+         row. Typing filters the feed (HomeUI.searchFeed → setQuery); the icon in
+         the field opens the full-results sheet. -->
+    <div class="gh-searchbar" id="ghSearchBar" hidden>
+        <div class="gh-searchbar-inner">
+            <div class="gh-searchbar-field">
+                <!-- the only search icon in the app: typing filters the feed, the
+                     icon itself opens the advanced (full results) sheet -->
+                <button type="button" class="gh-searchbar-open" id="ghSearchBarOpen"
+                        onclick="HomeUI.openSearch()" aria-label="Tafuta kwenye Uwanja"
+                        title="Utafutaji wa kina">
+                    <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+                </button>
+                <input id="ghSearchBarInput" type="search" autocomplete="off"
+                       placeholder="Tafuta kwenye Uwanja…" aria-label="Tafuta kwenye Uwanja"
+                       aria-describedby="ghSearchBarHint">
+                <button type="button" class="gh-searchbar-clear" id="ghSearchBarClear"
+                        aria-label="Ondoa utafutaji" hidden>
+                    <svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>
+                </button>
+            </div>
+            <p class="gh-searchbar-hint" id="ghSearchBarHint" role="status"></p>
+        </div>
+    </div>
+
     <!-- SIDEBAR DRAWER -->
     <div id="sidebarOverlay" class="drawer-overlay" onclick="toggleSidebar(false)"></div>
     <div id="sidebarDrawer" class="sidebar-drawer">
         <div class="sidebar-header" onclick="toggleSidebar(false); HomeUI.openMyProfile();" role="button" tabindex="0"
              aria-label="Fungua wasifu wangu">
-            <b style="font-size: 15px;" id="sidebarUserName">DR KAPAMA</b>
+            <b style="font-size: 15px;" id="sidebarUserName">Mtumiaji</b>
             <span style="font-size: 11px; color: #3EF0A2;">● Device Guardian Engine Active</span>
         </div>
         <div class="sidebar-menu-list">
@@ -425,28 +463,124 @@
     <!-- PAGE 1: HOME -->
     <div id="homePage" class="page-container gh-home">
 
-        <!-- B. Welcome -->
+        <!-- B. Greeting -->
         <section class="gh-welcome">
             <h1 class="gh-welcome-title" data-i18n="gh_welcome">Karibu GuardHai</h1>
             <p class="gh-welcome-sub" data-i18n="gh_welcome_sub">Usalama wako, afya yako, maisha yako.</p>
             <p class="gh-welcome-brand">Kulinda Uhai. Kuimarisha Usalama.</p>
         </section>
 
-        <!-- B. Safety status — states "not assessed", never claims protection -->
+        <!-- C. Hero — photo slideshow, one promise, no status claim.
+             Slides live here (single source of truth); features/hero/hero-slideshow.js
+             only drives them. Copy is never re-rendered when the photo changes. -->
+        <section class="gh-hero" id="ghHero" data-hero-slideshow aria-labelledby="ghHeroTitle">
+            <div class="gh-hero-media" aria-hidden="true">
+                <div class="gh-hero-slide is-active" data-hero-slide data-label="Wahudumu wa afya jamii">
+                    <img src="assets/img/hero-community.jpg" alt="" loading="eager" fetchpriority="high" decoding="async">
+                </div>
+                <div class="gh-hero-slide" data-hero-slide data-label="Huduma za dharura"
+                     data-src="assets/img/hero-rescue.jpg"></div>
+                <div class="gh-hero-slide" data-hero-slide data-label="Kinga na huduma za kitabibu"
+                     data-src="assets/img/post-clinic.jpg"></div>
+                <div class="gh-hero-slide" data-hero-slide data-label="Jamii inayosaidiana"
+                     data-src="assets/img/post-volunteers.jpg"></div>
+                <div class="gh-hero-slide" data-hero-slide data-label="Maandalizi ya dharura"
+                     data-src="assets/img/hero-preparedness.jpg"></div>
+            </div>
+            <div class="gh-hero-inner">
+                <span class="gh-hero-mark" aria-hidden="true"><svg class="ic"><use href="#i-shield-check"/></svg></span>
+                <div class="gh-hero-copy">
+                    <h2 class="gh-hero-title" id="ghHeroTitle" data-i18n="gh_hero_title">Tayari kwa dharura?</h2>
+                    <p class="gh-hero-sub" data-i18n="gh_hero_sub">Tuungane kulinda maisha.</p>
+                    <p class="gh-hero-desc" data-i18n="gh_hero_desc">Msaada unapohitajika, kila sekunde ina maana. Jiandae leo kwa usalama wa kesho.</p>
+                    <p class="gh-hero-meta" data-i18n="gh_hero_meta">Taarifa sahihi &bull; Hatua za haraka &bull; Jamii imara</p>
+                    <span class="gh-hero-chip" data-i18n="gh_hero_chip">GuardHai</span>
+                </div>
+            </div>
+            <div class="gh-hero-controls">
+                <button type="button" class="gh-hero-toggle" data-hero-toggle aria-pressed="false"
+                        aria-label="Simamisha picha zinazobadilika">
+                    <svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg>
+                </button>
+                <div class="gh-hero-dots" role="group" aria-label="Picha za ukurasa wa mwanzo"></div>
+            </div>
+        </section>
+
+        <!-- D. SOS — single shared handler (features/emergency/sos.js), never claims to dispatch -->
+        <section class="gh-sos" aria-labelledby="ghSosTitle">
+            <div class="gh-sos-card">
+                <button type="button" class="gh-sos-btn" onclick="GHSos.trigger()"
+                        aria-label="SOS — fungua maelekezo ya dharura">
+                    <span class="gh-sos-ico" aria-hidden="true"><svg class="ic"><use href="#i-siren"/></svg></span>
+                    <span class="gh-sos-txt"><b id="ghSosTitle">SOS</b></span>
+                </button>
+                <div class="gh-sos-copy">
+                    <b data-i18n="gh_sos_card_title">Dharura? Bonyeza hapa</b>
+                    <p>
+                        <span data-i18n="gh_sos_card_text">Tuma tahadhari ya dharura (haitumwi)</span>
+                        <span class="gh-demo-chip" data-i18n="gh_demo">DEMO</span>
+                    </p>
+                </div>
+                <button type="button" class="gh-sos-go" onclick="GHSos.trigger()" aria-label="Maelekezo ya dharura">
+                    <svg class="ic"><use href="#i-chevron-right"/></svg>
+                </button>
+            </div>
+            <p class="gh-sos-note">
+                <svg class="ic" aria-hidden="true"><use href="#i-alert-triangle"/></svg>
+                <span data-i18n="gh_sos_local">Hakuna msaada unaotumwa kwa mtu yeyote — simu ndiyo njia pekee.</span>
+            </p>
+        </section>
+
+        <!-- E. Quick actions — every existing destination kept, circular icon language -->
+        <section class="gh-section">
+            <h2 class="gh-section-title" data-i18n="gh_quick">Vitendo vya haraka</h2>
+            <div class="gh-qa-grid">
+                <button type="button" class="gh-qa" data-qa="health" onclick="HomeUI.go('health')">
+                    <span class="gh-qa-ico gh-qa-teal" aria-hidden="true"><svg class="ic"><use href="#i-heart-pulse"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_health">Afya</span>
+                </button>
+                <button type="button" class="gh-qa" data-qa="shield" onclick="HomeUI.go('shield')">
+                    <span class="gh-qa-ico gh-qa-green" aria-hidden="true"><svg class="ic"><use href="#i-shield-check"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_shield">Usalama</span>
+                </button>
+                <button type="button" class="gh-qa" data-qa="find" onclick="HomeUI.goFind()">
+                    <span class="gh-qa-ico gh-qa-blue" aria-hidden="true"><svg class="ic"><use href="#i-smartphone"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_find">Tafuta Kifaa</span>
+                </button>
+                <button type="button" class="gh-qa" data-qa="guardians" onclick="HomeUI.openGuardians()">
+                    <span class="gh-qa-ico gh-qa-purple" aria-hidden="true"><svg class="ic"><use href="#i-users"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_guardians">Walezi</span>
+                </button>
+                <button type="button" class="gh-qa" data-qa="learn" onclick="HomeUI.scrollToUwanja()">
+                    <span class="gh-qa-ico gh-qa-gold" aria-hidden="true"><svg class="ic"><use href="#i-book-open"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_learn">Elimu ya Usalama</span>
+                </button>
+                <button type="button" class="gh-qa" data-qa="map" onclick="HomeUI.go('map')">
+                    <span class="gh-qa-ico gh-qa-blue" aria-hidden="true"><svg class="ic"><use href="#i-map"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_map">Ramani</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- F. Safety status — states "not assessed", never claims protection -->
         <section class="gh-card gh-safety" aria-labelledby="ghSafetyTitle">
             <div class="gh-safety-row">
                 <span class="gh-safety-ico" aria-hidden="true"><svg class="ic"><use href="#i-shield-check"/></svg></span>
                 <div class="gh-safety-text">
-                    <div class="gh-safety-label" id="ghSafetyTitle" data-i18n="gh_safety_title">Hali ya usalama</div>
+                    <div class="gh-safety-label" id="ghSafetyTitle" data-i18n="gh_safety_title">Taarifa zako za usalama</div>
                     <div class="gh-safety-state" data-i18n="gh_safety_unknown">Haijapimwa bado</div>
-                    <div class="gh-safety-device">
-                        <span data-i18n="gh_device_line">Kifaa unachotumia:</span>
-                        <b id="lbl-controller-home-desc">&mdash;</b>
-                    </div>
                     <p class="gh-safety-desc" data-i18n="gh_safety_desc">
                         Hakuna huduma ya dharura iliyounganishwa. Kagua mazingira ya kifaa chako.
                     </p>
+                    <div class="gh-safety-device" hidden>
+                        <span data-i18n="gh_device_line">Kifaa unachotumia:</span>
+                        <b id="lbl-controller-home-desc">&mdash;</b>
+                    </div>
                 </div>
+                <button type="button" class="gh-btn gh-btn-outline" onclick="HomeUI.reviewSafety()">
+                    <svg class="ic"><use href="#i-search"/></svg>
+                    <span data-i18n="gh_safety_cta">Kagua usalama</span>
+                </button>
             </div>
             <div class="gh-safety-meta">
                 <span class="gh-chip">
@@ -461,78 +595,53 @@
             <p class="gh-safety-fine" data-i18n="gh_risk_note">
                 Kipimo hiki kinatokana na ishara za kifaa (mtandao, betri, ruhusa) — si tathmini ya usalama wako.
             </p>
-            <button type="button" class="gh-btn gh-btn-outline gh-btn-block" onclick="HomeUI.reviewSafety()">
-                <svg class="ic"><use href="#i-search"/></svg>
-                <span data-i18n="gh_safety_cta">Kagua / Sanidi taarifa za usalama</span>
-            </button>
-        </section>
-
-        <!-- C. SOS — single shared handler (features/emergency/sos.js), never claims to dispatch -->
-        <section class="gh-sos" aria-labelledby="ghSosTitle">
-            <button type="button" class="gh-sos-btn" onclick="GHSos.trigger()">
-                <span class="gh-sos-ico" aria-hidden="true"><svg class="ic"><use href="#i-siren"/></svg></span>
-                <span class="gh-sos-txt">
-                    <b id="ghSosTitle">SOS</b>
-                    <span data-i18n="gh_sos_text">Dharura</span>
-                </span>
-            </button>
-            <p class="gh-sos-note">
-                <svg class="ic" aria-hidden="true"><use href="#i-alert-triangle"/></svg>
-                <span data-i18n="gh_sos_local">Hakuna msaada unaotumwa kwa mtu yeyote — simu ndiyo njia pekee.</span>
-            </p>
-        </section>
-
-        <!-- D. Quick actions -->
-        <section class="gh-section">
-            <h2 class="gh-section-title" data-i18n="gh_quick">Vitendo vya haraka</h2>
-            <div class="gh-qa-grid">
-                <button type="button" class="gh-qa" onclick="HomeUI.go('health')">
-                    <span class="gh-qa-ico gh-qa-green" aria-hidden="true"><svg class="ic"><use href="#i-heart-pulse"/></svg></span>
-                    <span class="gh-qa-label" data-i18n="gh_qa_health">Afya</span>
-                </button>
-                <button type="button" class="gh-qa" onclick="HomeUI.go('shield')">
-                    <span class="gh-qa-ico gh-qa-blue" aria-hidden="true"><svg class="ic"><use href="#i-shield"/></svg></span>
-                    <span class="gh-qa-label" data-i18n="gh_qa_shield">Shield</span>
-                </button>
-                <button type="button" class="gh-qa" onclick="HomeUI.goFind()">
-                    <span class="gh-qa-ico gh-qa-blue" aria-hidden="true"><svg class="ic"><use href="#i-search"/></svg></span>
-                    <span class="gh-qa-label" data-i18n="gh_qa_find">Tafuta Kifaa</span>
-                </button>
-                <button type="button" class="gh-qa" onclick="HomeUI.go('map')">
-                    <span class="gh-qa-ico gh-qa-gold" aria-hidden="true"><svg class="ic"><use href="#i-map"/></svg></span>
-                    <span class="gh-qa-label" data-i18n="gh_qa_map">Ramani</span>
-                </button>
-                <button type="button" class="gh-qa" onclick="HomeUI.openGuardians()">
-                    <span class="gh-qa-ico gh-qa-green" aria-hidden="true"><svg class="ic"><use href="#i-users"/></svg></span>
-                    <span class="gh-qa-label" data-i18n="gh_qa_guardians">Walezi</span>
-                </button>
-                <button type="button" class="gh-qa" onclick="HomeUI.scrollToUwanja()">
-                    <span class="gh-qa-ico gh-qa-gold" aria-hidden="true"><svg class="ic"><use href="#i-book-open"/></svg></span>
-                    <span class="gh-qa-label" data-i18n="gh_qa_learn">Elimu ya Usalama</span>
-                </button>
-            </div>
         </section>
 
         <!-- E + F. Uwanja wa GuardHai -->
         <section class="gh-section" id="ghUwanja" aria-labelledby="ghUwanjaTitle">
             <div class="gh-section-head">
                 <div>
-                    <h2 class="gh-section-title" id="ghUwanjaTitle" data-i18n="gh_uwanja">Uwanja wa GuardHai</h2>
+                    <h2 class="gh-section-title" id="ghUwanjaTitle" data-i18n="gh_uwanja">Uwanja – Pamoja Tujifunze na Kusaidiana</h2>
                     <p class="gh-section-sub" data-i18n="gh_uwanja_sub">Jifunze, shiriki maarifa, saidiana.</p>
                 </div>
-                <button type="button" class="gh-btn gh-btn-primary gh-compose-btn" onclick="HomeUI.openComposer()">
-                    <svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>
-                    <span data-i18n="gh_compose">Shiriki Elimu</span>
-                </button>
+                <div class="gh-section-tools">
+                    <button type="button" class="gh-link" onclick="HomeUI.showAllTopics()">
+                        <span data-i18n="gh_see_all">Tazama zote</span>
+                        <svg class="ic" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+                    </button>
+                    <button type="button" class="gh-btn gh-btn-primary gh-compose-btn" onclick="HomeUI.openComposer()"
+                            aria-label="Shiriki elimu" title="Shiriki elimu">
+                        <svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>
+                        <span class="gh-sr">Shiriki Elimu</span>
+                    </button>
+                </div>
             </div>
 
             <div class="gh-topics" id="ghTopics" role="group" aria-label="Mada">
-                <button type="button" class="gh-topic is-active" data-topic="all" onclick="HomeUI.filterTopic('all', this)" data-i18n="gh_topic_all">Zote</button>
-                <button type="button" class="gh-topic" data-topic="people" onclick="HomeUI.filterTopic('people', this)" data-i18n="gh_topic_people">Usalama wa Watu</button>
-                <button type="button" class="gh-topic" data-topic="health" onclick="HomeUI.filterTopic('health', this)" data-i18n="gh_topic_health">Afya</button>
-                <button type="button" class="gh-topic" data-topic="crime" onclick="HomeUI.filterTopic('crime', this)" data-i18n="gh_topic_crime">Uhalifu na Mali</button>
-                <button type="button" class="gh-topic" data-topic="disaster" onclick="HomeUI.filterTopic('disaster', this)" data-i18n="gh_topic_disaster">Ajali na Majanga</button>
-                <button type="button" class="gh-topic" data-topic="digital" onclick="HomeUI.filterTopic('digital', this)" data-i18n="gh_topic_digital">Usalama wa Kidijitali</button>
+                <button type="button" class="gh-topic is-active" data-topic="all" onclick="HomeUI.filterTopic('all', this)">
+                    <span class="gh-topic-ico"><svg class="ic" aria-hidden="true"><use href="#i-list"/></svg></span>
+                    <span class="gh-topic-label" data-i18n="gh_topic_all">Zote</span>
+                </button>
+                <button type="button" class="gh-topic" data-topic="afya" onclick="HomeUI.filterTopic('afya', this)">
+                    <span class="gh-topic-ico"><svg class="ic" aria-hidden="true"><use href="#i-heart-pulse"/></svg></span>
+                    <span class="gh-topic-label" data-i18n="gh_topic_afya">Afya</span>
+                </button>
+                <button type="button" class="gh-topic" data-topic="usalama" onclick="HomeUI.filterTopic('usalama', this)">
+                    <span class="gh-topic-ico"><svg class="ic" aria-hidden="true"><use href="#i-shield-check"/></svg></span>
+                    <span class="gh-topic-label" data-i18n="gh_topic_usalama">Usalama</span>
+                </button>
+                <button type="button" class="gh-topic" data-topic="taasisi" onclick="HomeUI.filterTopic('taasisi', this)">
+                    <span class="gh-topic-ico"><svg class="ic" aria-hidden="true"><use href="#i-building"/></svg></span>
+                    <span class="gh-topic-label" data-i18n="gh_topic_taasisi">Taasisi</span>
+                </button>
+                <button type="button" class="gh-topic" data-topic="kusaidiana" onclick="HomeUI.filterTopic('kusaidiana', this)">
+                    <span class="gh-topic-ico"><svg class="ic" aria-hidden="true"><use href="#i-users"/></svg></span>
+                    <span class="gh-topic-label" data-i18n="gh_topic_kusaidiana">Kusaidiana</span>
+                </button>
+                <button type="button" class="gh-topic" data-topic="majanga" onclick="HomeUI.filterTopic('majanga', this)">
+                    <span class="gh-topic-ico"><svg class="ic" aria-hidden="true"><use href="#i-alert-triangle"/></svg></span>
+                    <span class="gh-topic-label" data-i18n="gh_topic_majanga">Majanga</span>
+                </button>
             </div>
 
             <div class="gh-feed" id="ghFeed"></div>
@@ -1561,11 +1670,14 @@
         <div class="gh-modal-card gh-compose-card">
 
             <div class="gh-modal-head">
-                <b id="ghcTitle" data-i18n="ghc_title">Shiriki Elimu</b>
-                <div class="ghc-head-tools">
-                    <span class="ghc-step" id="ghcStepLabel">1/2</span>
-                    <button type="button" class="gh-modal-x" id="ghcCancel" onclick="HomeUI.cancelComposer()" aria-label="Ghairi chapisho" title="Ghairi">&#10005;</button>
-                </div>
+                <button type="button" class="gh-compose-close" id="ghcCancel" onclick="HomeUI.cancelComposer()"
+                        aria-label="Ghairi chapisho" title="Ghairi">
+                    <svg class="ic" aria-hidden="true"><use href="#i-x"/></svg>
+                </button>
+                <b id="ghcTitle" data-i18n="ghc_title">Tuma Chapisho</b>
+                <span class="ghc-step" id="ghcStepLabel">1/2</span>
+                <button type="button" class="gh-compose-publish" id="ghcPublishTop" onclick="HomeUI.publish()"
+                        data-i18n="ghc_publish_top">Chapisha</button>
             </div>
 
             <!-- STEP 1: EDIT -->
@@ -1584,30 +1696,77 @@
 
                 <label class="ghc-label" data-i18n="ghc_type">Aina ya chapisho</label>
                 <div class="ghc-chips" id="ghcTypes" role="group" aria-label="Aina ya chapisho">
-                    <button type="button" class="ghc-chip is-active" data-type="elimu" data-i18n="ghc_type_elimu">Elimu</button>
-                    <button type="button" class="ghc-chip" data-type="swali" data-i18n="ghc_type_swali">Swali</button>
-                    <button type="button" class="ghc-chip" data-type="uzoefu" data-i18n="ghc_type_uzoefu">Uzoefu wa Jamii</button>
-                    <button type="button" class="ghc-chip" data-type="taarifa" data-i18n="ghc_type_taarifa">Taarifa ya Taasisi</button>
-                    <button type="button" class="ghc-chip" data-type="fursa" data-i18n="ghc_type_fursa">Fursa ya Kusaidia</button>
+                    <button type="button" class="ghc-chip is-active" data-type="elimu"><svg class="ic" aria-hidden="true"><use href="#i-book-open"/></svg><span data-i18n="ghc_type_elimu">Elimu</span></button>
+                    <button type="button" class="ghc-chip" data-type="swali"><svg class="ic" aria-hidden="true"><use href="#i-message"/></svg><span data-i18n="ghc_type_swali">Swali</span></button>
+                    <button type="button" class="ghc-chip" data-type="uzoefu"><svg class="ic" aria-hidden="true"><use href="#i-users"/></svg><span data-i18n="ghc_type_uzoefu">Uzoefu</span></button>
+                    <button type="button" class="ghc-chip" data-type="taarifa"><svg class="ic" aria-hidden="true"><use href="#i-bell"/></svg><span data-i18n="ghc_type_taarifa">Taarifa</span></button>
+                    <button type="button" class="ghc-chip" data-type="fursa"><svg class="ic" aria-hidden="true"><use href="#i-heart"/></svg><span data-i18n="ghc_type_fursa">Kusaidia</span></button>
                 </div>
 
                 <label class="ghc-label" for="ghcText" data-i18n="ghc_text">Maelezo</label>
-                <textarea id="ghcText" class="ghc-textarea" rows="4" maxlength="600"
+                <textarea id="ghcText" class="ghc-textarea" rows="4" maxlength="2000"
                           placeholder="Andika elimu, swali au uzoefu wako…"></textarea>
-                <div class="ghc-count"><span id="ghcCount">0</span>/600</div>
+                <div class="ghc-count"><span id="ghcCount">0</span>/2000</div>
 
-                <div class="ghc-two">
-                    <div>
+                <div class="ghc-choice">
+                    <span class="ghc-label" id="ghcShortcutLabel">Njia za mkato</span>
+                    <p class="ghc-note-sm" id="ghcShortcutNote">Chip hizi huchagua kitu kimoja tu:
+                      <b>Elimu</b> huchagua aina; nyingine huchagua mada. Unaweza kubadilisha
+                      aina na mada kwa kujitegemea hapa chini.</p>
+                    <div class="ghc-shortcuts" id="ghcShortcuts" role="group" aria-labelledby="ghcShortcutLabel">
+                        <button type="button" class="ghc-shortcut" data-shortcut="elimu">
+                            <svg class="ic" aria-hidden="true"><use href="#i-book-open"/></svg>
+                            <span data-i18n="gh_type_elimu">Elimu</span></button>
+                        <button type="button" class="ghc-shortcut" data-shortcut="afya">
+                            <svg class="ic" aria-hidden="true"><use href="#i-heart-pulse"/></svg>
+                            <span data-i18n="gh_topic_afya">Afya</span></button>
+                        <button type="button" class="ghc-shortcut" data-shortcut="usalama">
+                            <svg class="ic" aria-hidden="true"><use href="#i-shield-check"/></svg>
+                            <span data-i18n="gh_topic_usalama">Usalama</span></button>
+                        <button type="button" class="ghc-shortcut" data-shortcut="taasisi">
+                            <svg class="ic" aria-hidden="true"><use href="#i-building"/></svg>
+                            <span data-i18n="gh_topic_taasisi">Taasisi</span></button>
+                        <button type="button" class="ghc-shortcut" data-shortcut="kusaidiana">
+                            <svg class="ic" aria-hidden="true"><use href="#i-users"/></svg>
+                            <span data-i18n="gh_topic_kusaidiana">Kusaidiana</span></button>
+                        <button type="button" class="ghc-shortcut" data-shortcut="majanga">
+                            <svg class="ic" aria-hidden="true"><use href="#i-alert-triangle"/></svg>
+                            <span data-i18n="gh_topic_majanga">Majanga</span></button>
+                    </div>
+                </div>
+
+                <div class="ghc-choice">
+                    <span class="ghc-label" id="ghcTopicLabel" data-i18n="ghc_choice_topic">Mada</span>
+                    <div class="ghc-topicchips" id="ghcTopicChips" role="group" aria-labelledby="ghcTopicLabel">
+                        <button type="button" class="ghc-topicchip is-topic-afya" data-topic-chip="afya"><span data-i18n="gh_topic_afya">Afya</span></button>
+                        <button type="button" class="ghc-topicchip is-topic-usalama" data-topic-chip="usalama"><span data-i18n="gh_topic_usalama">Usalama</span></button>
+                        <button type="button" class="ghc-topicchip is-topic-taasisi" data-topic-chip="taasisi"><span data-i18n="gh_topic_taasisi">Taasisi</span></button>
+                        <button type="button" class="ghc-topicchip is-topic-kusaidiana" data-topic-chip="kusaidiana"><span data-i18n="gh_topic_kusaidiana">Kusaidiana</span></button>
+                        <button type="button" class="ghc-topicchip is-topic-majanga" data-topic-chip="majanga"><span data-i18n="gh_topic_majanga">Majanga</span></button>
+                    </div>
+                    <div class="ghc-native">
                         <label class="ghc-label" for="ghcTopic" data-i18n="ghc_topic">Mada</label>
                         <select id="ghcTopic" class="ghc-select">
-                            <option value="people" data-i18n="gh_topic_people">Usalama wa Watu</option>
-                            <option value="health" data-i18n="gh_topic_health">Afya</option>
-                            <option value="crime" data-i18n="gh_topic_crime">Uhalifu na Mali</option>
-                            <option value="disaster" data-i18n="gh_topic_disaster">Ajali na Majanga</option>
-                            <option value="digital" data-i18n="gh_topic_digital">Usalama wa Kidijitali</option>
+                            <option value="afya" data-i18n="gh_topic_afya">Afya</option>
+                            <option value="usalama" data-i18n="gh_topic_usalama">Usalama</option>
+                            <option value="taasisi" data-i18n="gh_topic_taasisi">Taasisi</option>
+                            <option value="kusaidiana" data-i18n="gh_topic_kusaidiana">Kusaidiana</option>
+                            <option value="majanga" data-i18n="gh_topic_majanga">Majanga</option>
                         </select>
                     </div>
-                    <div>
+                </div>
+
+                <div class="ghc-choice">
+                    <span class="ghc-label" id="ghcAudienceLabel" data-i18n="ghc_choice_audience">Watazamaji</span>
+                    <div class="ghc-audchips" id="ghcAudienceChips" role="group" aria-labelledby="ghcAudienceLabel">
+                        <button type="button" class="ghc-audchip" data-aud-chip="public">
+                            <svg class="ic" aria-hidden="true"><use href="#i-globe"/></svg> <span data-i18n="gh_aud_public">Watu Wote</span></button>
+                        <button type="button" class="ghc-audchip" data-aud-chip="community">
+                            <svg class="ic" aria-hidden="true"><use href="#i-users"/></svg> <span data-i18n="gh_aud_community">Community</span></button>
+                        <button type="button" class="ghc-audchip" data-aud-chip="guardians">
+                            <svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg> <span data-i18n="gh_aud_guardians">Walezi</span></button>
+                    </div>
+                    <div class="ghc-native">
                         <label class="ghc-label" for="ghcAudience" data-i18n="ghc_audience">Watazamaji</label>
                         <select id="ghcAudience" class="ghc-select">
                             <option value="public" data-i18n="ghc_aud_public">Umma</option>
@@ -1616,6 +1775,11 @@
                         </select>
                     </div>
                 </div>
+
+                <label class="ghc-checkline" for="ghcKeepDraft">
+                    <input type="checkbox" id="ghcKeepDraft">
+                    <span data-i18n="ghc_keep_draft">Hifadhi nakala ya rasimu ninapochapisha</span>
+                </label>
 
                 <label class="ghc-label" data-i18n="ghc_media">Viambatisho</label>
                 <div class="ghc-media" role="group" aria-label="Viambatisho">

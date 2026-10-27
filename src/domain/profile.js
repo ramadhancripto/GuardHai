@@ -135,6 +135,21 @@ export function badgesFor(profile) {
 export const BIO_MAX = 160;
 export const TOPICS_MAX = 5;
 
+/**
+ * Optional, role-shaped fields. They are free text the owner (or a sample
+ * persona) fills in; none of them is evidence and none of them produces a
+ * badge. Empty string means "not provided" and the UI renders nothing.
+ */
+export const PROFILE_FIELDS = Object.freeze({
+  affiliation: 80,     // hospital, unit, institution the person works with
+  availability: 60,    // "7:00 - 19:00", "Jumatatu - Ijumaa"
+  serviceAreas: 80,    // where a volunteer works
+  orgKind: 40,         // clinic / NGO / company
+  coverage: 60         // area an institution or officer covers
+});
+
+const clean = (value, max) => String(value || '').trim().slice(0, max);
+
 export function profileInitials(name, fallback = 'GH') {
   const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
   if (!parts.length) return fallback;
@@ -154,8 +169,14 @@ export function normalizeProfile(raw) {
     primaryRole: roles[0],
     topics: Array.isArray(raw.topics) ? raw.topics.slice(0, TOPICS_MAX).map(String) : [],
     location: raw.location || '',
+    affiliation: clean(raw.affiliation, PROFILE_FIELDS.affiliation),
+    availability: clean(raw.availability, PROFILE_FIELDS.availability),
+    serviceAreas: clean(raw.serviceAreas, PROFILE_FIELDS.serviceAreas),
+    orgKind: clean(raw.orgKind, PROFILE_FIELDS.orgKind),
+    coverage: clean(raw.coverage, PROFILE_FIELDS.coverage),
     joinedAt: raw.joinedAt || null,
     avatarUrl: raw.avatarUrl || null,
+    coverUrl: raw.coverUrl || null,
     sample: raw.sample === true,
     isSelf: raw.isSelf === true,
     verification: {

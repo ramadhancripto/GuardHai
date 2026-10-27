@@ -16,15 +16,67 @@ import { bus, EVENTS } from '../../core/bus.js';
 import { escapeHtml } from '../../core/dom.js';
 import { fmtSize } from '../../core/format.js';
 import { openSheet } from '../../ui/sheet.js';
+import { createLogger } from '../../core/logger.js';
+
+const log = createLogger('feed');
 
 export const feedState = {
   topic: 'all',
+  query: '',
   posts: [],
   flags: {},
   counts: {},
   expanded: {},
   loading: false
 };
+
+/* --------------------------------------------------------------- states */
+/** Skeleton placeholders: the shape of a card, no invented content. */
+function skeletonHtml() {
+  return `<div class="gh-feed-skel" aria-hidden="true">
+    ${[0, 1].map(() => `
+      <div class="gh-skel-card">
+        <div class="gh-skel-row"><span class="gh-skel-dot"></span><span class="gh-skel-bar w40"></span></div>
+        <span class="gh-skel-bar w90"></span><span class="gh-skel-bar w70"></span>
+        <div class="gh-skel-row"><span class="gh-skel-bar w20"></span><span class="gh-skel-bar w20"></span></div>
+      </div>`).join('')}
+  </div>`;
+}
+
+/**
+ * Empty, no-results and error states. Each says what actually happened and
+ * offers the one action that can change it; nothing pretends to have loaded.
+ */
+function stateHtml(kind) {
+  if (kind === 'error') {
+    return `<div class="gh-feed-state is-error" role="alert">
+      <svg class="ic" aria-hidden="true"><use href="#i-alert-circle"/></svg>
+      <b>Chapisho hazikupatikana</b>
+      <span>Hifadhi ya kifaa hiki haikusomeka. Hakuna kilichopotea — jaribu tena.</span>
+      <button type="button" class="gh-btn gh-btn-outline" data-feed-retry>
+        <svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg> Jaribu tena
+      </button>
+    </div>`;
+  }
+  if (kind === 'search') {
+    return `<div class="gh-feed-state">
+      <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+      <b>Hakuna chapisho linalolingana</b>
+      <span>Hakuna matokeo kwa utafutaji huu kwenye mada iliyochaguliwa.</span>
+      <button type="button" class="gh-btn gh-btn-outline" data-feed-clear>
+        <svg class="ic" aria-hidden="true"><use href="#i-x"/></svg> Ondoa kichujio
+      </button>
+    </div>`;
+  }
+  return `<div class="gh-feed-state">
+    <svg class="ic" aria-hidden="true"><use href="#i-list"/></svg>
+    <b>Hakuna chapisho kwenye mada hii bado</b>
+    <span>Kuwa wa kwanza kushiriki elimu, swali au taarifa kwenye mada hii.</span>
+    <button type="button" class="gh-btn gh-btn-outline" data-feed-clear>
+      <svg class="ic" aria-hidden="true"><use href="#i-arrow-left"/></svg> Onyesha mada zote
+    </button>
+  </div>`;
+}
 
 /** load + decorate everything the cards need, then paint */
 export async function renderFeed({ keepScroll = false } = {}) {
@@ -33,24 +85,38 @@ export async function renderFeed({ keepScroll = false } = {}) {
 
   const scrollY = window.scrollY;
   host.setAttribute('aria-busy', 'true');
+  if (!feedState.posts.length && !keepScroll) host.innerHTML = skeletonHtml();
 
   const user = currentUser();
   const topic = feedState.topic;
 
-  const mine = await listPosts({ topic });
+  let mine;
+  try {
+    mine = await listPosts({ topic });
+  } catch (err) {
+    log.error('feed load failed', err);
+    host.innerHTML = stateHtml('error');
+    host.removeAttribute('aria-busy');
+    return;
+  }
   const samples = SAMPLE_POSTS.filter((p) => topic === 'all' || p.topic === topic);
-  const posts = [...mine, ...samples];
+  const q = feedState.query.trim().toLowerCase();
+  const posts = [...mine, ...samples].filter((p) => !q || [
+    p.text, p.title, p.authorName, p.topicLabel, p.alertText, p.location
+  ].filter(Boolean).join(' ').toLowerCase().includes(q));
 
   await primeUrls(posts);
 
   const flags = {};
   const counts = {};
   const roles = {};
+  const people = {};
   await Promise.all(posts.map(async (p) => {
     flags[p.id] = await flagsFor(p.id, user);
     counts[p.id] = await commentCount(p.id);
     const profile = await getProfile(p.authorId);
     roles[p.authorId] = profile ? primaryRoleOf(profile) : null;
+    people[p.authorId] = profile || null;
   }));
 
   feedState.posts = posts;
@@ -58,20 +124,47 @@ export async function renderFeed({ keepScroll = false } = {}) {
   feedState.counts = counts;
 
   if (!posts.length) {
-    host.innerHTML = '<div class="gh-feed-empty">Hakuna chapisho kwenye mada hii bado.</div>';
+    host.innerHTML = stateHtml(feedState.query.trim() ? 'search' : 'empty');
     host.removeAttribute('aria-busy');
     return;
   }
+
+  // which of these posts the current user has already reposted
+  const myReposts = new Set(posts
+    .filter((p) => p.authorId === user.id && p.repostOf?.postId)
+    .map((p) => p.repostOf.postId));
 
   host.innerHTML = posts.map((p) => postCard(p, {
     flags: flags[p.id],
     commentCount: counts[p.id] || 0,
     expanded: feedState.expanded[p.id],
-    role: roles[p.authorId] || null
+    role: roles[p.authorId] || null,
+    author: people[p.authorId] || null,
+    reposted: myReposts.has(p.id)
   })).join('');
 
   host.removeAttribute('aria-busy');
   if (keepScroll) window.scrollTo({ top: scrollY });
+}
+
+/** client-side search over the posts already loaded (no network, no fake hits) */
+export async function setQuery(term) {
+  feedState.query = String(term || '');
+  await renderFeed({ keepScroll: true });
+  return feedState.posts.length;
+}
+
+export async function clearQuery() {
+  feedState.query = '';
+  await renderFeed();
+}
+
+export async function showAllTopics() {
+  feedState.query = '';
+  feedState.topic = 'all';
+  document.querySelectorAll('#ghTopics .gh-topic')
+    .forEach((b) => b.classList.toggle('is-active', b.dataset.topic === 'all'));
+  await renderFeed();
 }
 
 export function filterTopic(topic, btn) {

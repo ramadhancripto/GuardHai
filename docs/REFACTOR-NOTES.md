@@ -192,3 +192,113 @@ messaging have no backend. They live in `src/mocks/`, return
 `{ ok: false, simulated: true, reason: 'not-connected' }`, and the UI prints the
 unconnected state instead of a success toast. Verification is a *request*; there
 is no reviewer, so nothing in the shipped build can become "verified".
+
+
+---
+
+# Third pass — the showcase visual language
+
+Date: 2026-10-27 · version 0.5.0
+
+## Why
+
+The user supplied a product mockup (six panels) and asked for the whole system
+to follow it: photo hero, circular quick actions, an SOS card with a DEMO
+marker, coloured post-type badges, post media with a warning band, photo
+profiles with four tabs, and a composer sheet with a close button and a publish
+button in the header.
+
+## What was built
+
+| Area | Change |
+|---|---|
+| CSS | new tenth part `assets/css/10-showcase.css` (additive; the earlier nine are untouched) |
+| header | brand block, in-device search sheet, red unread counter on the bell |
+| home | photo hero (`assets/img/hero-community.jpg`), SOS card with DEMO chip, circular quick actions, greener safety strip |
+| feed | type badge (Afya/Usalama/Majanga/Taasisi/Elimu), persona photos, location line, media with an alert band |
+| profiles | photo cover + photo avatar, verification pill, stats separators, message/follow/⋯ row, tabs Machapisho · Taarifa · Picha · Kuhusu |
+| editor | profile photo picker (downscaled to 512px in the browser, stored locally, removable) |
+| composer | sheet header with ✕ and Chapisha, five icon type chips |
+| search | `HomeUI.openSearch()` — a real local filter over the posts on the device |
+
+## Honesty decisions that shaped the design
+
+The mockup shows verified institutions, 248 posts, 1.2K followers, likes (456),
+comments (89) and a live "Tahadhari: Epuka maeneo ya mafuriko" band. None of
+those can be reproduced truthfully in a build with no server, so:
+
+| Mockup element | What ships instead |
+|---|---|
+| green “Thibitishwa” badge | a grey **“Sampuli — hakuna uthibitisho”** pill; the green pill appears only from evidence (`checkedBy` + `reference`) |
+| 248 Machapisho / 1.2K Wafuasi / 312 Anayefuata | real counts from the device: posts, topics, roles |
+| 456 likes · 89 comments · 73 shares · 12 saves | no invented numbers; a count appears only when a stored row exists |
+| red alert band over the flood photo | the same band, worded **“Tahadhari (sampuli)…”** with a second line saying it is not a live emergency notice |
+| "Tuma tahadhari" | **“(haitumwi)”** next to it and the existing note that only a phone call works |
+
+Real data that *was* added: eight photographs generated for this build
+(hero, five covers/portraits, three post images) stored under `assets/img/`.
+They are shipped files, not remote hotlinks, so they work offline.
+
+## Test deltas (intentional)
+
+| check | change |
+|---|---|
+| `home A1` | core order Storage → Notifications → Account → More is asserted, search is allowed in front of it |
+| `home D1` | quick actions in the showcased order: Afya, Usalama, Tafuta Kifaa, Walezi, Elimu ya Usalama, Ramani |
+| `home F2c` | five post types still asserted, by `data-type` plus the short showcase labels |
+| `home H1` | English Uwanja title updated with the dictionary |
+| `composer K4` | same as `home A1` |
+| `profile P5`, `P15` | badges are read from the new `.gh-profile-verifyline` wrapper |
+| `tools/verify_app.py` | `DEMO` is allowed **only** on a line that also says it is not real (haitumwi / not transmitted); any other demo framing still fails |
+
+Five suites, 195 checks: `home` 60 · `composer` 72 · `bugfix` 23 · `profile` 20 ·
+`showcase` 20.
+
+
+---
+
+# Awamu ya nne — "UI design reference implementation" (2026-10-27)
+
+Picha ya pili (`uploads/GuardHai Mobile App UI Showcase.png`) ilionyesha mfumo
+mzima, si skrini moja: tiles za mada, kichwa cha kadi, info-cards za wasifu wa
+kila jukumu, composer wa tiles na sheet ya vitendo. Awamu hii inafuata mpango wa
+`docs/REFINE-PLAN.md` (backup: `backup/pre-refine-ui-20261027T154405Z/`).
+
+## Kilichojengwa
+
+| Eneo | Kabla | Sasa |
+|---|---|---|
+| Mada (Uwanja) | pills za maandishi zinazosogeza kwa mlalo | tiles 6 zenye ikoni, grid 3×2 (6 kwa upana ≥720px) |
+| Kadi ya chapisho | beji juu, Fuata juu-kulia, maelezo chini | mwandishi kushoto (picha, jina, jukumu, muda/mahali), **Fuata + ⋮ kulia**, chips za aina/Sampuli/mada/watazamaji chini |
+| Menyu ya ⋮ | vitu 5 | vitu 6 — ile 5 + **"Vitendo vyote"** |
+| Sheet ya vitendo | hapakuwa | tiles 9: Imenisaidia, Maoni, Shiriki, Hifadhi, Fuata, Tuma kwa mtu, Fungua wasifu, Nakili kiungo, Ripoti |
+| Wasifu | beji + mstari wa mahali | mstari "Jukumu \| Taasisi" + **info-cards 2 kwa kila jukumu** + noti ya sampuli |
+| Kihariri cha wasifu | jina, wasifu, picha, mahali, majukumu, mada | + sehemu 5 za hiari (taasisi, upatikanaji, maeneo ya kujitolea, aina ya taasisi, eneo) |
+| Composer | `<select>` 2 + tray ya orodha | chips za Mada, segmented za Watazamaji (selects zile zile nyuma), tiles za viambatisho zenye ✕ na "Ongeza zaidi", checkbox ya nakala ya rasimu |
+| Kikomo cha maandishi | 600 | 2,000 |
+| Avatar ya kichwa | `<img>` ya `ui-avatars.com` yenye "DR KAPAMA" | monogram ya ndani au ikoni ya mtu |
+
+## Uaminifu (hakuna kilichobadilika)
+
+- Info-cards za personas zinaandikwa kuwa **za sampuli** chini ya kila kikundi.
+- Beji ya uthibitisho bado inahitaji `checkedBy` + `reference`.
+- Sheet ya vitendo inasema "Vitendo vyote vinahifadhiwa kwenye kifaa hiki.
+  Hakuna kinachotumwa kwa seva."
+- "Tuma kwa mtu" inabaki `disabled` pale `navigator.share` haipo, na lebo
+  inasema hivyo.
+- Hakuna namba za kubuni: stats ni machapisho/mada/majukumu halisi.
+
+## Ushahidi
+
+- `python3 tools/verify_app.py` → 12/12 (11 CSS parts, funguo 104 kwa lugha).
+- `bash tools/run_tests.sh 8123` → 224/224 (home 60, composer 72, bugfix 23,
+  profile 20, showcase 20, refine 29).
+- Picha: `docs/screens/20…29-refine-*.png`.
+
+## Kilichogunduliwa njiani
+
+1. `ui-avatars.com` ilikuwa ombi la nje lisiloandikwa **na** jina la kubuni
+   lililopachikwa kwenye kichwa — imeondolewa.
+2. `DR KAPAMA` ilikuwa placeholder ya kujiandikisha na jina la drawer.
+3. Mstari wa kifaa kwenye strip ya usalama ulionekana kama mabaki ya mashine;
+   sasa upo kwenye sheet ya usalama pekee.

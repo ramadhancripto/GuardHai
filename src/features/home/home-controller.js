@@ -6,8 +6,8 @@
  *
  * It owns no rendering of its own — that is feed-view / composer-view's job.
  */
-import { renderFeed, filterTopic, toggleExpand, lightbox, feedState } from '../feed/feed-view.js';
-import { toggleHelpful, toggleSave, toggleFollow, postMenu, closePostMenus, share, copyLink, report, submitReport, sendToPerson, openAuthor } from '../engagement/engagement-actions.js';
+import { renderFeed, filterTopic, toggleExpand, lightbox, feedState, setQuery, showAllTopics } from '../feed/feed-view.js';
+import { toggleRepost, toggleHelpful, toggleSave, toggleFollow, postMenu, closePostMenus, share, copyLink, report, submitReport, sendToPerson, openAuthor, openActionSheet } from '../engagement/engagement-actions.js';
 import { openProfile, openMyProfile, initProfileView } from '../profile/profile-view.js';
 import { initProfileEditor } from '../profile/profile-edit.js';
 import { openThread, submitComment, initCommentThread } from '../engagement/comment-thread.js';
@@ -23,6 +23,9 @@ import { openSheet, closeSheet } from '../../ui/sheet.js';
 import { toast } from '../../ui/toast.js';
 import { countDrafts } from '../../services/drafts.service.js';
 import { createLogger } from '../../core/logger.js';
+import { init as initHero } from '../hero/hero-slideshow.js';
+import { initSearchBar, syncSearchBar } from './search-bar.js';
+import { bus, EVENTS } from '../../core/bus.js';
 
 const log = createLogger('home');
 
@@ -31,6 +34,46 @@ export function setActiveTab(id) {
   document.querySelectorAll('.nav-tab-btn').forEach((b) => b.classList.remove('active'));
   const el = id && document.getElementById(id);
   if (el) el.classList.add('active');
+}
+
+/**
+ * Search the Uwanja feed. This is a real, local filter over the posts that are
+ * on this device — no request leaves the page, and an empty result says so.
+ */
+export function openSearch() {
+  closeMore();
+  openSheet('Tafuta kwenye Uwanja', `
+    <div class="gh-search">
+      <label class="ghc-label" for="ghSearchInput">Neno au jina la mwandishi</label>
+      <input id="ghSearchInput" class="ghc-input" type="search" autocomplete="off"
+             placeholder="mf. mafuriko, lishe, Afya" aria-describedby="ghSearchHelp">
+      <p id="ghSearchHelp" class="ghc-note-sm">
+        Utafutaji unafanyika kwenye kifaa hiki pekee — hakuna kinachotumwa mtandaoni.
+      </p>
+      <div id="ghSearchResults" class="gh-search-results" aria-live="polite"></div>
+    </div>`);
+
+  const input = document.getElementById('ghSearchInput');
+  const out = document.getElementById('ghSearchResults');
+  if (!input || !out) return;
+  let timer = null;
+  input.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(async () => {
+      const term = input.value.trim();
+      const n = await setQuery(term);
+      syncSearchBar(term);
+      out.textContent = term
+        ? `${n} chapisho ${n === 1 ? 'limepatikana' : 'yamepatikana'} kwenye kifaa hiki.`
+        : '';
+    }, 180);
+  });
+  input.focus();
+  return true;
+}
+
+export function searchFeed(term) {
+  return setQuery(term);
 }
 
 export function go(target) {
@@ -65,6 +108,12 @@ export function go(target) {
       switchTo('home');
       setActiveTab('tab-home');
   }
+
+  // The quick search bar belongs to the Uwanja; on other pages it would be a
+  // control that filters a feed the reader cannot see.
+  const onFeed = target === 'home' || !['shield', 'health', 'chat', 'map'].includes(target);
+  const bar = document.getElementById('ghSearchBar');
+  if (bar) (onFeed ? bar.removeAttribute('hidden') : bar.setAttribute('hidden', ''));
 }
 
 export function goFind() {
@@ -162,6 +211,14 @@ function wireFeedGestures() {
       else if (menuItem.dataset.menu === 'report') report(id);
       else if (menuItem.dataset.menu === 'profile') await openAuthor(id);
       else if (menuItem.dataset.menu === 'send') await sendToPerson(id);
+      else if (menuItem.dataset.menu === 'all') await openActionSheet(id);
+      return;
+    }
+
+    const cta = e.target.closest('[data-post-cta]');
+    if (cta) {
+      // post-level call to action reuses the existing report flow (device only)
+      if (cta.dataset.postCta === 'report') report(cta.dataset.post);
       return;
     }
 
@@ -170,6 +227,16 @@ function wireFeedGestures() {
 
     const media = e.target.closest('[data-media]');
     if (media) { lightbox(media.dataset.post, Number(media.dataset.index)); return; }
+
+    const retry = e.target.closest('[data-feed-retry]');
+    if (retry) { retry.disabled = true; await renderFeed({ keepScroll: true }); return; }
+
+    const clear = e.target.closest('[data-feed-clear]');
+    if (clear) {
+      const all = document.querySelector('#ghTopics .gh-topic[data-topic="all"]');
+      if (all) filterTopic('all', all);
+      return;
+    }
 
     const act = e.target.closest('[data-act]');
     if (!act) return;
@@ -180,9 +247,17 @@ function wireFeedGestures() {
       case 'comment': await openThread(postId); break;
       case 'share': await share(postId); break;
       case 'more': postMenu(postId); break;
+      case 'repost': await toggleRepost(postId); break;
+      case 'unrepost': await toggleRepost(postId); break;
       default: break;
     }
   });
+}
+
+/** Mount the hero slideshow once; it is a no-op on every later call. */
+function initHeroSlideshow() {
+  const api = initHero();
+  if (api) window.GHHero = api;      // same bridge style as HomeUI / GHSos
 }
 
 function wireTopics() {
@@ -218,6 +293,24 @@ function wireSheetActionHandlers() {
   }
 }
 
+/**
+ * The header avatar used to be an external ui-avatars.com hotlink with a
+ * hard-coded name. It is now painted locally: the initials of the signed-in
+ * profile when there is one, a neutral person icon otherwise. Nothing is
+ * fetched and no name is invented.
+ */
+export function syncHeaderAvatar() {
+  const host = document.getElementById('topNavUserPic');
+  if (!host) return;
+  const name = (localStorage.getItem('guardhai_profile_name') || '').trim();
+  const parts = name.split(/\s+/).filter(Boolean);
+  const initials = parts.length
+    ? (parts[0][0] + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase()
+    : '';
+  if (initials) host.textContent = initials;
+  else host.innerHTML = '<svg class="ic"><use href="#i-user"/></svg>';
+}
+
 export async function initHome() {
   try {
     await renderFeed();
@@ -227,9 +320,16 @@ export async function initHome() {
     wireFeedGestures();
     wireTopics();
     wireSheetActionHandlers();
+    initHeroSlideshow();
+    initSearchBar();
     initProfileView();
     initProfileEditor();
     initCommentThread();
+    syncSafetyDevice();
+    syncHeaderAvatar();
+    bus.on(EVENTS.PROFILE_UPDATED, syncHeaderAvatar);
+    // the Shield engine fills in the detected device after boot; mirror it once
+    setTimeout(syncSafetyDevice, 1200);
     await restoreDraftHint();
     log.info('home ready');
   } catch (err) {
@@ -285,6 +385,13 @@ export const HomeUI = {
 
   sos,
 
+  /* search + feed shortcuts */
+  openSearch: () => openSearch(),
+  showSearchBar: () => document.getElementById('ghSearchBar')?.removeAttribute('hidden'),
+  hideSearchBar: () => document.getElementById('ghSearchBar')?.setAttribute('hidden', ''),
+  searchFeed: (term) => searchFeed(term),
+  showAllTopics: () => showAllTopics(),
+
   /* profiles */
   openProfile: (id) => openProfile(id),
   openMyProfile: () => openMyProfile(),
@@ -308,6 +415,16 @@ export const HomeUI = {
   get form() { return readForm(); },
   get drafts() { return countDrafts(); }
 };
+
+/** keeps the safety card honest: the detected device line only shows when there is one */
+export function syncSafetyDevice() {
+  const value = document.getElementById('lbl-controller-home-desc');
+  const row = value?.closest('.gh-safety-device');
+  if (!row || !value) return;
+  const text = (value.textContent || '').trim();
+  const real = text && text !== '—' && text !== '-' && text !== '\u2014';
+  row.classList.toggle('is-live', !!real);
+}
 
 window.HomeUI = HomeUI;
 window.GHSos = GHSos;   // index.html still calls GHSos.trigger() inline

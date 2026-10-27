@@ -28,11 +28,11 @@ It must be served over HTTP (`file://` breaks ES modules). No build step, no
 
 | Area | Behaviour |
 |---|---|
-| Feed (Uwanja) | posts from IndexedDB + clearly-labelled sample posts, topic filter, expand/collapse, photo lightbox |
+| Feed (Uwanja) | posts from IndexedDB + clearly-labelled sample posts, type badges, topic filter, in-device search, expand/collapse, photo lightbox |
 | Composer | title/text/type/topic/audience, image·video·audio·link attachments, microphone recording, live validation, preview step, publish |
 | Media | validated by `domain/media.js`, stored as Blobs in IndexedDB, previewed through object URLs — nothing is uploaded |
 | Engagement | five labelled icon actions per post (helpful, comments, share, save, more), follow toggles, one-level comment replies, per-post and per-comment report — all stored on the device |
-| Profiles | five role identities with their own accent, icon and cover; role chips, stats, post list, evidence panel |
+| Profiles | five role identities with their own accent, icon, photo cover and photo avatar; two role-shaped info cards (facility + hours, unit + area, kind + coverage, service areas + availability, place + topics); four tabs (posts, notices, photos, about); a photo can be picked from the device and is downscaled locally |
 | Verification | a request is recorded, but nothing is ever shown as verified without a reviewer's evidence; licence and institution are separate kinds |
 | Drafts | saved to IndexedDB, reloadable, media intentionally dropped (the UI says so) |
 | Shield | dashboard, confidence score, device list, protection profiles, wizard, travel protection, communication screen |
@@ -55,7 +55,7 @@ Firebase **auth** is the one external integration that exists
 
 ```
 index.html                  markup + SVG sprite + one <script type="module">
-assets/css/                 nine ordered stylesheets (01-core … 09-profile)
+assets/css/                 fifteen ordered stylesheets (00-tokens … 14-identity)
 src/
   main.js                   entry: engines → home → ready event
   config.js                 runtime switches (<meta name="guardhai:…">)
@@ -67,10 +67,11 @@ src/
   i18n/                     sw/en dictionary + applier
   engines/                  shield engine (7 mixes), auth, navigation, boot
   features/                 home, feed, composer, engagement, profile, emergency, map
+assets/img/                 the photographs shipped with the build (local, no hotlinks)
   mocks/                    the only simulated seam (SOS, push, BLE, guardians)
-tests/                      Playwright suites: home, composer, bugfix, profile
+tests/                      Playwright suites: home, composer, bugfix, profile, showcase, refine, posttypes, hero, identity
 tools/                      verify_app.py, pkg_redact.py, run_tests.sh
-docs/                       architecture, audits, reports
+docs/                       architecture, audits, reports (tokens, post schema, hero slideshow…)
 backup/                     archived single-file version + pre-change checkpoints
 ```
 
@@ -85,12 +86,13 @@ engines  → core
 
 ```bash
 python3 tools/verify_app.py                       # 12 integrity checks
-bash tools/run_tests.sh                           # 175 Playwright checks
+bash tools/run_tests.sh                           # 307 Playwright checks
 python3 tools/pkg_redact.py <package-root>        # strip credentials before shipping
 ```
 
 Current status: `verify_app.py` **12/12** · home **60/60** · composer **72/72** ·
-bugfix **23/23** · profile **20/20** (175 total).
+bugfix **23/23** · profile **20/20** · showcase **20/20** · refine **29/29** ·
+posttypes **33/33** · hero **23/23** · identity **25/25** (307 total).
 
 ## Rules for growing this codebase
 

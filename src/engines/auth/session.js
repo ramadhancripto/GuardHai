@@ -10,6 +10,7 @@ function enterGuardHaiHome() {
    localStorage.setItem('guardhai_logged_in', 'true');
     document.querySelectorAll('.auth-screen').forEach(s => s.classList.remove('active'));
     document.getElementById('appTopNav').style.display = 'flex';
+    document.getElementById('ghSearchBar')?.removeAttribute('hidden');
     document.getElementById('appBottomNav').style.display = 'flex';
     switchTab('home');
 }
@@ -17,6 +18,7 @@ function enterGuardHaiHome() {
 function handleSignOut() {
     localStorage.removeItem('guardhai_logged_in');
     document.getElementById('appTopNav').style.display = 'none';
+    document.getElementById('ghSearchBar')?.setAttribute('hidden', '');
     document.getElementById('appBottomNav').style.display = 'none';
     document.querySelectorAll('.page-container').forEach(p => p.classList.remove('active'));
     if (window.auth) window.auth.signOut();

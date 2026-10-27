@@ -1,0 +1,268 @@
+/* ==========================================================================
+   GuardHai · assets/css/14-identity.css
+   Background & iconic identity pass (task “10”).
+
+   Rules of this sheet, in order:
+     1. one green→blue identity gradient for identity surfaces only
+     2. white / light neutral behind all body content
+     3. one icon scale (00-tokens --gh-icon-*) instead of per-sheet pixels
+     4. one chip language for metadata (type, topic, status)
+   It is written entirely in tokens and never re-declares an existing component.
+   ========================================================================== */
+
+/* ==================================================== 1. QUICK SEARCH BAR */
+/* Sits under the top row; the header keeps its own 🔍 for the advanced sheet. */
+.gh-searchbar {
+    position: relative;
+    z-index: 4;
+    padding: var(--gh-s3) var(--gh-s6) var(--gh-s2);
+    background: var(--gh-surface);
+    border-bottom: 1px solid var(--gh-line);
+}
+
+.gh-searchbar[hidden] { display: none; }
+
+.gh-searchbar-inner {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.gh-searchbar-field {
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s3);
+    min-height: var(--gh-tap);
+    padding: 0 var(--gh-s4);
+    border: 1px solid var(--gh-line-strong);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface-alt);
+    transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.gh-searchbar-field:focus-within {
+    border-color: var(--gh-green);
+    background: var(--gh-surface);
+    box-shadow: var(--gh-ring);
+}
+
+/* the icon inside the field is the only search icon in the product */
+.gh-searchbar-open {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin-left: -2px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--gh-r-pill);
+    background: transparent;
+    color: var(--gh-muted);
+    cursor: pointer;
+    transition: color .15s ease, background .15s ease;
+}
+
+.gh-searchbar-open:hover { color: var(--gh-green-ink); background: var(--gh-green-soft); }
+.gh-searchbar-open:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 1px; }
+.gh-searchbar-open .ic { width: var(--gh-icon-sm); height: var(--gh-icon-sm); }
+
+.gh-searchbar-field input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 42px;
+    border: 0;
+    outline: none;
+    background: transparent;
+    font: inherit;
+    font-size: var(--gh-fs-body);
+    color: var(--gh-text);
+}
+
+.gh-searchbar-field input::placeholder { color: var(--gh-faint); }
+.gh-searchbar-field input::-webkit-search-cancel-button { display: none; }
+
+.gh-searchbar-clear {
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-line);
+    color: var(--gh-muted);
+    cursor: pointer;
+}
+
+.gh-searchbar-clear .ic { width: var(--gh-icon-xs); height: var(--gh-icon-xs); }
+.gh-searchbar-clear[hidden] { display: none; }
+
+.gh-searchbar-hint {
+    min-height: 14px;
+    margin: 4px var(--gh-s2) 0;
+    font-size: var(--gh-fs-caption);
+    color: var(--gh-muted);
+}
+
+.gh-searchbar-hint.is-empty { color: #A11818; }
+
+/* ================================================== 2. IDENTITY SURFACES */
+/* The soft green→blue band marks "this is the GuardHai identity area". It is
+   used on exactly three kinds of surface: the profile header, the page head of
+   Shield/Health and the SOS block. Everything else stays white/neutral. */
+
+.gh-profile-cover-grad {
+    background: var(--gh-grad-identity);
+    opacity: .92;
+}
+
+/* The SOS block keeps its own emergency red-tinted card: an identity band here
+   would fight the one colour that must stay unmistakably "emergency". */
+.gh-sos-card {
+    border-radius: var(--gh-r-lg);
+    box-shadow: var(--gh-shadow-1);
+}
+
+#shieldPage > div:first-child {
+    background: var(--gh-grad-band);
+    border: 1px solid var(--gh-grad-band-line);
+    border-radius: var(--gh-r-md);
+    padding: var(--gh-s3) var(--gh-s4);
+}
+
+#mapPage > h3 {
+    background: var(--gh-grad-band);
+    border: 1px solid var(--gh-grad-band-line);
+    border-radius: var(--gh-r-md);
+    margin: 0 0 var(--gh-s3);
+    padding: var(--gh-s3) var(--gh-s4);
+    font-size: var(--gh-fs-lead);
+    color: var(--gh-ink);
+}
+
+#commPage .modal-big-icon { background: var(--gh-blue-soft); }
+
+/* body copy always sits on white/neutral, never on the gradient */
+.gh-post,
+.gh-profile-body,
+.gh-card,
+.ghc-choice {
+    background: var(--gh-surface);
+}
+
+.gh-home .gh-section { background: transparent; }
+
+/* ========================================================= 3. ICON SCALE */
+/* One family, one stroke (00-tokens --gh-icon-stroke), four sizes. The scale is
+   re-stated here because older sheets each picked their own pixel value. */
+
+.top-nav.gh-topnav .gh-icon-btn .ic { width: var(--gh-icon-md); height: var(--gh-icon-md); }
+
+#appBottomNav .nav-tab-btn .ic,
+#appBottomNav .nav-sos-slot .ic { width: var(--gh-icon-lg); height: var(--gh-icon-lg); }
+
+.gh-qa-ico .ic,
+.gh-topic-ico .ic { width: var(--gh-icon-xl); height: var(--gh-icon-xl); }
+
+.gh-act .ic,
+.gh-post-menu .ic { width: var(--gh-icon-sm); height: var(--gh-icon-sm); }
+
+.gh-type-badge .ic,
+.gh-post-topic .ic,
+.gh-post-reposted .ic,
+.gh-contrib-pill .ic,
+.gh-topic-chip .ic,
+.gh-verify-pill .ic { width: var(--gh-icon-xs); height: var(--gh-icon-xs); }
+
+/* older sheets each nudged the stroke to 1.8 / 2 / 2.1 for their own context.
+   The identity pass re-asserts the single weight, keeping one documented
+   optical exception for icons smaller than 14px (they read too light at 1.9). */
+.gh-act .ic,
+.gh-qa-ico .ic,
+.gh-topic-ico .ic,
+.gh-actionsheet-ico .ic,
+.gh-profile-infocard-ico .ic,
+.forgot-success .ic,
+.modal-big-icon .ic,
+.gh-post-menu .ic { stroke-width: var(--gh-icon-stroke); }
+
+.gh-type-badge .ic,
+.gh-hero-toggle .ic,
+.gh-sos-note .ic,
+.gh-post-topic .ic,
+.gh-post-reposted .ic { stroke-width: var(--gh-icon-stroke-tiny); }
+
+/* ====================================================== 4. CHIP LANGUAGE */
+/* Every metadata chip: light surface, hairline border, one ink colour, pill
+   radius. Meaning is carried by the ink, never by a heavy fill. */
+
+.gh-type-badge,
+.gh-post-topic,
+.gh-post-audience,
+.gh-post-reposted,
+.gh-verify-pill,
+.gh-badge,
+.gh-contrib-pill,
+.gh-topic-chip,
+.gh-demo-chip {
+    border-radius: var(--gh-r-pill);
+    border: 1px solid var(--gh-line);
+    font-weight: var(--gh-fw-bold);
+    letter-spacing: .1px;
+}
+
+/* per-type fills live once, in 10-showcase.css / 12-posttypes.css, using the
+   --gh-type-soft-* / --gh-type-ink-* token pairs. Nothing is re-declared here. */
+.gh-post-topic {
+    background: var(--gh-green-soft);
+    border-color: #BBE6D5;
+    color: var(--gh-green-ink);
+}
+
+.gh-post-audience {
+    background: var(--gh-surface-alt);
+    border-color: var(--gh-line);
+    color: var(--gh-muted);
+}
+
+.gh-demo-chip {
+    background: var(--gh-red-soft);
+    border-color: #F6C9C5;
+    color: #A11818;
+}
+
+/* the repost attribution line reads as metadata, not as body copy */
+.gh-post-reposted {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 4px 0 0;
+    padding: 3px 9px;
+    background: var(--gh-blue-soft);
+    border-color: #C9DAFB;
+    color: #1D4ED8;
+    font-size: var(--gh-fs-caption);
+}
+
+.gh-act-repost.is-on { color: var(--gh-blue); }
+.gh-act-repost.is-on .ic { stroke: var(--gh-blue); }
+
+/* =========================================== 5. LIGHT BORDERS / RADII PASS */
+.gh-post,
+.gh-card {
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-lg);
+}
+
+.gh-qa,
+.gh-topic,
+.gh-profile-infocard {
+    border-radius: var(--gh-r-md);
+}
+
+@media (max-width: 619px) {
+    .gh-searchbar { padding: var(--gh-s2) var(--gh-s5) var(--gh-s1); }
+    .gh-searchbar-field { min-height: var(--gh-tap-sm); }
+    .gh-searchbar-field input { height: 38px; }
+}

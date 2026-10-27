@@ -782,8 +782,10 @@ fs.writeFileSync(FX.videoHuge, Buffer.concat([Buffer.from([0x1a, 0x45, 0xdf, 0xa
              top: [...document.querySelectorAll('.gh-top-actions > button')].map(b => b.getAttribute('aria-label')) };
   });
   rec('K3', 'Bottom nav untouched (Home, Afya, SOS, Shield, Chat)', navIntact.ok, navIntact.ids.join(' | '));
-  rec('K4', 'Top nav untouched (Storage, Notifications, Account, More)',
-      JSON.stringify(navIntact.top) === JSON.stringify(['Storage', 'Notifications', 'Account', 'More']), navIntact.top.join(' | '));
+  const wanted = ['Storage', 'Notifications', 'Account', 'More'];
+  rec('K4', 'Top nav is exactly Storage, Notifications, Account, More (single search below)',
+      JSON.stringify(navIntact.top) === JSON.stringify(wanted)
+        && !navIntact.top.some((l) => /tafuta/i.test(l || '')), navIntact.top.join(' | '));
 
   rec('K5', 'No page errors during the whole suite', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | ') || 'none');
   rec('K6', 'No console errors during the whole suite', consoleErrors.length === 0, consoleErrors.slice(0, 2).join(' | ') || 'none');

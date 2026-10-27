@@ -3,15 +3,41 @@
  * Pure rendering of one post. No state, no side effects beyond reading the
  * media URL cache — everything it needs arrives in `ctx`.
  *
- * ctx = { flags, commentCount, expanded, mediaUrl(id), preview }
+ * ctx = { flags, commentCount, expanded, mediaUrl(id), preview, role, author,
+ *         hideFollow }
+ *
+ * Layout follows the product showcase: a coloured type badge on top, the author
+ * row with a real photo when the profile has one, a title line, the body, the
+ * media (optionally with a warning band) and the five icon actions.
  */
 import { escapeHtml } from '../../core/dom.js';
-import { typeLabel, audienceLabel } from '../../domain/post.js';
+import { typeLabel, audienceLabel, normalizeTopic, topicLabel } from '../../domain/post.js';
+import { postBlocks } from './post-blocks.js';
 import { fmtSize, truncate } from '../../core/format.js';
 import { getCachedUrl } from '../../services/media.service.js';
 
 const COLLAPSE_AT = 240;
 
+/* --------------------------------------------------------------- badges */
+/**
+ * The badge is derived from the post itself, never invented: an institution
+ * announcement is `Taasisi`, a disaster topic is `Majanga`, and so on. The word
+ * is always shown next to the coloured chip, so colour is never the only cue.
+ */
+/**
+ * The badge describes the TOPIC of the post, never its type: the type is shown
+ * as its own chip (`typeLabel`), so the two axes can never be confused.
+ */
+export function typeBadge(post) {
+  const topic = normalizeTopic(post.topic);
+  if (topic === 'majanga') return { cls: 'gh-type-disaster', label: 'Majanga', icon: 'i-alert-triangle' };
+  if (topic === 'afya') return { cls: 'gh-type-health', label: 'Afya', icon: 'i-heart-pulse' };
+  if (topic === 'taasisi') return { cls: 'gh-type-org', label: 'Taasisi', icon: 'i-building' };
+  if (topic === 'kusaidiana') return { cls: 'gh-type-aid', label: 'Kusaidiana', icon: 'i-users' };
+  return { cls: 'gh-type-safety', label: 'Usalama', icon: 'i-shield-check' };
+}
+
+/* ---------------------------------------------------------------- media */
 export function mediaHtml(post) {
   const items = post.media || [];
   if (!items.length) return '';
@@ -68,6 +94,7 @@ export function mediaHtml(post) {
   return html;
 }
 
+/* ----------------------------------------------------------------- card */
 export function postCard(post, ctx = {}) {
   const flags = ctx.flags || {};
   const preview = !!ctx.preview;
@@ -77,7 +104,6 @@ export function postCard(post, ctx = {}) {
     ? '<span class="gh-badge-sample">Sampuli</span>'
     : '<span class="gh-badge-sample gh-badge-mine">Haijachapishwa mtandaoni</span>';
 
-  const authorId = post.authorId || '';
   const verified = post.verified === true
     ? '<svg class="ic gh-verified" aria-label="Imethibitishwa"><use href="#i-check-circle"/></svg>'
     : '';
@@ -97,13 +123,17 @@ export function postCard(post, ctx = {}) {
 
   const canSend = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
   const actionRow = preview ? '' : `
+    ${post.repostOf ? `<p class="gh-post-reposted">
+      <svg class="ic" aria-hidden="true"><use href="#i-repost"/></svg>
+      Umerudia kutoka kwa ${escapeHtml(post.repostOf.authorName || 'mtumiaji mwingine')}
+    </p>` : ''}
     <div class="gh-post-actions" role="group" aria-label="Vitendo vya chapisho">
       <button type="button" class="gh-act ${flags.helpful ? 'is-on' : ''}" data-act="helpful"
               data-post="${escapeHtml(post.id)}" aria-pressed="${!!flags.helpful}"
               aria-label="Imenisaidia" title="Imenisaidia">
         <svg class="ic" aria-hidden="true"><use href="#i-heart"/></svg><span>Imenisaidia</span>
       </button>
-      <button type="button" class="gh-act ${commentCount ? 'has-count' : ''}" data-act="comment"
+      <button type="button" class="gh-act gh-act-comment ${commentCount ? 'has-count is-on' : ''}" data-act="comment"
               data-post="${escapeHtml(post.id)}" aria-label="${commentLabel}" title="${commentLabel}">
         <svg class="ic" aria-hidden="true"><use href="#i-message"/></svg><span>${commentLabel}</span>
       </button>
@@ -111,11 +141,23 @@ export function postCard(post, ctx = {}) {
               aria-label="Shiriki" title="Shiriki">
         <svg class="ic" aria-hidden="true"><use href="#i-share"/></svg><span>Shiriki</span>
       </button>
-      <button type="button" class="gh-act ${flags.saved ? 'is-on' : ''}" data-act="save"
+      <button type="button" class="gh-act gh-act-save ${flags.saved ? 'is-on' : ''}" data-act="save"
               data-post="${escapeHtml(post.id)}" aria-pressed="${!!flags.saved}"
               aria-label="Hifadhi" title="Hifadhi">
         <svg class="ic" aria-hidden="true"><use href="#i-bookmark"/></svg><span>${flags.saved ? 'Imehifadhiwa' : 'Hifadhi'}</span>
       </button>
+      ${post.repostOf ? `
+      <button type="button" class="gh-act gh-act-repost is-on" data-act="unrepost"
+              data-post="${escapeHtml(post.repostOf.postId)}" aria-pressed="true"
+              aria-label="Ondoa rudio" title="Ondoa rudio">
+        <svg class="ic" aria-hidden="true"><use href="#i-repost"/></svg><span>Ondoa rudio</span>
+      </button>` : `
+      <button type="button" class="gh-act gh-act-repost ${ctx.reposted ? 'is-on' : ''}" data-act="repost"
+              data-post="${escapeHtml(post.id)}" aria-pressed="${!!ctx.reposted}"
+              aria-label="${ctx.reposted ? 'Ondoa rudio' : 'Rudia chapisho'}"
+              title="${ctx.reposted ? 'Ondoa rudio' : 'Rudia'}">
+        <svg class="ic" aria-hidden="true"><use href="#i-repost"/></svg><span>${ctx.reposted ? 'Imerudiwa' : 'Rudia'}</span>
+      </button>`}
       <button type="button" class="gh-act gh-act-more" data-act="more" data-post="${escapeHtml(post.id)}"
               aria-haspopup="menu" aria-expanded="false" aria-label="Vitendo zaidi" title="Vitendo zaidi">
         <svg class="ic"><use href="#i-more-vertical"/></svg>
@@ -139,17 +181,39 @@ export function postCard(post, ctx = {}) {
         <button type="button" role="menuitem" class="gh-menu-item gh-menu-danger" data-menu="report" data-post="${escapeHtml(post.id)}">
           <svg class="ic"><use href="#i-flag"/></svg> <span>Ripoti</span>
         </button>
+        <button type="button" role="menuitem" class="gh-menu-item" data-menu="all" data-post="${escapeHtml(post.id)}">
+          <svg class="ic"><use href="#i-list"/></svg> <span>Vitendo vyote</span>
+        </button>
       </div>
     </div>`;
 
   const role = ctx.role || null;
+  const author = ctx.author || {};
   const roleStyle = role ? `--gh-role:${role.accent};--gh-role-soft:${role.soft};--gh-role-ink:${role.ink}` : '';
   const roleChip = role && role.id !== 'member'
     ? `<span class="gh-post-avatar-role" title="${escapeHtml(role.label)}">
          <svg class="ic" aria-hidden="true"><use href="#${role.icon}"/></svg></span>`
     : '';
   const roleLine = role && role.id !== 'member'
-    ? `<div class="gh-post-role">${escapeHtml(role.label)}</div>`
+    ? `<span class="gh-post-role">${escapeHtml(role.label)}</span>`
+    : '';
+
+  const photo = author.avatarUrl || null;
+  const avatar = photo
+    ? `<img src="${escapeHtml(photo)}" alt="" loading="lazy">`
+    : escapeHtml(post.initials || 'GH');
+
+  const type = typeBadge(post);
+  const place = post.location || author.location || '';
+  const timeLine = [post.timeLabel || '', place].filter(Boolean).join(' · ');
+  const media = mediaHtml(post);
+  const blocksHtml = postBlocks(post);
+  const mediaBlock = media
+    ? `<div class="gh-post-media-wrap">${media}${post.alertText
+        ? `<div class="gh-media-alert" role="note">
+             <svg class="ic" aria-hidden="true"><use href="#i-alert-triangle"/></svg>
+             <span>${escapeHtml(post.alertText)}<small>Sampuli — si arifa ya dharura ya moja kwa moja.</small></span>
+           </div>` : ''}</div>`
     : '';
 
   return `
@@ -157,26 +221,38 @@ export function postCard(post, ctx = {}) {
       <div class="gh-post-head">
         <button type="button" class="gh-post-author" data-profile="${escapeHtml(post.authorId || '')}"
                 aria-label="Fungua wasifu wa ${escapeHtml(post.authorName)}">
-          <span class="gh-post-avatar" aria-hidden="true">${escapeHtml(post.initials || 'GH')}${roleChip}</span>
+          <span class="gh-post-avatar" aria-hidden="true">${avatar}${roleChip}</span>
           <span class="gh-post-who">
             <span class="gh-post-name">${escapeHtml(post.authorName)}${verified}</span>
             ${roleLine}
-            <span class="gh-post-type">${escapeHtml(typeLabel(post.type))} · ${escapeHtml(audienceLabel(post.audience))}</span>
+            <span class="gh-post-time">${escapeHtml(timeLine)}</span>
           </span>
         </button>
-        ${(preview || ctx.hideFollow) ? '' : `<button type="button" class="gh-post-follow ${flags.following ? 'is-on' : ''}"
-            data-follow-btn data-post="${escapeHtml(post.id)}"
-            aria-pressed="${!!flags.following}">${flags.following ? 'Unafuata' : 'Fuata'}</button>`}
+        <div class="gh-post-headend">
+          ${(preview || ctx.hideFollow) ? '' : `<button type="button" class="gh-post-follow ${flags.following ? 'is-on' : ''}"
+              data-follow-btn data-post="${escapeHtml(post.id)}"
+              aria-pressed="${!!flags.following}">${flags.following ? 'Unafuata' : 'Fuata'}</button>`}
+          ${(preview || ctx.hideFollow) ? '' : `<button type="button" class="gh-post-more" data-act="more"
+              data-post="${escapeHtml(post.id)}" aria-haspopup="menu" aria-expanded="false"
+              aria-label="Vitendo zaidi" title="Vitendo zaidi">
+              <svg class="ic" aria-hidden="true"><use href="#i-more-vertical"/></svg>
+            </button>`}
+        </div>
       </div>
-      <div class="gh-post-meta">
+
+      <div class="gh-post-topline">
+        <span class="gh-type-badge ${type.cls}">
+          <svg class="ic" aria-hidden="true"><use href="#${type.icon}"/></svg>${type.label}
+        </span>
         ${badge}
-        <span class="gh-post-topic">${escapeHtml(post.topicLabel)}</span>
-        <span class="gh-post-time">${escapeHtml(post.timeLabel || '')}</span>
+        <span class="gh-post-topic">${escapeHtml(post.topicLabel || topicLabel(post.topic))}</span>
+        <span class="gh-post-audience">${escapeHtml(typeLabel(post.type))} · ${escapeHtml(audienceLabel(post.audience))}</span>
       </div>
       ${title}
       <p class="gh-post-text">${escapeHtml(shown)}</p>
       ${expandBtn}
-      ${mediaHtml(post)}
+      ${mediaBlock}
+      ${post.sample ? '' : ''}${blocksHtml}
       ${actionRow}
     </article>`;
 }

@@ -1,0 +1,440 @@
+{
+  "url": "http://127.0.0.1:8123/index.html",
+  "at": "2026-10-27T18:49:46.883Z",
+  "pass": 72,
+  "total": 72,
+  "checks": [
+    {
+      "id": "A0",
+      "name": "Browser can produce a real WEBM via MediaRecorder",
+      "ok": true,
+      "detail": "23844 B"
+    },
+    {
+      "id": "A1",
+      "name": "Composer, tray and preview step exist",
+      "ok": true,
+      "detail": "true/true/true"
+    },
+    {
+      "id": "A2",
+      "name": "Hidden file inputs use correct types and MIME filters",
+      "ok": true,
+      "detail": "ghcFileImage:image/jpeg,image/png,image/webp,image/gif ; ghcFileVideo:video/mp4,video/webm"
+    },
+    {
+      "id": "A3",
+      "name": "Five post types wired",
+      "ok": true,
+      "detail": "elimu,swali,uzoefu,taarifa,fursa"
+    },
+    {
+      "id": "A4",
+      "name": "Footer exposes Draft, Preview and Publish before previewing",
+      "ok": true,
+      "detail": "Hifadhi Rasimu | Hakiki | Chapisha"
+    },
+    {
+      "id": "A5",
+      "name": "Cancel control is labelled for screen readers",
+      "ok": true,
+      "detail": "Ghairi chapisho"
+    },
+    {
+      "id": "A6",
+      "name": "Every visible form label points at a real control",
+      "ok": true,
+      "detail": "4 labels"
+    },
+    {
+      "id": "B0",
+      "name": "Character counters track typing",
+      "ok": true,
+      "detail": "24/120 title, 81/600 text"
+    },
+    {
+      "id": "B1",
+      "name": "Text-only post is published into the local feed",
+      "ok": true,
+      "detail": "8 -> 9"
+    },
+    {
+      "id": "B2",
+      "name": "Composer closes and confirms device-only publish",
+      "ok": true,
+      "detail": "Imehifadhiwa kwenye kifaa hiki — haijatumwa mtandaoni."
+    },
+    {
+      "id": "B3",
+      "name": "User post is never marked verified and carries the not-online badge",
+      "ok": true,
+      "detail": "HAIJACHAPISHWA MTANDAONI"
+    },
+    {
+      "id": "C1",
+      "name": "Two images attach with real local previews",
+      "ok": true,
+      "detail": "2 items / 2 thumbs"
+    },
+    {
+      "id": "C2",
+      "name": "Each attachment has remove + replace controls and a device-only tag",
+      "ok": true,
+      "detail": "Kifaa hiki pekee"
+    },
+    {
+      "id": "C3",
+      "name": "Removing one image leaves the other",
+      "ok": true,
+      "detail": "1 left"
+    },
+    {
+      "id": "C4",
+      "name": "Replace re-opens the file picker",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "C5",
+      "name": "Image count is capped at 4 per post",
+      "ok": true,
+      "detail": "4 attached — \"Picha: kiwango cha juu ni 4 kwa chapisho.\""
+    },
+    {
+      "id": "C6",
+      "name": "Preview renders a 4-up responsive gallery",
+      "ok": true,
+      "detail": "gh-gal gh-gal-4"
+    },
+    {
+      "id": "C7",
+      "name": "Preview hides engagement actions (nothing to act on yet)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "C8",
+      "name": "Published post keeps real image previews in the feed",
+      "ok": true,
+      "detail": "4 images"
+    },
+    {
+      "id": "C9",
+      "name": "Tapping a photo opens a local lightbox",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "D1",
+      "name": "Video attaches with a local blob thumbnail in the tray",
+      "ok": true,
+      "detail": "src=blob: Kifaa hiki pekee"
+    },
+    {
+      "id": "D1b",
+      "name": "Preview step shows a controllable video before publishing",
+      "ok": true,
+      "detail": "{\"has\":true,\"controls\":true,\"ready\":4,\"src\":\"blob:\"}"
+    },
+    {
+      "id": "D2",
+      "name": "Video is playable in the feed (metadata + playback advances)",
+      "ok": true,
+      "detail": "{\"has\":true,\"ok\":true,\"ready\":4,\"duration\":1.4,\"time\":0.7,\"controls\":true,\"paused\":false}"
+    },
+    {
+      "id": "D3",
+      "name": "Video player exposes native controls and a known duration",
+      "ok": true,
+      "detail": "duration 1.4s"
+    },
+    {
+      "id": "D4",
+      "name": "Record button enters a visible recording state",
+      "ok": true,
+      "detail": "Simamisha"
+    },
+    {
+      "id": "D5",
+      "name": "Recorded audio becomes a playable attachment on the device",
+      "ok": true,
+      "detail": "rekodi-1793126967063.webm playable=true "
+    },
+    {
+      "id": "D6",
+      "name": "Published audio plays inline in the feed",
+      "ok": true,
+      "detail": "{\"has\":true,\"controls\":true,\"src\":\"blob:\"}"
+    },
+    {
+      "id": "E1",
+      "name": "Wrong MIME type is rejected with a readable reason",
+      "ok": true,
+      "detail": "notes.txt: aina \"text/plain\" hairuhusiwi. Inaruhusiwa: image/jpeg, image/png, "
+    },
+    {
+      "id": "E2",
+      "name": "Oversized image (>5 MB) is rejected",
+      "ok": true,
+      "detail": "guardhai-big.png: 5.6 MB inazidi kikomo cha 5.0 MB."
+    },
+    {
+      "id": "E3",
+      "name": "Oversized video (>50 MB) is rejected",
+      "ok": true,
+      "detail": "huge.webm: 51.0 MB inazidi kikomo cha 50.0 MB."
+    },
+    {
+      "id": "E4",
+      "name": "Non http(s) link is rejected",
+      "ok": true,
+      "detail": "Kiungo lazima kianze na http:// au https://"
+    },
+    {
+      "id": "E5",
+      "name": "Valid source link attaches as a link card",
+      "ok": true,
+      "detail": "who.int/fact-sheets"
+    },
+    {
+      "id": "E6",
+      "name": "Publishing with no text/title is blocked and keeps the composer open",
+      "ok": true,
+      "detail": "13 -> 13"
+    },
+    {
+      "id": "E7",
+      "name": "Validation messages do not leak between composer sessions",
+      "ok": true,
+      "detail": "0 shown"
+    },
+    {
+      "id": "F1",
+      "name": "Cancel closes the composer, clears the editor and removes attachments",
+      "ok": true,
+      "detail": "Umeghairi. Maandishi yamehifadhiwa kama rasimu kwenye kifaa "
+    },
+    {
+      "id": "F2",
+      "name": "Cancel keeps the text as a device draft instead of silently losing it",
+      "ok": true,
+      "detail": "Umeghairi. Maandishi yamehifadhiwa kama rasimu kwenye kifaa hiki."
+    },
+    {
+      "id": "F3",
+      "name": "Cancelling never publishes",
+      "ok": true,
+      "detail": "13 -> 13 posts"
+    },
+    {
+      "id": "F4",
+      "name": "Saved drafts surface inside the composer",
+      "ok": true,
+      "detail": "Rasimu zilizohifadhiwa: 1 Pakia ya mwisho"
+    },
+    {
+      "id": "F5",
+      "name": "Latest draft reloads into the editor",
+      "ok": true,
+      "detail": "Chapisho nitakalo ghairi."
+    },
+    {
+      "id": "F6",
+      "name": "Save Draft writes text (never media) to this device and closes",
+      "ok": true,
+      "detail": "2 drafts, media fields present: 0"
+    },
+    {
+      "id": "G1",
+      "name": "Like shows a label, no fabricated count",
+      "ok": true,
+      "detail": "Imenisaidia"
+    },
+    {
+      "id": "G2",
+      "name": "Like toggles with a real selected state",
+      "ok": true,
+      "detail": "Imenisaidia"
+    },
+    {
+      "id": "G3",
+      "name": "Like toggles back off",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G4",
+      "name": "Save toggles on with aria-pressed and the \"Imehifadhiwa\" label",
+      "ok": true,
+      "detail": "Imehifadhiwa"
+    },
+    {
+      "id": "G5",
+      "name": "Comment is added to the correct thread",
+      "ok": true,
+      "detail": "1 comment"
+    },
+    {
+      "id": "G6",
+      "name": "Thread states comments never leave the device",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G7",
+      "name": "Comment count appears only after a real comment exists",
+      "ok": true,
+      "detail": "Maoni (1)"
+    },
+    {
+      "id": "G8",
+      "name": "Share uses the native sheet when present, otherwise copies a sample link",
+      "ok": true,
+      "detail": "native=false — Kiungo kimenakiliwa. Hakuna seva — kiungo ni cha sampuli."
+    },
+    {
+      "id": "G9",
+      "name": "Three-dot menu holds Follow / Copy / Report (+ profile, send)",
+      "ok": true,
+      "detail": "Fuata mwandishi | Fungua wasifu | Tuma kwa mtu (haipatikani) | Nakili kiungo | Ripoti | Vitendo vyote"
+    },
+    {
+      "id": "G10",
+      "name": "Follow from the menu updates the card button state",
+      "ok": true,
+      "detail": "Unafuata"
+    },
+    {
+      "id": "G11",
+      "name": "Report flow offers reasons and states it is not transmitted",
+      "ok": true,
+      "detail": "5 reasons"
+    },
+    {
+      "id": "G12",
+      "name": "Report is stored locally with reason and never claims to be sent",
+      "ok": true,
+      "detail": "false — Ripoti imehifadhiwa kwenye kifaa hiki — haijatumwa"
+    },
+    {
+      "id": "H1",
+      "name": "Long descriptions collapse with a Zaidi control",
+      "ok": true,
+      "detail": "240 chars shown"
+    },
+    {
+      "id": "H2",
+      "name": "Zaidi expands the full text and switches to Punguza",
+      "ok": true,
+      "detail": "367 chars, Punguza"
+    },
+    {
+      "id": "I1",
+      "name": "Focus moves into the composer when it opens",
+      "ok": true,
+      "detail": "ghcText"
+    },
+    {
+      "id": "I2",
+      "name": "Composer is reachable by keyboard without escaping the modal",
+      "ok": true,
+      "detail": "Elimu > Afya > Usalama > Taasisi > Kusaidiana"
+    },
+    {
+      "id": "I3",
+      "name": "Escape cancels the composer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "I4",
+      "name": "No horizontal overflow at any width",
+      "ok": true,
+      "detail": "320:320 360:360 390:390 430:430 768:768 1024:1024 1440:1440"
+    },
+    {
+      "id": "I5",
+      "name": "Composer card and footer stay inside the viewport",
+      "ok": true,
+      "detail": "320:846px 360:846px 390:846px 430:846px 768:846px 1024:846px 1440:846px"
+    },
+    {
+      "id": "J1",
+      "name": "All composer/engagement icons come from the single sprite family",
+      "ok": true,
+      "detail": "76 icons, 6 unique"
+    },
+    {
+      "id": "J2b",
+      "name": "Selected engagement state is visually distinct (filled or tinted)",
+      "ok": true,
+      "detail": "fill=rgb(37, 99, 235)"
+    },
+    {
+      "id": "J2",
+      "name": "Unselected icons share one stroke weight and outline fill",
+      "ok": true,
+      "detail": "stroke-widths 1.9px fill=none"
+    },
+    {
+      "id": "J3",
+      "name": "Icons are size-consistent",
+      "ok": true,
+      "detail": "16x16"
+    },
+    {
+      "id": "J4",
+      "name": "Engagement row shows counts only when a real local count exists",
+      "ok": true,
+      "detail": "Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia | Imenisaidia | Maoni (1) | Shiriki | Imehifadhiwa | Rudia | Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia | Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia | Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia | Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia | Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia | Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia | Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia | Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia | Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia | Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia | Imenisaidia | Maoni | Shiriki | Hifadhi | Rudia"
+    },
+    {
+      "id": "J5",
+      "name": "Publishing performs no write requests (no upload/API call)",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "id": "J6",
+      "name": "Publishing makes no external network calls at all",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "id": "K1",
+      "name": "No duplicate element ids after the upgrade",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "id": "K2",
+      "name": "Every inline HomeUI handler resolves to a real function",
+      "ok": true,
+      "detail": "26 handlers, missing: none"
+    },
+    {
+      "id": "K3",
+      "name": "Bottom nav untouched (Home, Afya, SOS, Shield, Chat)",
+      "ok": true,
+      "detail": "tab-home | tab-health | tab-sos | tab-shield | tab-chat"
+    },
+    {
+      "id": "K4",
+      "name": "Top nav is exactly Storage, Notifications, Account, More (single search below)",
+      "ok": true,
+      "detail": "Storage | Notifications | Account | More"
+    },
+    {
+      "id": "K5",
+      "name": "No page errors during the whole suite",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "id": "K6",
+      "name": "No console errors during the whole suite",
+      "ok": true,
+      "detail": "none"
+    }
+  ]
+}

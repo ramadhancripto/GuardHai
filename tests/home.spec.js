@@ -36,8 +36,11 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
   /* ---------------- A. top navigation ---------------- */
   const topOrder = await page.$$eval('.gh-top-actions > button', els =>
     els.map(e => e.getAttribute('aria-label')));
-  rec('A1', 'Top nav order = Storage, Notifications, Account, More',
-      JSON.stringify(topOrder) === JSON.stringify(['Storage', 'Notifications', 'Account', 'More']),
+  const coreActions = topOrder.filter((l) => ['Storage', 'Notifications', 'Account', 'More'].includes(l));
+  rec('A1', 'Top nav is Storage → Notifications → Account → More (search lives in the field)',
+      JSON.stringify(topOrder) === JSON.stringify(['Storage', 'Notifications', 'Account', 'More'])
+        && coreActions.length === 4
+        && !topOrder.some((l) => /tafuta/i.test(l || '')),
       topOrder.join(' > '));
 
   const brand = await page.$eval('.gh-brand-name', e => e.innerText.trim()).catch(() => '');
@@ -118,10 +121,14 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
 
   /* ---------------- D. quick actions ---------------- */
   const qa = await page.$$eval('.gh-qa .gh-qa-label', els => els.map(e => e.innerText.trim()));
-  const expected = ['Afya', 'Shield', 'Tafuta Kifaa', 'Ramani', 'Walezi', 'Elimu ya Usalama'];
-  rec('D1', 'Six quick actions in order', JSON.stringify(qa) === JSON.stringify(expected), qa.join(' | '));
+  const qaKeys = await page.$$eval('.gh-qa', els => els.map(e => e.dataset.qa));
+  const expected = ['Afya', 'Usalama', 'Tafuta Kifaa', 'Walezi', 'Elimu ya Usalama', 'Ramani'];
+  rec('D1', 'Six quick actions in the showcased order (Ramani kept as the sixth)',
+      JSON.stringify(qa) === JSON.stringify(expected) &&
+      JSON.stringify(qaKeys) === JSON.stringify(['health', 'shield', 'find', 'guardians', 'learn', 'map']),
+      qa.join(' | '));
 
-  await page.click('.gh-qa >> nth=0');           // Afya
+  await page.click('.gh-qa[data-qa="health"]');
   await page.waitForTimeout(500);
   const healthOk = await page.evaluate(() =>
     document.getElementById('shieldPage').classList.contains('active') &&
@@ -131,14 +138,14 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
 
   await page.evaluate(() => HomeUI.go('home'));
   await page.waitForTimeout(400);
-  await page.click('.gh-qa >> nth=2');           // Tafuta Kifaa
+  await page.click('.gh-qa[data-qa="find"]');
   await page.waitForTimeout(500);
   const findOk = await page.$eval('#pillar-content-find', e => getComputedStyle(e).display !== 'none');
   rec('D3', 'Tafuta Kifaa opens the existing Find pillar', findOk);
 
   await page.evaluate(() => HomeUI.go('home'));
   await page.waitForTimeout(400);
-  await page.click('.gh-qa >> nth=4');           // Walezi
+  await page.click('.gh-qa[data-qa="guardians"]');
   await page.waitForTimeout(350);
   const guardianSheet = await page.$eval('#ghSheetBody', e => e.innerText);
   rec('D4', 'Walezi states guardians are NOT connected (no fake list)',
@@ -146,7 +153,7 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
   await page.keyboard.press('Escape');
   await page.waitForTimeout(250);
 
-  await page.click('.gh-qa >> nth=5');           // Elimu ya Usalama
+  await page.click('.gh-qa[data-qa="learn"]');
   await page.waitForTimeout(600);
   const scrolled = await page.evaluate(() => {
     const r = document.getElementById('ghUwanja').getBoundingClientRect();
@@ -165,12 +172,13 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
   rec('E1', 'Feed renders sample posts', feed.posts >= 4, `${feed.posts} posts`);
   rec('E2', 'Every sample post carries a SAMPULI badge', feed.badges === feed.posts, `${feed.badges}/${feed.posts}`);
   rec('E3', 'No fake verification badge', feed.verified === 0, `${feed.verified} found`);
+  // topic taxonomy v2 (2026-10): Afya, Usalama, Taasisi, Kusaidiana, Majanga
   rec('E4', 'Five required topics present',
-      ['Usalama wa Watu', 'Afya', 'Uhalifu na Mali', 'Ajali na Majanga', 'Usalama wa Kidijitali']
+      ['Afya', 'Usalama', 'Taasisi', 'Kusaidiana', 'Majanga']
         .every(t => feed.topics.includes(t)), feed.topics.join(' | '));
   rec('E5', 'Feed carries an explicit sample-content note', /SAMPULI/i.test(feed.note));
 
-  await page.click('#ghTopics .gh-topic[data-topic="health"]');
+  await page.click('#ghTopics .gh-topic[data-topic="afya"]');
   await page.waitForTimeout(300);
   const filtered = await page.$$eval('.gh-post-topic', els => els.map(e => e.innerText.trim()));
   rec('E6', 'Topic filter works', filtered.length > 0 && filtered.every(t => t === 'Afya'), filtered.join(','));
@@ -243,12 +251,40 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
   await page.keyboard.press('Escape');
   await page.waitForTimeout(200);
 
+  /* ---------------- repost ---------------- */
+  const cardsBefore = await page.$$eval('#ghFeed .gh-post', els => els.length);
+  await page.click('#ghFeed .gh-post [data-act="repost"]');
+  await page.waitForTimeout(700);
+  const reposted = await page.evaluate(() => {
+    const card = document.querySelector('#ghFeed .gh-post:has(.gh-post-reposted)');
+    return {
+      cards: document.querySelectorAll('#ghFeed .gh-post').length,
+      marker: card?.querySelector('.gh-post-reposted')?.innerText.trim() || '',
+      pressed: !!card?.querySelector('[data-act="unrepost"][aria-pressed="true"]'),
+      originalOn: !!document.querySelector('.gh-post:not(:has(.gh-post-reposted)) [data-act="repost"][aria-pressed="true"]'),
+      sample: !!card?.querySelector('.gh-badge-sample'),
+      toast: document.getElementById('ghToast')?.innerText || ''
+    };
+  });
+  rec('F8', 'Repost adds a second feed card that names the original author',
+      reposted.cards === cardsBefore + 1 && /umerudia kutoka kwa/i.test(reposted.marker)
+        && reposted.pressed && reposted.originalOn,
+      `${cardsBefore} → ${reposted.cards} · ${reposted.marker}`);
+
+  await page.click('#ghFeed .gh-post:has(.gh-post-reposted) [data-act="unrepost"]');
+  await page.waitForTimeout(700);
+  const undoCount = await page.$$eval('#ghFeed .gh-post', els => els.length);
+  rec('F9', 'Reposting again removes the copy and says it stays on this device',
+      undoCount === cardsBefore && /kifaa hiki/i.test(reposted.toast),
+      `${reposted.cards} → ${undoCount} · ${reposted.toast}`);
+
   /* ---------------- F. composer ---------------- */
   await page.click('.gh-compose-btn');
   await page.waitForTimeout(350);
   const composer = await page.evaluate(() => ({
     open: document.getElementById('ghComposer').classList.contains('open'),
-    types: [...document.querySelectorAll('#ghcTypes .ghc-chip')].map(c => c.innerText.trim()),
+    types: [...document.querySelectorAll('#ghcTypes .ghc-chip')].map(c => c.dataset.type),
+    typeLabels: [...document.querySelectorAll('#ghcTypes .ghc-chip span')].map(c => c.innerText.trim()),
     topics: [...document.querySelectorAll('#ghcTopic option')].map(o => o.textContent.trim()),
     audiences: [...document.querySelectorAll('#ghcAudience option')].map(o => o.textContent.trim()),
     media: [...document.querySelectorAll('.ghc-media-btn')].map(b => b.innerText.trim()),
@@ -257,9 +293,10 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
     hasDraft: !!document.getElementById('ghcDraftBtn')
   }));
   rec('F1c', 'Composer opens', composer.open);
-  rec('F2c', 'Five post types present',
-      ['Elimu', 'Swali', 'Uzoefu wa Jamii', 'Taarifa ya Taasisi', 'Fursa ya Kusaidia']
-        .every(t => composer.types.includes(t)), composer.types.join(' | '));
+  rec('F2c', 'Five post types present (short showcase labels, same five types)',
+      JSON.stringify(composer.types) === JSON.stringify(['elimu', 'swali', 'uzoefu', 'taarifa', 'fursa'])
+        && ['Elimu', 'Swali', 'Uzoefu', 'Taarifa', 'Kusaidia'].every(t => composer.typeLabels.includes(t)),
+      `${composer.types.join(',')} → ${composer.typeLabels.join(' | ')}`);
   rec('F3c', 'Topic + audience selectors present', composer.topics.length === 5 && composer.audiences.length === 3,
       `${composer.topics.length} topics / ${composer.audiences.length} audiences`);
   rec('F4c', 'Photo/video/audio/record/link controls present', composer.media.length === 5, composer.media.join(' | '));
@@ -372,7 +409,8 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
     navHealth: document.querySelector('#tab-health .tab-label')?.innerText.trim()
   }));
   rec('H1', 'Home strings switch to English',
-      en.welcome === 'Welcome to GuardHai' && en.uwanja === 'GuardHai Community' && en.navHealth === 'Health',
+      en.welcome === 'Welcome to GuardHai'
+        && en.uwanja === 'Uwanja – Learn and Help Each Other' && en.navHealth === 'Health',
       `${en.welcome} / ${en.uwanja} / ${en.navHealth}`);
   await page.evaluate(() => I18N.setLanguage('sw'));
   await page.waitForTimeout(400);

@@ -88,6 +88,13 @@ export async function saveMyProfile(draft) {
     primaryRole: roles[0] || 'member',
     topics: (draft.topics || []).slice(0, 5),
     location: String(draft.location || '').trim(),
+    // role-shaped optional fields: saved only when the editor provides them,
+    // otherwise the stored value is kept as-is (normalizeProfile trims + caps).
+    affiliation: draft.affiliation ?? previous.affiliation,
+    availability: draft.availability ?? previous.availability,
+    serviceAreas: draft.serviceAreas ?? previous.serviceAreas,
+    orgKind: draft.orgKind ?? previous.orgKind,
+    coverage: draft.coverage ?? previous.coverage,
     avatarUrl: draft.avatarUrl ?? previous.avatarUrl,
     isSelf: true,
     sample: false

@@ -1,0 +1,581 @@
+/* ==========================================================================
+   GuardHai · 10-SHOWCASE
+   Part 10/10 — the visual language from the product showcase:
+   brand header, photo hero, SOS card, circular quick actions, type badges,
+   post cards with a media warning band, photo profiles and the composer sheet.
+
+   Additive: nothing here deletes or renames a component that already existed.
+   Where a rule replaces an older look it is scoped tighter, so the older
+   stylesheet still works as a fallback.
+   ========================================================================== */
+
+:root {
+    --gh-r-sm: 10px;
+    --gh-r-md: 14px;
+    --gh-r-lg: 20px;
+    --gh-r-xl: 26px;
+    --gh-shadow-1: 0 1px 2px rgba(9, 30, 46, .05), 0 6px 18px rgba(9, 30, 46, .05);
+    --gh-shadow-2: 0 10px 30px rgba(9, 30, 46, .10);
+    --gh-type-disaster: #DC2626;
+    --gh-type-health: #2563EB;
+    --gh-type-safety: #0F7C5C;
+    --gh-type-org: #B8860B;
+    --gh-type-learn: #7C3AED;
+    --gh-verified: #0E9F6E;
+}
+
+/* ========================================================== 1. BRAND HEADER */
+.top-nav.gh-topnav {
+    padding: 10px 16px 9px;
+    gap: 12px;
+    box-shadow: 0 1px 0 rgba(9, 30, 46, .04);
+}
+.top-nav.gh-topnav .gh-brand {
+    align-items: center;
+    gap: 10px;
+    padding: 2px 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+}
+.top-nav.gh-topnav .gh-logo {
+    width: 38px; height: 38px; border-radius: 12px;
+    background: linear-gradient(150deg, #1FBF8F 0%, #0E8F6B 62%, #0A6F53 100%);
+    box-shadow: 0 6px 14px rgba(14, 143, 107, .30);
+}
+.top-nav.gh-topnav .gh-logo .ic { width: 21px; height: 21px; }
+.gh-brand-block {
+    display: flex; flex-direction: column; line-height: 1.1;
+    min-width: 0; flex: 1 1 auto; overflow: hidden;
+}
+.gh-brand-name { font-size: 18px; letter-spacing: -0.4px; font-weight: 900; }
+.gh-brand-tag {
+    font-size: 10px; font-weight: 600; color: var(--gh-green-ink);
+    letter-spacing: 0.1px; margin-top: 2px; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+}
+.gh-top-actions { gap: 0; flex: 0 0 auto; }
+.top-nav.gh-topnav .gh-icon-btn { width: 36px; height: 36px; border-radius: 11px; color: #2C3A4B; }
+.top-nav.gh-topnav .gh-icon-btn .ic { width: 21px; height: 21px; stroke-width: 1.9; }
+.gh-icon-btn .gh-count-dot {
+    position: absolute; top: 2px; right: 1px; min-width: 15px; height: 15px;
+    padding: 0 4px; border-radius: 999px; background: #E11D2E; color: #fff;
+    font-size: 9px; font-weight: 800; line-height: 15px; text-align: center;
+    border: 1.5px solid #fff; font-family: inherit;
+}
+.gh-icon-btn .gh-count-dot[hidden] { display: none; }
+
+/* ============================================================ 2. GREETING */
+.page-container.gh-home { padding: 14px 16px 132px; }
+.gh-welcome { margin: 0 0 12px; }
+.gh-welcome-title { font-size: 17px; letter-spacing: -0.3px; }
+.gh-welcome-sub { font-size: 11.5px; margin-top: 2px; color: var(--gh-muted); }
+.gh-welcome-brand {
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-top: 6px; font-size: 10.5px; font-weight: 800;
+    letter-spacing: .6px; text-transform: uppercase;
+    color: var(--gh-green-ink);
+}
+.gh-welcome-brand::before {
+    content: ""; width: 14px; height: 2px; border-radius: 2px; background: var(--gh-green);
+}
+
+/* ================================================================ 3. HERO */
+.gh-hero {
+    position: relative; overflow: hidden; border-radius: var(--gh-r-lg);
+    margin-bottom: 14px; box-shadow: var(--gh-shadow-2); isolation: isolate;
+    background: #0B4A38;
+}
+.gh-hero img {
+    display: block; width: 100%; height: 148px; object-fit: cover;
+    object-position: 50% 56%;
+}
+.gh-hero::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+        linear-gradient(96deg, rgba(6, 48, 36, .92) 0%, rgba(7, 66, 49, .74) 44%, rgba(8, 74, 55, .12) 100%),
+        linear-gradient(0deg, rgba(4, 34, 26, .38), rgba(4, 34, 26, 0) 60%);
+}
+.gh-hero-inner {
+    position: absolute; inset: 0; z-index: 1;
+    display: flex; align-items: center; gap: 12px; padding: 16px;
+}
+.gh-hero-mark {
+    width: 46px; height: 46px; border-radius: 14px; flex-shrink: 0;
+    background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .28);
+    display: inline-flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(2px);
+}
+.gh-hero-mark .ic { width: 24px; height: 24px; stroke: #EAFFF7; }
+.gh-hero-copy { min-width: 0; }
+.gh-hero-title {
+    font-size: 19px; font-weight: 900; color: #fff; letter-spacing: -0.4px; line-height: 1.15;
+}
+.gh-hero-sub {
+    font-size: 16px; font-weight: 700; color: #D8FBEE; line-height: 1.25; margin-top: 1px;
+}
+.gh-hero-meta {
+    font-size: 10.5px; font-weight: 600; color: rgba(234, 255, 247, .82); margin-top: 6px;
+    letter-spacing: 0.1px;
+}
+
+/* ============================================================ 4. SAFETY STRIP */
+.gh-card.gh-safety {
+    border: 1px solid #CDEDE1;
+    background: linear-gradient(180deg, #F1FBF7 0%, #EAF8F3 100%);
+    border-left: 1px solid #CDEDE1;
+    border-radius: var(--gh-r-md);
+    padding: 12px 13px;
+    margin-bottom: 12px;
+    box-shadow: none;
+}
+.gh-safety-row { align-items: center; gap: 10px; }
+.gh-safety-ico {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: #D8F3E7; color: var(--gh-green-ink);
+}
+.gh-safety-ico .ic { width: 17px; height: 17px; }
+.gh-safety-label { font-size: 9.5px; letter-spacing: .6px; }
+.gh-safety-state { font-size: 13.5px; margin-top: 1px; }
+.gh-safety-desc { font-size: 11px; margin-top: 2px; }
+.gh-safety .gh-btn-outline {
+    height: 32px; padding: 0 10px; font-size: 11px; flex-shrink: 0;
+    border-radius: 999px; background: #fff; gap: 4px;
+}
+.gh-safety .gh-btn-outline .ic { width: 13px; height: 13px; }
+.gh-safety-meta { display: none; }        /* the two KPIs stay in the DOM for the engine */
+.gh-safety-fine { display: none; }
+.gh-safety .gh-safety-desc { display: block; }
+.gh-safety .gh-safety-device { display: none; }
+.gh-safety .gh-safety-device.is-live { display: block; margin-top: 3px; font-size: 10.5px; color: #5B6779; }
+
+/* ================================================================= 5. SOS */
+.gh-sos { margin-bottom: 16px; }
+.gh-sos-card {
+    display: flex; align-items: center; gap: 13px;
+    background: linear-gradient(180deg, #FEF4F4 0%, #FDEDED 100%);
+    border: 1px solid #F7D9D9; border-radius: var(--gh-r-lg);
+    padding: 12px 13px; position: relative;
+}
+.gh-sos-btn {
+    width: 72px; height: 72px; min-width: 72px; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+    background: radial-gradient(circle at 32% 26%, #FF5B5B 0%, #E11D2E 48%, #B3121F 100%);
+    color: #fff; border: 0; padding: 0; cursor: pointer; font-family: inherit;
+    box-shadow: 0 8px 18px rgba(190, 18, 34, .34), inset 0 0 0 5px rgba(255, 255, 255, .14);
+    transition: transform .12s ease, box-shadow .2s ease;
+}
+.gh-sos-btn:active { transform: scale(.96); box-shadow: 0 4px 10px rgba(190, 18, 34, .38), inset 0 0 0 5px rgba(255,255,255,.14); }
+.gh-sos-btn:focus-visible { outline: 3px solid #FCA5A5; outline-offset: 3px; }
+.gh-sos-ico { background: transparent; width: auto; height: auto; }
+.gh-sos-ico .ic { width: 26px; height: 26px; stroke: #fff; }
+.gh-sos-txt { align-items: center; line-height: 1; }
+.gh-sos-txt b { font-size: 14px; letter-spacing: .8px; font-weight: 900; }
+.gh-sos-txt span { display: none; }
+.gh-sos-copy { flex: 1; min-width: 0; }
+.gh-sos-copy b {
+    display: block; font-size: 15px; font-weight: 900; color: #B3121F; letter-spacing: -0.2px;
+}
+.gh-sos-copy p { font-size: 11px; color: #6B2A2A; line-height: 1.45; margin-top: 3px; }
+.gh-sos-copy .gh-demo-chip {
+    display: inline-flex; align-items: center; gap: 4px; margin-left: 5px;
+    background: #E11D2E; color: #fff; font-size: 8.5px; font-weight: 900;
+    letter-spacing: .5px; border-radius: 5px; padding: 1px 5px; vertical-align: 1px;
+}
+.gh-sos-go {
+    width: 30px; height: 30px; border-radius: 50%; border: 0; flex-shrink: 0;
+    background: rgba(179, 18, 31, .07); color: #B3121F;
+    display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.gh-sos-go .ic { width: 16px; height: 16px; }
+.gh-sos-note {
+    justify-content: flex-start; text-align: left; margin-top: 8px; padding-left: 4px;
+    font-size: 10px; line-height: 1.4;
+}
+.gh-sos-note .ic { color: #B3121F; }
+
+/* ======================================================= 6. QUICK ACTIONS */
+.gh-section { margin-bottom: 20px; }
+.gh-section-title { font-size: 14px; letter-spacing: -0.2px; }
+.gh-qa-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 14px 8px; margin-top: 6px;
+}
+.gh-qa {
+    border: 0; background: transparent; padding: 2px 0; gap: 7px;
+    border-radius: 14px;
+}
+.gh-qa:hover { background: transparent; }
+.gh-qa-ico {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #F1F7F5; color: var(--gh-green-ink);
+    transition: transform .12s ease, box-shadow .18s ease;
+}
+.gh-qa:hover .gh-qa-ico { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(9, 30, 46, .10); }
+.gh-qa-ico .ic { width: 25px; height: 25px; stroke-width: 1.8; }
+.gh-qa-green { background: #E9F7F1; color: #0E8F6E; }
+.gh-qa-teal { background: #E3F6F2; color: #0B7F72; }
+.gh-qa-blue { background: #E9F0FE; color: #2563EB; }
+.gh-qa-purple { background: #F1EBFE; color: #7C3AED; }
+.gh-qa-gold { background: #FBF3E0; color: #B8860B; }
+.gh-qa-label { font-size: 10.5px; font-weight: 700; color: #2C3A4B; line-height: 1.2; }
+
+/* ==================================================== 7. SECTION HEADER */
+.gh-section-head { align-items: center; margin-bottom: 10px; gap: 8px; }
+.gh-section-head .gh-link {
+    border: 0; background: transparent; color: var(--gh-green-ink);
+    font-size: 11px; font-weight: 700; font-family: inherit; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 3px; padding: 4px 2px; flex-shrink: 0;
+}
+.gh-section-head .gh-link .ic { width: 13px; height: 13px; }
+.gh-compose-btn { height: 34px; padding: 0 12px; font-size: 11.5px; border-radius: 999px; }
+.gh-section-sub { display: none; }
+
+/* topics */
+.gh-topics { gap: 7px; margin-bottom: 12px; padding: 1px 0 5px; }
+.gh-topic {
+    padding: 7px 13px; font-size: 11px; border-color: #E1E7EF; color: #46566A;
+}
+.gh-topic.is-active {
+    background: linear-gradient(180deg, #17B78A 0%, #0E9F6E 100%);
+    border-color: #0E9F6E; box-shadow: 0 4px 10px rgba(14, 159, 110, .26);
+}
+
+/* ============================================================ 8. POST CARDS */
+.gh-feed { gap: 12px; }
+.gh-post {
+    border-radius: var(--gh-r-lg); padding: 13px 13px 6px;
+    border: 1px solid #E6EBF2; box-shadow: var(--gh-shadow-1);
+}
+.gh-post-topline {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    margin-bottom: 9px;
+}
+/* Type chips carry meaning with a soft fill + dark ink (colour & identity pass).
+   The saturated --gh-type-* hues above stay available for icons and accents. */
+.gh-type-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 8.6px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase;
+    color: var(--gh-type-ink-safety); background: var(--gh-type-soft-safety);
+    border: 1px solid #BEE5D8; border-radius: var(--gh-r-pill); padding: 3px 7px; line-height: 1;
+}
+.gh-type-badge .ic { width: var(--gh-icon-xs); height: var(--gh-icon-xs); }
+.gh-type-disaster { color: var(--gh-type-ink-disaster); background: var(--gh-type-soft-disaster); border-color: #F6C9C5; }
+.gh-type-health { color: var(--gh-type-ink-health); background: var(--gh-type-soft-health); border-color: #C9DAFB; }
+.gh-type-safety { color: var(--gh-type-ink-safety); background: var(--gh-type-soft-safety); border-color: #BEE5D8; }
+.gh-type-org { color: var(--gh-type-ink-org); background: var(--gh-type-soft-org); border-color: #EEDCB3; }
+.gh-type-learn { color: var(--gh-type-ink-learn); background: var(--gh-type-soft-learn); border-color: #DCCEFB; }
+.gh-post .gh-post-follow {
+    border-radius: 999px; padding: 5px 11px; font-size: 10.5px;
+    border-color: color-mix(in srgb, var(--gh-role, #18A982) 40%, #fff);
+    color: var(--gh-role-ink, #0B7A5F);
+}
+.gh-post .gh-post-follow.is-on { background: var(--gh-role-soft, #E7F6F1); }
+.gh-post-head { align-items: center; gap: 10px; }
+.gh-post-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--gh-role, #18A982) 26%, #fff);
+    overflow: visible; position: relative;
+}
+.gh-post-avatar img, .gh-post-avatar-photo {
+    width: 44px; height: 44px; border-radius: 50%; object-fit: cover; display: block;
+}
+.gh-post-avatar .gh-post-avatar-role {
+    position: absolute; right: -3px; bottom: -3px; width: 17px; height: 17px;
+    border-radius: 50%; background: var(--gh-role, #18A982); border: 2px solid #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+.gh-post-avatar .gh-post-avatar-role .ic { width: 9px; height: 9px; stroke: #fff; }
+.gh-post-who { gap: 2px; }
+.gh-post-name { font-size: 13px; gap: 5px; }
+.gh-post-type { font-size: 10px; }
+.gh-post-role {
+    display: inline-block; width: fit-content;
+    font-size: 9.2px; font-weight: 800; letter-spacing: .2px;
+    color: var(--gh-role-ink, #0B7A5F);
+    background: color-mix(in srgb, var(--gh-role-soft, #E7F6F1) 78%, #fff);
+    border-radius: 4px; padding: 1px 5px; margin-top: 1px;
+}
+.gh-post-meta { margin: 9px 0 6px; gap: 6px; }
+.gh-badge-sample {
+    border-radius: 999px; padding: 2px 7px; font-size: 8.2px; letter-spacing: .45px;
+}
+.gh-post-topic { border-radius: 999px; padding: 2px 8px; font-size: 9.2px; }
+.gh-post-time { font-size: 9.8px; }
+.gh-post-title {
+    font-size: 14.5px; font-weight: 900; color: var(--gh-ink);
+    letter-spacing: -0.3px; line-height: 1.3; margin: 2px 0 4px;
+}
+.gh-post-text { font-size: 12.8px; line-height: 1.6; color: #24374B; }
+.gh-post .gh-moretext { color: var(--gh-green-ink); font-size: 11.5px; }
+
+/* media with an optional warning band */
+.gh-post-media-wrap { position: relative; margin-top: 10px; }
+.gh-post-media-wrap .gh-gal,
+.gh-post-media-wrap .gh-video-wrap,
+.gh-post-media-wrap .gh-audio-wrap { margin: 0; }
+.gh-media-alert {
+    position: absolute; left: 10px; right: 10px; bottom: 10px;
+    display: flex; align-items: center; gap: 7px;
+    background: rgba(197, 18, 31, .93); color: #fff;
+    border-radius: 10px; padding: 8px 10px;
+    font-size: 11px; font-weight: 800; line-height: 1.35;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .24);
+}
+.gh-media-alert .ic { width: 15px; height: 15px; flex-shrink: 0; stroke: #fff; }
+.gh-media-alert small { font-weight: 600; font-size: 9px; opacity: .85; display: block; }
+
+/* action rail */
+.gh-post-actions {
+    display: flex; align-items: center; justify-content: space-between; gap: 2px;
+    margin-top: 10px; padding-top: 9px; border-top: 1px solid #EFF3F8;
+}
+.gh-act {
+    display: inline-flex; align-items: center; gap: 5px;
+    border: 0; background: transparent; cursor: pointer; font-family: inherit;
+    color: #5A6B80; font-size: 10.6px; font-weight: 600;
+    padding: 7px 7px; border-radius: 10px; min-height: 38px;
+    transition: background .14s ease, color .14s ease;
+}
+.gh-act:hover { background: #F4F7FB; }
+.gh-act:focus-visible { outline: 2px solid var(--gh-green); outline-offset: 1px; }
+.gh-act .ic { width: 19px; height: 19px; stroke-width: 1.8; }
+.gh-act.is-on { color: var(--gh-green-ink); background: color-mix(in srgb, var(--gh-role-soft, #E7F6F1) 70%, #fff); }
+.gh-act.is-on .ic { fill: currentColor; fill-opacity: .16; }
+.gh-act.gh-act-comment.is-on { color: var(--gh-blue); background: var(--gh-blue-soft); }
+.gh-act.gh-act-save.is-on .ic { fill: currentColor; fill-opacity: .9; }
+.gh-act-more { padding: 7px 9px; }
+.gh-act-more .ic { width: 20px; height: 20px; }
+.gh-act .gh-act-count { font-size: 10px; font-weight: 800; color: inherit; opacity: .85; }
+.gh-feed-note { font-size: 10px; line-height: 1.45; margin-top: 12px; }
+
+/* ============================================================= 9. PROFILE */
+.gh-profile .gh-profile-sheet { max-width: 560px; }
+.gh-profile-cover { height: 178px; }
+.gh-profile-cover img.gh-profile-cover-img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.gh-profile-cover-grad {
+    background: linear-gradient(180deg, rgba(6, 24, 38, .34) 0%, rgba(6, 24, 38, .06) 42%, rgba(255, 255, 255, .12) 100%);
+    z-index: 1;
+}
+.gh-profile-topbar { z-index: 3; padding: 12px 14px 0; }
+.gh-profile-iconbtn {
+    background: rgba(255, 255, 255, .92); color: #16232F;
+    box-shadow: 0 4px 12px rgba(6, 24, 38, .18); backdrop-filter: blur(4px);
+}
+.gh-profile-avatar-wrap { z-index: 3; left: 16px; bottom: -46px; }
+.gh-profile-avatar {
+    width: 96px; height: 96px; border-radius: 50%; border: 4px solid #fff;
+    background: #fff; color: var(--gh-role-ink, #0B7A5F); font-size: 30px; font-weight: 900;
+    box-shadow: 0 8px 22px rgba(9, 30, 46, .18); overflow: hidden;
+}
+.gh-profile-avatar img {
+    width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%;
+}
+.gh-profile-rolebadge {
+    width: 30px; height: 30px; right: 0; bottom: 4px;
+    border: 3px solid #fff; background: var(--gh-role, #18A982);
+}
+.gh-profile-rolebadge .ic { width: 15px; height: 15px; stroke: #fff; }
+.gh-profile-identity { padding: 54px 16px 0; }
+.gh-profile-name { font-size: 22px; letter-spacing: -0.4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.gh-profile-name .gh-verified-check { width: 19px; height: 19px; fill: #1D9BF0; stroke: #fff; stroke-width: 2.4; }
+.gh-profile-roleline { font-size: 13px; color: #334; font-weight: 600; margin-top: 2px; }
+.gh-profile-verifyline {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+}
+.gh-verify-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 800; border-radius: 999px; padding: 4px 10px;
+    background: #EAF6F0; color: #0B7A5F; border: 1px solid #CDEBDD;
+}
+.gh-verify-pill .ic { width: 13px; height: 13px; }
+.gh-verify-pill.is-ok { background: #0E9F6E; border-color: #0E9F6E; color: #fff; }
+.gh-verify-pill.is-wait { background: #FDF6E7; border-color: #F2DFB4; color: #8A6100; }
+.gh-verify-pill.is-none { background: #F4F6FA; border-color: #E4E9F0; color: #5B6779; }
+.gh-profile-affil {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: #46566A; margin-top: 7px; font-weight: 600;
+}
+.gh-profile-affil .ic { width: 14px; height: 14px; color: var(--gh-role-ink, #0B7A5F); }
+.gh-profile-badges { margin-top: 8px; gap: 6px; }
+.gh-profile-stats {
+    display: flex; align-items: center; justify-content: space-around;
+    border-top: 1px solid #EDF1F6; border-bottom: 1px solid #EDF1F6;
+    margin: 14px 0 12px; padding: 11px 0; gap: 0;
+}
+.gh-profile-stats > div {
+    flex: 1; text-align: center; position: relative;
+}
+.gh-profile-stats > div + div::before {
+    content: ""; position: absolute; left: 0; top: 12%; bottom: 12%; width: 1px; background: #E7ECF3;
+}
+.gh-profile-stats b { display: block; font-size: 17px; font-weight: 900; color: var(--gh-ink); line-height: 1.1; }
+.gh-profile-stats span { font-size: 10.5px; color: #64748B; font-weight: 600; }
+.gh-profile-actions { gap: 8px; align-items: stretch; }
+.gh-profile-actions .gh-btn { height: 42px; border-radius: 11px; font-size: 12.5px; flex: 1; }
+.gh-profile-actions .gh-btn-message {
+    background: #1D6FF2; border-color: #1D6FF2; color: #fff; flex: 1.15;
+}
+.gh-profile-actions .gh-btn-message:hover { background: #1A63DA; }
+.gh-profile-actions .gh-btn-square {
+    flex: 0 0 44px; width: 44px; padding: 0; border-radius: 11px;
+    background: #fff; border: 1px solid #DDE4ED; color: #46566A;
+}
+.gh-profile-actions .gh-btn-square .ic { width: 18px; height: 18px; }
+.gh-profile-bio { font-size: 12.8px; line-height: 1.6; color: #26374B; margin-top: 12px; }
+.gh-profile-note { font-size: 10px; margin-top: 8px; }
+.gh-profile-h3 { font-size: 13px; margin: 16px 0 5px; }
+.gh-profile-topicrow {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;
+}
+.gh-topic-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #F2F6FB; border: 1px solid #E1E8F2; color: #36475C;
+    border-radius: 999px; padding: 5px 10px; font-size: 10.5px; font-weight: 700;
+}
+.gh-topic-chip .ic { width: 12px; height: 12px; color: var(--gh-role-ink, #0B7A5F); }
+.gh-profile-ledger { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.gh-ledger-row { display: flex; gap: 9px; align-items: flex-start; }
+.gh-ledger-row .ic { width: 17px; height: 17px; color: var(--gh-role-ink, #0B7A5F); flex-shrink: 0; margin-top: 1px; }
+.gh-ledger-row b { display: block; font-size: 12px; color: var(--gh-ink); font-weight: 800; }
+.gh-ledger-row span { display: block; font-size: 10.5px; color: #64748B; font-weight: 600; }
+.gh-profile-tabs {
+    display: flex; gap: 4px; margin-top: 16px; border-bottom: 1px solid #E9EEF5;
+    position: sticky; top: 0; background: #fff; z-index: 4;
+}
+.gh-profile-tab {
+    flex: 1; border: 0; background: transparent; cursor: pointer; font-family: inherit;
+    font-size: 11.5px; font-weight: 700; color: #64748B; padding: 11px 4px 10px;
+    border-bottom: 2.5px solid transparent; margin-bottom: -1px;
+}
+.gh-profile-tab.is-active { color: var(--gh-role-ink, #0B7A5F); border-bottom-color: var(--gh-role, #18A982); }
+.gh-profile-tabpanel { padding: 12px 16px 26px; background: #F6F8FB; }
+.gh-profile-tabpanel .gh-post { background: #fff; }
+.gh-profile-about { background: #fff; border-radius: var(--gh-r-md); padding: 2px 14px 16px; }
+.gh-photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.gh-photo-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; display: block; }
+
+/* ============================================================ 10. COMPOSER */
+.gh-compose-card { max-height: 94vh; }
+.gh-compose-card .gh-modal-head {
+    padding: 12px 14px; border-bottom: 1px solid #EDF1F6;
+    display: flex; align-items: center; gap: 10px;
+}
+.gh-compose-card .gh-modal-head > b { font-size: 15px; flex: 1; }
+.gh-compose-close {
+    width: 34px; height: 34px; border-radius: 50%; border: 0; background: #F2F5F9;
+    color: #2C3A4B; display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; font-family: inherit; order: -1; flex-shrink: 0;
+}
+.gh-compose-close .ic { width: 16px; height: 16px; }
+.gh-compose-publish {
+    height: 34px; padding: 0 15px; border-radius: 999px; border: 0;
+    background: linear-gradient(180deg, #17B78A 0%, #0E9F6E 100%); color: #fff;
+    font-family: inherit; font-size: 12px; font-weight: 800; cursor: pointer;
+    box-shadow: 0 4px 12px rgba(14, 159, 110, .28);
+}
+.gh-compose-publish:disabled { opacity: .55; box-shadow: none; cursor: not-allowed; }
+.ghc-step { font-size: 9.5px; }
+.gh-compose-card .gh-modal-body { padding: 14px 14px 4px; }
+.ghc-textarea {
+    border-radius: 14px; border: 1px solid #E1E8F2; background: #FBFCFE;
+    min-height: 96px; font-size: 13px; padding: 12px 13px;
+}
+.ghc-textarea:focus { border-color: var(--gh-green); background: #fff; box-shadow: 0 0 0 3px rgba(24, 169, 130, .12); }
+.ghc-media { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.ghc-media-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 5px; height: 64px; border-radius: 14px;
+    background: #F4F7FB; border: 1px solid #E7EDF5; font-size: 10px; font-weight: 700;
+    color: #3D4C5F;
+}
+.ghc-media-btn:hover { background: #EDF3FA; border-color: #D8E2EF; }
+.ghc-media-btn .ic { width: 20px; height: 20px; color: var(--gh-green-ink); }
+.ghc-media-btn:nth-child(5) { grid-column: span 1; }
+.ghc-chips { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.ghc-chip {
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 4px; border-radius: 12px;
+    background: #F4F7FB; border: 1px solid #E7EDF5; color: #3D4C5F;
+    font-size: 9.6px; font-weight: 700; padding: 9px 3px; min-height: 58px;
+}
+.ghc-chip .ic { width: 16px; height: 16px; }
+.ghc-chip.is-active {
+    background: #EAF7F1; border-color: #18A982; color: var(--gh-green-ink);
+    box-shadow: 0 0 0 1px #18A982 inset;
+}
+.ghc-select { border-radius: 12px; height: 44px; background: #FBFCFE; }
+.ghc-label { font-size: 11.5px; }
+.gh-modal-foot { border-top: 1px solid #EDF1F6; padding: 12px 14px; }
+
+/* ========================================================== 11. RESPONSIVE */
+@media (max-width: 359px) {
+    .gh-qa-ico { width: 50px; height: 50px; }
+    .gh-qa-ico .ic { width: 22px; height: 22px; }
+    .gh-act span { font-size: 9.6px; }
+    .gh-hero img { height: 138px; }
+    .gh-hero-meta { display: none; }
+    .gh-profile-avatar { width: 84px; height: 84px; }
+    /* no room for a wordmark next to five actions: the logo carries the brand */
+    .top-nav.gh-topnav .gh-brand-block { display: none; }
+    .top-nav.gh-topnav .gh-icon-btn { width: 34px; height: 34px; }
+    .gh-sos-copy b { font-size: 14px; }
+}
+@media (min-width: 620px) {
+    .gh-qa-grid { grid-template-columns: repeat(6, 1fr); }
+    .gh-hero img { height: 176px; }
+    .gh-hero-title { font-size: 22px; }
+    .gh-hero-sub { font-size: 18px; }
+    .gh-post-text { font-size: 13.2px; }
+    .gh-profile-cover { height: 210px; }
+}
+@media (min-width: 900px) {
+    .page-container.gh-home { max-width: 720px; margin: 0 auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gh-qa:hover .gh-qa-ico, .gh-sos-btn:active { transform: none; }
+}
+
+/* ==================================================== 12. SMALL UTILITIES */
+.gh-sr {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.gh-section-tools { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.gh-section-tools .gh-compose-btn {
+    width: 36px; height: 36px; padding: 0; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 14px rgba(14, 159, 110, .28);
+}
+.gh-section-tools .gh-compose-btn .ic { width: 19px; height: 19px; }
+
+/* search sheet */
+.gh-search { display: flex; flex-direction: column; gap: 6px; }
+.gh-search .ghc-input { width: 100%; }
+.gh-search-results { font-size: 11.5px; color: var(--gh-muted); min-height: 18px; }
+
+/* a photo cover hides the dotted texture behind it */
+.gh-profile-cover:has(.gh-profile-cover-img)::after { display: none; }
+.gh-profile-cover-img { z-index: 0; }
+.gh-profile-cover-grad { z-index: 1; }
+.gh-post-avatar { position: relative; overflow: visible; }
+.gh-post-avatar > img { position: relative; z-index: 0; }
+.gh-post-avatar .gh-post-avatar-role { z-index: 2; }
+
+/* =========================================== 13. PROFILE PHOTO IN THE EDITOR */
+.gh-pe-photo {
+    display: flex; align-items: center; gap: 12px; margin: 4px 0 2px;
+}
+.gh-pe-photo-preview {
+    width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--gh-green-soft, #E7F6F1); color: var(--gh-green-ink, #0B7A5F);
+    font-size: 18px; font-weight: 900; overflow: hidden;
+    border: 3px solid #fff; box-shadow: 0 4px 12px rgba(9, 30, 46, .14);
+}
+.gh-pe-photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+.gh-pe-photo-actions { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.gh-pe-photo-actions .gh-btn { height: 34px; font-size: 11.5px; }

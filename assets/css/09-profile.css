@@ -530,3 +530,35 @@ html.gh-no-scroll body { overflow: hidden; }
 .gh-profile .gh-profile-actions .gh-btn-ghost { color: var(--gh-role-ink, #0B7A5F); }
 .gh-profile .gh-profile-tab.is-active { color: var(--gh-role-ink, #0B7A5F); }
 .gh-profile .gh-profile-tab.is-active::after { background: var(--gh-role, #18A982); }
+
+/* ------------------------------------------------ P3 · contribution strip */
+.gh-profile-contrib {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gh-s2);
+    margin: var(--gh-s3) 0 var(--gh-s2);
+}
+
+.gh-contrib-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 28px;
+    padding: 0 10px;
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface);
+    color: var(--gh-muted);
+    font-size: var(--gh-fs-caption);
+    font-weight: var(--gh-fw-semi);
+}
+
+.gh-contrib-pill b { color: var(--gh-text); font-weight: var(--gh-fw-bold); }
+.gh-contrib-pill .ic { width: 14px; height: 14px; }
+
+/* topic chips keep a per-topic accent where the interest matches a post topic */
+.gh-topic-chip.is-topic-afya { background: var(--gh-blue-soft); color: #1D4ED8; border-color: #C9DAFB; }
+.gh-topic-chip.is-topic-usalama { background: var(--gh-green-soft); color: var(--gh-green-ink); border-color: #BBE6D5; }
+.gh-topic-chip.is-topic-taasisi { background: var(--gh-amber-soft); color: #8A6508; border-color: #EFE0BE; }
+.gh-topic-chip.is-topic-kusaidiana { background: #E6F7F5; color: #0B6E63; border-color: #BFE9E4; }
+.gh-topic-chip.is-topic-majanga { background: var(--gh-red-soft); color: #A11818; border-color: #F6C9C5; }

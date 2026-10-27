@@ -79,17 +79,18 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
     open: document.getElementById('ghProfile')?.classList.contains('open'),
     name: document.querySelector('.gh-profile-name')?.innerText.trim(),
     roleLine: document.querySelector('.gh-profile-roleline')?.innerText.trim(),
-    badges: [...document.querySelectorAll('.gh-profile-badges .gh-badge')].map((b) => b.innerText.trim()),
+    badges: [...document.querySelectorAll('.gh-profile-verifyline .gh-badge')].map((b) => b.innerText.trim()),
+    pills: [...document.querySelectorAll('.gh-profile-verifyline .gh-verify-pill')].map((p) => p.innerText.trim()),
     avatarBg: getComputedStyle(document.querySelector('.gh-profile-avatar')).backgroundColor,
     stats: [...document.querySelectorAll('.gh-profile-stats b')].map((b) => b.innerText.trim()),
     actions: [...document.querySelectorAll('.gh-profile-actions .gh-btn')].map((b) => b.innerText.trim())
   }));
   rec('P4', 'Avatar in the feed opens the author profile',
       card.open && !!card.name, `${card.name} · ${card.roleLine}`);
-  rec('P5', 'Profile shows role, badges and real counts',
+  rec('P5', 'Profile shows role, verification state and real counts',
       /Mtaalamu wa Afya|Mtaalamu wa Usalama|Mwanajamii|Taasisi|Kujitolea/.test(card.roleLine || '')
-        && card.badges.length >= 1 && card.stats.length === 3,
-      `${card.roleLine} · ${card.badges.join(',')} · ${card.stats.join('/')}`);
+        && card.pills.length >= 1 && card.badges.length >= 1 && card.stats.length === 3,
+      `${card.roleLine} · ${card.pills.join(',')} · ${card.badges.join(',')} · ${card.stats.join('/')}`);
   rec('P6', 'Profile exposes Follow and Message actions',
       card.actions.some((a) => /Fuata/.test(a)) && card.actions.some((a) => /ujumbe/i.test(a)),
       card.actions.join(' | '));
@@ -181,15 +182,17 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
   const saved = await page.evaluate(() => ({
     name: document.querySelector('.gh-profile-name')?.innerText.trim(),
     role: document.querySelector('.gh-profile-roleline')?.innerText.trim(),
-    badges: [...document.querySelectorAll('.gh-profile-badges .gh-badge')].map((b) => b.innerText.trim())
+    badges: [...document.querySelectorAll('.gh-profile-verifyline .gh-badge')].map((b) => b.innerText.trim()),
+    pills: [...document.querySelectorAll('.gh-profile-verifyline .gh-verify-pill')].map((p) => p.innerText.trim())
   }));
   rec('P14', 'Editing name/role/topics updates the profile immediately',
       saved.name === 'Neema A. Mushi' && /Afya/.test(saved.role),
       `${saved.name} · ${saved.role}`);
 
   rec('P15', 'Choosing a professional role grants no verification badge',
-      !saved.badges.some((b) => /Leseni|Taasisi/i.test(b)),
-      saved.badges.join(',') || 'no badges');
+      !saved.badges.some((b) => /^Leseni$|^Taasisi$/.test(b))
+        && !saved.pills.some((p) => /Uthibitisho wa taaluma|Uthibitisho wa taasisi/.test(p)),
+      `${saved.pills.join(',') || 'no pill'} · ${saved.badges.join(',') || 'no badge'}`);
 
   await page.reload({ waitUntil: 'load' });
   await page.waitForTimeout(1900);
@@ -237,8 +240,8 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
       acts: document.querySelectorAll('.gh-post:first-child .gh-act').length
     };
   });
-  rec('H1', 'All five engagement actions still present after the redesign',
-      stillWorks.acts === 5 && stillWorks.pressed === 'true',
+  rec('H1', 'All six engagement actions still present after the redesign',
+      stillWorks.acts === 6 && stillWorks.pressed === 'true',
       `${stillWorks.acts} actions · helpful=${stillWorks.pressed}`);
 
   rec('H2', 'No page errors during the profile suite', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));

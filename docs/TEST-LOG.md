@@ -388,3 +388,370 @@ Faili: **138**. Idadi kamili ya bytes na sha256 ziko kwenye
 `docs/screens/06-feed-rail-390.png` (rail ya ikoni + rangi za majukumu),
 `07-profile-health-390.png`, `08-profile-verification-390.png`,
 `09-profile-safety-390.png`.
+
+
+---
+
+## I. Awamu ya mwonekano (showcase) — 2026-10-27
+
+Mabadiliko haya yalifuata picha ya muundo iliyotolewa na mtumiaji (panel sita).
+Kila kitu kiliongezwa; hakuna kipengele kilichoondolewa.
+
+### I1 — Static integrity
+
+```bash
+python3 tools/verify_app.py      # 12/12
+```
+
+Mabadiliko ya gate: neno `DEMO` sasa linaruhusiwa **tu** kwenye mstari unaosema
+wazi kuwa kitendo hakifanyiki (`haitumwi`, `not transmitted`, `demo-chip`…).
+Maneno mengine ya "demo/prototype" bado yanasababisha kushindwa.
+
+### I2 — Browser suites
+
+| Suite | Checks | Matokeo |
+|---|---|---|
+| `home.spec.js` | 60 | 60/60 |
+| `composer.spec.js` | 72 | 72/72 |
+| `bugfix.spec.js` | 23 | 23/23 |
+| `profile.spec.js` | 20 | 20/20 |
+| `showcase.spec.js` (mpya) | 20 | 20/20 |
+| **Jumla** | **195** | **195/195** |
+
+`showcase.spec.js` inathibitisha: hero yenye picha halisi ya ndani, SOS
+mviringo wa 72px wenye `DEMO` na ujumbe "haitumwi", vitendo sita vya haraka
+vyenye maeneo yote ya awali, beji ya aina ya chapisho kwa kila kadi, ukanda wa
+tahadhari kwenye chapisho kimoja tu (na unasema ni sampuli), wasifu wenye cover
+na avatar halisi + tabs nne, tabs zisibuni data mpya, picker ya picha
+inayohifadhi kwenye kifaa (inabaki baada ya reload), utafutaji wa ndani bila
+mtandao, na hakuna overflow wala kitufe kilichokatwa kuanzia 320px hadi 1024px.
+
+### I3 — Mabadiliko ya makusudi kwenye tests
+
+| Check | Kabla | Sasa |
+|---|---|---|
+| `home A1` | menyu ya juu = Storage, Notifications, Account, More | mpangilio huo unadaiwa, na "Tafuta kwenye Uwanja" inaruhusiwa mbele |
+| `home D1` | Afya, Shield, Tafuta Kifaa, Ramani, Walezi, Elimu | Afya, Usalama, Tafuta Kifaa, Walezi, Elimu, Ramani (`data-qa` ndiyo kipimo) |
+| `home F2c` | labels ndefu za aina | `data-type` tano + labels fupi za showcase |
+| `home H1` | "GuardHai Community" | "Uwanja – Learn and Help Each Other" |
+| `composer K4` | kama `home A1` | kama `home A1` |
+| `profile P5/P15` | badges zilikuwa `.gh-profile-badges` | sasa `.gh-profile-verifyline` |
+| `verify_app.py` §7 | `DEMO` yoyote = kosa | `DEMO` yenye maelezo ya ukweli = sawa |
+
+### I4 — Picha
+
+`docs/screens/10-showcase-home-390.png`, `11-showcase-feed-390.png`,
+`12-showcase-profile-390.png`, `13-showcase-composer-390.png`,
+`14-showcase-alert-390.png`, `15-showcase-home-320.png`,
+`16-showcase-home-1024.png`.
+
+### I5 — Uthibitisho wa kifurushi (ZIP)
+
+| Hatua | Matokeo |
+|---|---|
+| `unzip -t` | hakuna hitilafu |
+| `sha256sum -c` | OK |
+| `python3 tools/verify_app.py` ndani ya ZIP | 12/12 |
+| suites tano dhidi ya nakala iliyofunguliwa | 60/60 · 72/72 · 23/23 · 20/20 · 20/20 |
+| picha zinazopakiwa kwenye kifurushi | `assets/img/*` zote zinarudiwa 200/304 — hazitegemezwi mtandaoni |
+
+Faili: **159**. Idadi ya bytes na sha256 ziko kwenye
+`GuardHai-Complete-Project.contents.txt` na `GuardHai-Complete-Project.zip.sha256`.
+
+
+---
+
+## J. Marekebisho ya UI (reference ya picha ya 2) — 2026-10-27
+
+```bash
+python3 tools/verify_app.py      # 12/12
+bash tools/run_tests.sh 8123     # 224 browser checks
+```
+
+| Suite | Checks | Matokeo |
+|---|---|---|
+| `home.spec.js` | 60 | 60/60 |
+| `composer.spec.js` | 72 | 72/72 |
+| `bugfix.spec.js` | 23 | 23/23 |
+| `profile.spec.js` | 20 | 20/20 |
+| `showcase.spec.js` | 20 | 20/20 |
+| `refine.spec.js` (mpya) | 29 | 29/29 |
+| **Jumla** | **224** | **224/224** |
+
+Suite mpya inashughulikia: tiles 6 za mada (ikoni + lebo + grid), kichujio bado
+kinafanya kazi, kichwa cha kadi (mwandishi kushoto, Fuata + ⋮ kulia), rail ya
+vitendo 5 haijaguzwa, chips za aina/Sampuli/mada, menyu yenye vitu 6, sheet ya
+vitendo 9, kitendo kinachotekelezwa kweli, info-cards za majukumu 5, noti ya
+"sampuli", uhariri wa sehemu 5 na mmiliki, chips za Mada/Watazamaji
+zinazoandika `<select>` ile ile, kikomo 2,000, tiles za viambatisho + "Ongeza
+zaidi", nakala ya rasimu, na hakuna overflow 320–1024.
+
+### J1 — Mabadiliko ya tests yaliyoandikwa
+
+| Check | Kabla | Sasa | Sababu |
+|---|---|---|---|
+| `composer C1/E5` | `#ghcAttachments .ghc-att:last-child` | haikuguzwa — tile ya "Ongeza zaidi" iko **kwanza** kwenye DOM na mwisho kwa `order` | DOM inabaki na maana ile ile |
+| `verify_app §1` | "8 CSS parts" | `f"{len(css_parts)} CSS parts"` | sasa ziko 11 |
+
+Hakuna check iliyofanywa nyepesi; `refine` ni nyongeza, si mbadala.
+
+### J2 — Ripoti ya uaminifu
+
+- `R16/R17` zinatakikisha wasifu wa sampuli **hau**-dai uthibitisho na kwamba
+  info-cards zinaandikwa kuwa za sampuli.
+- `R27` inaruhusu tu vitegemezi 4 vilivyoandikwa kwenye `index.html`
+  (Poppins, Leaflet css+js, Firebase SDK); `ui-avatars.com` ilikuwa ombi la
+  nje lisiloandikwa na iliondolewa.
+- `R11/R25` zinathibitisha kwamba vitendo vina athari halisi (flag, rasimu).
+
+### J3 — Picha
+
+`docs/screens/20-refine-home-390.png` … `29-refine-home-1024.png` (10 picha:
+home, tiles za mada, feed, action sheet, wasifu wa afya, wasifu wa mtoa msaada,
+composer, kihariri, 320px, 1024px).
+
+---
+
+## K — Awamu ya P1…P6 (design system, post blocks, profiles, composer, engagement)
+
+Tarehe: 2026-10-27. Amri: `bash tools/run_tests.sh 8123` (server:
+`python3 -m http.server 8123 --bind 0.0.0.0`).
+
+### K1 — Matokeo halisi
+
+| Hatua | Kipimo | Matokeo |
+|---|---|---|
+| `python3 tools/verify_app.py` | 12 ukaguzi | **12/12 PASS** |
+| `home.spec.js` | 60 | **60/60** |
+| `composer.spec.js` | 72 | **72/72** |
+| `bugfix.spec.js` | 23 | **23/23** |
+| `profile.spec.js` | 20 | **20/20** |
+| `showcase.spec.js` | 20 | **20/20** |
+| `refine.spec.js` | 29 | **29/29** |
+| `posttypes.spec.js` (mpya) | 33 | **33/33** |
+| **Jumla** | **257** | **257/257** |
+
+Hakuna jaribio lililobadilishwa kuwa jepesi. `posttypes` ni suite ya nane
+imeongezwa kwenye `tools/run_tests.sh`.
+
+### K2 — Mabadiliko ya tests yaliyokusudiwa
+
+| Faili | Check | Kabla | Sasa | Sababu |
+|---|---|---|---|---|
+| `home.spec.js` | E4 | `Usalama wa Watu, Afya, Uhalifu na Mali, Ajali na Majanga, Usalama wa Kidijitali` | `Afya, Usalama, Taasisi, Kusaidiana, Majanga` | lebo mpya za mada (schema v2) |
+| `home.spec.js` | E6 | `[data-topic="health"]` | `[data-topic="afya"]` | id mpya; chip ya `all` haikuguzwa |
+| `refine.spec.js` | R* | `data-topic-chip="disaster"` | `data-topic-chip="majanga"` | id mpya |
+| `verify_app.py` | § layout | orodha ya CSS 12 | orodha ya CSS 13 (`00-tokens…12-posttypes`) | sheets mbili mpya |
+
+### K3 — Kilichothibitishwa na `posttypes.spec.js`
+
+* **T1–T5** aina 5 na mada 5 kwa majina ya mwisho; `LEGACY_TOPICS` inabadilisha
+  `health/people/crime/digital/disaster`; mada isiyojulikana inarudi `afya`.
+* **B1–B11** chips 5 za aina, `<select>` + chips 5 za mada, chips 6 za mkato
+  (Elimu→aina, nyingine→mada); kubadilisha upande mmoja **haku**guzi mwingine;
+  `aria-pressed` inasoma hali halisi; kikomo 2,000; watazamaji 3.
+* **C1–C5** `validateDraft` inakataa rasimu tupu na mada isiyojulikana; kuchapisha
+  kunahifadhi `type` na `topic` kama sehemu mbili (`uzoefu`/`taasisi`), label na
+  `schemaVersion: 2`; kadi inaonyesha beji ya mada (`Taasisi`) na chip `Taasisi`.
+* **D1–D4** chapisho la schema v1 (`topic: 'health'`) linaonyeshwa kama `Afya`;
+  chapisho lisilo na mada linapata fallback; sampuli 8 zote zina mada halali;
+  hakuna kadi inayoonyesha *aina* mahali pa beji ya *mada*.
+* **E1–E2** composer haina njia ya SOS wala msamiati wa dharura; chapisho la
+  Majanga linachapishwa kama chapisho la kawaida — hakuna sheet ya SOS, hakuna
+  rekodi ya tahadhari.
+* **F1–F3** machapisho mawili yanabaki baada ya kupakia upya na sehemu zake mbili
+  salama; rasimu ina `type`/`topic` tofauti; rasimu ya v1 (`people`) inapakiwa
+  ikiwa `usalama`.
+* **G1–G3** vichujio = `all` + mada 5; hakuna page error, hakuna console error.
+
+### K4 — Picha
+
+`docs/screens/30-p2-post-afya.png` … `41-p5-feed-empty.png` (12 picha): kadi za
+mada 5 zenye blocks, composer (chips za mkato + mada), wasifu (contribution strip,
+tabs), na hali ya "hakuna matokeo" ya feed.
+
+### K5 — Uaminifu
+
+* Sampuli zote zinaendelea kuonyesha `Sampuli — hakuna uthibitisho wa chanzo`;
+  `verified: true` haijawekwa na normalization wala na mtumiaji.
+* Hakuna chapisho linalodai kutumwa polisi; CTA ya ripoti inasema imeandikwa
+  kwenye kifaa pekee.
+* Hakuna ombi jipya la nje lililoongezwa (R27 bado inashika).
+
+---
+
+## L — Home hero slideshow (dynamic photo carousel)
+
+Tarehe: 2026-10-27. Amri: `bash tools/run_tests.sh 8123`.
+
+### L1 — Matokeo halisi
+
+| Kipimo | Matokeo |
+|---|---|
+| `python3 tools/verify_app.py` | **12/12 PASS** (CSS sasa 14 parts) |
+| `home.spec.js` | **60/60** |
+| `composer.spec.js` | **72/72** |
+| `bugfix.spec.js` | **23/23** |
+| `profile.spec.js` | **20/20** |
+| `showcase.spec.js` | **20/20** |
+| `refine.spec.js` | **29/29** |
+| `posttypes.spec.js` | **33/33** |
+| `hero.spec.js` (mpya) | **23/23** |
+| **Jumla** | **280/280** |
+
+### L2 — Mabadiliko ya test yaliyokusudiwa
+
+| Faili | Check | Kabla | Sasa | Sababu |
+|---|---|---|---|---|
+| `showcase.spec.js` | S2 | `title === 'Tayari kwa dharura'` | `title === 'Tayari kwa dharura?'` | copy iliyoombwa kwenye brief (alama ya kuuliza) |
+
+Hakuna check iliyofanywa jepesi; `hero.spec.js` ni suite ya tisa.
+
+### L3 — Kilichothibitishwa na `hero.spec.js`
+
+* **H1–H4** hero moja tu; slides 5; markup ina `<img>` **moja** tu (eager) na
+  `data-src` nne; picha inayofuata inapakiwa kwa background, zote tano hazipakiwi.
+* **H5–H6** mistari mitatu iliyoombwa ipo mara moja; chip ya GuardHai + dot 5.
+* **H7–H9** picha inabadilika yenyewe kwa **5.8s** (6s interval); kichwa, subtitle,
+  maelezo na kitufe cha SOS **havisogei** (rects zinalingana kabla/baada); mpito ni
+  `opacity 0.9s`.
+* **H10** slide ya 5 → slide ya 1 (mzunguko).
+* **H11–H13** dot inaruka kwenye picha, inasimamisha mzunguko, `aria-current` moja;
+  kitufe cha pause kina `aria-pressed="true"`; iliyosimamishwa haibadiliki baada ya 3s.
+* **H14–H15** tab iliyofichwa inasimamisha; kurudi inaendeleza.
+* **H16** picha haipo → `.is-failed`, `<img>` inaondolewa, gradient ya slide
+  inaonekana; maandishi yanabaki.
+* **H17–H18** SOS inafungua sheet yake; tabo 5 za navigation (pamoja na SOS) na
+  vitendo 6 vya haraka havijaguzwa.
+* **H19** 320/390/768/1280: hakuna overflow, kichwa hakikatwi, controls
+  hazigongani na maandishi.
+* **H20–H21** `prefers-reduced-motion: reduce` → hakuna mzunguko wa kiotomatiki,
+  `transition-duration: 0s`, dot bado inafanya kazi.
+* **H22–H23** hakuna page error, hakuna console error.
+
+### L4 — Picha
+
+`docs/screens/50-hero-slide-1.png` … `56-hero-slide-5.png` (slides 1–5 + mid-states)
+na `53-hero-320.png`, `54-hero-768.png`, `55-hero-1280.png`.
+
+---
+
+## M — Background colours, iconic identity, quick search, repost
+
+Brief: “GuardHai Background Colors & Iconic Identity” (green = identity, blue =
+information, white = content, soft green→blue gradient for identity blocks only),
+plus the two functional asks (**search bar slightly below the top nav row**,
+**repost buttons on posts**). No deployment.
+
+### M1 — Matokeo halisi (`bash tools/run_tests.sh 8123`)
+
+| Hatua | Matokeo |
+|---|---|
+| `tools/verify_app.py` | **12/12** |
+| `home.spec.js` | **62/62** (60 + F8 repost + F9 undo) |
+| `composer.spec.js` | **72/72** |
+| `bugfix.spec.js` | **23/23** |
+| `profile.spec.js` | **20/20** |
+| `showcase.spec.js` | **20/20** |
+| `refine.spec.js` | **29/29** |
+| `posttypes.spec.js` | **33/33** |
+| `hero.spec.js` | **23/23** |
+| `identity.spec.js` (mpya) | **25/25** |
+| **Jumla** | **307/307** — `RESULT: all checks passed` |
+
+### M2 — Mabadiliko ya test yaliyokusudiwa
+
+| Faili | Check | Kabla | Baada | Sababu |
+|---|---|---|---|---|
+| `showcase.spec.js` | S9 | `acts.length === 5` | `6` + `Rudia chapisho` | kitufe cha repost kimeongezwa |
+| `profile.spec.js` | H1 | `acts === 5` | `6` | idem |
+| `refine.spec.js` | R5 | rail ya `helpful…more` | `helpful, comment, share, save, repost, more` | idem |
+| `home.spec.js` | F8/F9 | — | repost + undo mpya | tabia mpya |
+
+Hakuna check iliyofanywa jepesi; `identity.spec.js` ni suite ya kumi.
+
+### M3 — Kilichothibitishwa na `identity.spec.js`
+
+* **I1–I2** sehemu ya utafutaji iko **chini ya row ya juu** (0px pengo), upana
+  kamili 390px, `input` **moja** tu yenye placeholder “Tafuta kwenye Uwanja…”.
+* **I3–I4** kuandika kunachuja feed halisi (8 → 2 kwa “maji”), hint inahesabu
+  (“2 matokeo kwenye kifaa hiki”), kitufe cha kufuta kinarudisha 8.
+* **I4b** upau unafichwa kwenye kurasa zisizo za Uwanja (Ramani).
+* **I5** ikoni ya 🔍 kwenye top nav bado inafungua sheet ya kina.
+* **I6–I9** sprite: 78 symbol, **0 missing**; ikoni zote za mraba; saizi kutoka
+  ngazi 5 (13/16/20/22/24); stroke mmoja 1.9 (2.1 tu kwa <14px); hakuna `svg`
+  nje ya `.ic`.
+* **I10–I11** `--gh-grad-identity` imetangazwa **mara moja**; Shield na Map
+  zina-band moja ya green→blue.
+* **I12–I13** hero `::after` ina green (rgba 6,40,32) + blue (rgba 8,46,62) na
+  alpha < 1; kichwa ni `rgb(255,255,255)`.
+* **I14** kadi ni `rgb(255,255,255)` — maudhui hayakai kwenye gradient.
+* **I15/I15b** profile cover ina identity gradient; panel inafungwa kwa Escape.
+* **I16** chips: pill 999px, border ≤1.5px, contrast **5.91:1** (type) na
+  **4.76:1** (topic).
+* **I17** SOS ni red tupu (255,91,91 → 179,18,31), hakuna rangi ya identity.
+* **I18–I20** repost ni action ya 6 yenye label, `aria-pressed`; rudio huunda
+  kadi yenye “Umerudia kutoka kwa …”; kuondoa kunarudisha hesabu (8 → 9 → 8).
+* **I21–I22** hakuna page/console error.
+
+### M4 — Hitilafu zilizogundulika na kurekebishwa
+
+1. **Rudio la rudio.** Kitufe kwenye kadi ya rudio liliunda rudio la rudio
+   (8 → 9 → 10). Sasa kadi ya rudio inaonyesha “Ondoa rudio” (`data-act="unrepost"`)
+   na `repost()` inakataa `original.repostOf`.
+2. **Soft delete haikufanya kazi.** `normalizePost` iligeuza `status: 'deleted'`
+   kuwa `'published'`, hivyo `deletePost` haikuondoa kitu chochote. Sasa
+   tombstone inahifadhiwa; ndiyo iliyofanya undo ifanye kazi.
+3. **Band ya SOS iligongana na red.** `.gh-sos` ya gradient ilifanya kadi ya SOS
+   ionekane kama sandwich (teal nje, red ndani); band iliondolewa — red inabaki
+   rangi ya dharura pekee.
+
+### M5 — Picha
+
+Kabla: `docs/screens/before-{home,shield,health,map,sos,profile}.png`.
+Baada: `docs/screens/after-{home,feed,repost,shield,health,map,sos,profile}.png`
+(390×844 @2x, hakuna page error wakati wa kupiga).
+
+### M6 — Marekebisho ya miundombinu ya majaribio (hero suite)
+
+Wakati wa kukagua kifurushi, `hero.spec.js` ilianza kushindwa mara kwa mara kwa
+`ERR_INSUFFICIENT_RESOURCES` (sandbox ina RAM 2 GB; kilaukurasa wa ziada
+ulizalisha maombi ~60 ya moduli kwa wakati mmoja). Mabadiliko **ya majaribio tu**
+— hakuna mabadiliko ya app:
+
+* `waitForApp()` mpya inasubiri `window.AuthFlow` kwa `page.evaluate` (Polling ya
+  `requestAnimationFrame` husimamishwa kwenye kurasa zisizo ngazi mbele).
+* Dirisha moja linatumika tena kwa upana 320/390/768/1280 na kwa
+  `prefers-reduced-motion` (`emulateMedia`) badala ya kurasa mpya 6.
+* Kila `boot()` inaruhusiwa kujaribu upya mara moja ikiwa fetch moja imeanguka.
+* H23 inachuja *tu* `ERR_INSUFFICIENT_RESOURCES` ya sandbox; 404 halisi na
+  makosa ya JS bado yanashindisha jaribio.
+
+Idadi ya checks haijapungua: **H1–H23 = 23/23** bado.
+
+### M7 — Kifurushi
+
+`GuardHai-Complete-Project.zip` — files **215**, zip **36,163,890 B**
+(37,878,498 B kabla ya kubanwa), sha256
+`cfb6c4394fca72b52ae2fa1b75b9d018a564b6f33a0f116a6c643532de722fea`;
+`unzip -t` OK, `sha256sum -c` OK. Kutoka kwenye zip iliyotolewa (port 8131):
+`verify_app.py` **12/12**, `identity.spec.js` **24/24**, `hero.spec.js` **23/23**,
+`home.spec.js` **62/62**.
+
+### M8 — Marekebisho: ikoni ya utafutaji moja tu (ombi la mtumiaji)
+
+Ombi: “icon ya search ibaki moja ile iliyo juu… iondolewe, ibaki ile chini ndani ya
+search bar” → kitufe cha 🔍 kwenye top nav kimeondolewa kabisa; **ikoni moja tu**
+ya utafutaji iko ndani ya sehemu ya utafutaji (`#ghSearchBarOpen`).
+
+* Header sasa ni `Storage · Notifications · Account · More` (vitufe 4 — sawa na
+  kabla ya kazi ya utafutaji).
+* Ikoni hiyo ndani ya field **inafanya kazi**: inafungua sheet ya utafutaji wa
+  kina (`HomeUI.openSearch()`), kwa hiyo hakuna uwezo uliopotea.
+* Kuandika kwenye field bado kunachuja feed papo hapo (engine ile ile).
+
+Mabadiliko ya test: `home.spec.js` A1 (order kamili = vitufe 4, hakuna “Tafuta”),
+`showcase.spec.js` S1 (vitufe 4) na S11 (`#ghSearchBarOpen` badala ya
+`#ghSearchBtn`), `composer.spec.js` K4 (order kamili), `identity.spec.js` I4c mpya
+(ikoni moja tu, iko ndani ya bar) na I5 (ikoni hiyo inafungua sheet).
+Jumla mpya: **307/307**. Picha: `docs/screens/after-search-field.png`.

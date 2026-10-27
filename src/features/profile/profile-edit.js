@@ -7,10 +7,11 @@
  * badge appears. A verifier with a backend would fill that in.
  */
 import { myProfile, saveMyProfile, requestVerification, presentationOf } from '../../services/profile.service.js';
-import { ROLES, ROLE_ORDER, MAX_ROLES, BIO_MAX, TOPICS_MAX } from '../../domain/profile.js';
+import { ROLES, ROLE_ORDER, MAX_ROLES, BIO_MAX, TOPICS_MAX, PROFILE_FIELDS } from '../../domain/profile.js';
 import { openSheet, closeSheet } from '../../ui/sheet.js';
 import { toast } from '../../ui/toast.js';
 import { escapeHtml } from '../../core/dom.js';
+import { getCachedUrl } from '../../services/media.service.js';
 
 const el = (id) => document.getElementById(id);
 
@@ -23,6 +24,31 @@ const SUGGESTED_TOPICS = [
 /** selection order matters: the first selected role becomes the profile accent */
 let selectedRoles = [];
 
+/** undefined = keep as-is · null = remove · string = new data URL */
+let pickedAvatar;
+
+/** downscale + re-encode in the browser so a 5 MB photo stays a small local string */
+function readAvatar(file) {
+  return new Promise((resolve, reject) => {
+    if (!file.type.startsWith('image/')) { reject(new Error('type')); return; }
+    if (file.size > 3 * 1024 * 1024) { reject(new Error('size')); return; }
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const max = 512;
+      const scale = Math.min(1, max / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL('image/jpeg', 0.82));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('decode')); };
+    img.src = url;
+  });
+}
+
 function readForm() {
   const topics = [...document.querySelectorAll('[data-pe-topic].is-active')].map((b) => b.dataset.peTopic);
   const extra = (el('ghPeTopicInput')?.value || '').split(',').map((t) => t.trim()).filter(Boolean);
@@ -31,7 +57,13 @@ function readForm() {
     bio: el('ghPeBio')?.value || '',
     location: el('ghPeLocation')?.value || '',
     roles: selectedRoles.slice(),
-    topics: [...new Set([...topics, ...extra])].slice(0, TOPICS_MAX)
+    topics: [...new Set([...topics, ...extra])].slice(0, TOPICS_MAX),
+    affiliation: el('ghPeAffiliation')?.value || '',
+    availability: el('ghPeAvailability')?.value || '',
+    serviceAreas: el('ghPeServiceAreas')?.value || '',
+    orgKind: el('ghPeOrgKind')?.value || '',
+    coverage: el('ghPeCoverage')?.value || '',
+    ...(pickedAvatar === undefined ? {} : { avatarUrl: pickedAvatar })
   };
 }
 
@@ -45,6 +77,7 @@ export async function openProfileEditor() {
   const presentation = presentationOf(profile);
 
   selectedRoles = profile.roles.slice(0, MAX_ROLES);
+  pickedAvatar = undefined;
 
   openSheet('Hariri wasifu', `
     <label class="ghc-label" for="ghPeName">Jina</label>
@@ -55,8 +88,41 @@ export async function openProfileEditor() {
       placeholder="Eleza unachoshiriki…">${escapeHtml(profile.bio)}</textarea>
     <div class="ghc-count"><span id="ghPeBioCount">${profile.bio.length}</span>/${BIO_MAX}</div>
 
+    <label class="ghc-label">Picha ya wasifu</label>
+    <div class="gh-pe-photo">
+      <span class="gh-pe-photo-preview" id="ghPeAvatarPreview">${profile.avatarUrl
+        ? `<img src="${escapeHtml(profile.avatarUrl)}" alt="">`
+        : escapeHtml(profile.initials || 'GH')}</span>
+      <div class="gh-pe-photo-actions">
+        <button type="button" class="gh-btn gh-btn-outline" id="ghPeAvatarPick">
+          <svg class="ic"><use href="#i-camera"/></svg> Chagua picha</button>
+        <button type="button" class="gh-btn gh-btn-outline" id="ghPeAvatarClear">Ondoa</button>
+      </div>
+      <input type="file" id="ghPeAvatarFile" accept="image/jpeg,image/png,image/webp" hidden>
+    </div>
+    <p class="ghc-note-sm">Picha inabaki kwenye kifaa hiki (hadi 3 MB). Hakuna inayopakiwa mtandaoni.</p>
+
     <label class="ghc-label" for="ghPeLocation">Mahali (hiari)</label>
     <input id="ghPeLocation" class="ghc-input" maxlength="40" value="${escapeHtml(profile.location || '')}">
+
+    <span class="ghc-label">Taarifa za kitaaluma (hiari)</span>
+    <p class="ghc-note-sm">Zinaonekana kwenye wasifu wako tu. Hazithibitishi taaluma wala taasisi —
+      uthibitisho unahitaji ushahidi.</p>
+    <label class="ghc-label" for="ghPeAffiliation">Taasisi / kituo unachohusiana nacho</label>
+    <input id="ghPeAffiliation" class="ghc-input" maxlength="${PROFILE_FIELDS.affiliation}"
+      value="${escapeHtml(profile.affiliation || '')}" placeholder="mf. Hospitali ya Wilaya">
+    <label class="ghc-label" for="ghPeAvailability">Upatikanaji</label>
+    <input id="ghPeAvailability" class="ghc-input" maxlength="${PROFILE_FIELDS.availability}"
+      value="${escapeHtml(profile.availability || '')}" placeholder="mf. 8:00 - 16:00">
+    <label class="ghc-label" for="ghPeServiceAreas">Maeneo ya kujitolea / huduma</label>
+    <input id="ghPeServiceAreas" class="ghc-input" maxlength="${PROFILE_FIELDS.serviceAreas}"
+      value="${escapeHtml(profile.serviceAreas || '')}" placeholder="mf. Kijichi, Mbagala">
+    <label class="ghc-label" for="ghPeOrgKind">Aina ya taasisi</label>
+    <input id="ghPeOrgKind" class="ghc-input" maxlength="${PROFILE_FIELDS.orgKind}"
+      value="${escapeHtml(profile.orgKind || '')}" placeholder="mf. Kliniki ya jamii">
+    <label class="ghc-label" for="ghPeCoverage">Eneo la huduma</label>
+    <input id="ghPeCoverage" class="ghc-input" maxlength="${PROFILE_FIELDS.coverage}"
+      value="${escapeHtml(profile.coverage || '')}" placeholder="mf. Wilaya 3">
 
     <span class="ghc-label">Majukumu (hadi ${MAX_ROLES}) — wa kwanza ndiye rangi ya wasifu</span>
     <div class="gh-pe-chips" id="ghPeRoles">
@@ -166,7 +232,30 @@ export function initProfileEditor() {
   if (wiredEdit) return;
   wiredEdit = true;
 
+  document.addEventListener('change', async (event) => {
+    if (event.target.id !== 'ghPeAvatarFile') return;
+    const chosen = (event.target.files || [])[0];
+    event.target.value = '';
+    if (!chosen) return;
+    try {
+      pickedAvatar = await readAvatar(chosen);
+      const preview = el('ghPeAvatarPreview');
+      if (preview) preview.innerHTML = `<img src="${pickedAvatar}" alt="">`;
+    } catch (err) {
+      toast(err.message === 'size'
+        ? 'Picha ni kubwa mno — chagua isiyozidi 3 MB.'
+        : 'Faili hili si picha inayoweza kutumika.');
+    }
+  });
+
   document.addEventListener('click', async (event) => {
+    if (event.target.closest('#ghPeAvatarPick')) { el('ghPeAvatarFile')?.click(); return; }
+    if (event.target.closest('#ghPeAvatarClear')) {
+      pickedAvatar = null;
+      const preview = el('ghPeAvatarPreview');
+      if (preview) preview.textContent = (el('ghPeName')?.value || 'GH').slice(0, 2).toUpperCase();
+      return;
+    }
     const roleBtn = event.target.closest('[data-pe-role]');
     if (roleBtn) { toggleRole(roleBtn); return; }
 
@@ -178,6 +267,7 @@ export function initProfileEditor() {
     }
 
     const action = event.target.closest('[data-pe-action]')?.dataset.peAction;
+    if (event.target.closest('#ghPeAvatarFile, #ghPeAvatarPick, #ghPeAvatarClear')) return;
     if (action === 'cancel-verify') { const h = el('ghPeVerifyHost'); if (h) { h.hidden = true; h.innerHTML = ''; } return; }
     if (!action) return;
 

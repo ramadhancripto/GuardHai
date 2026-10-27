@@ -1,0 +1,301 @@
+/* ==========================================================================
+   GuardHai · assets/css/12-posttypes.css
+   P1 + P2 — the design tokens applied to post blocks, and the block styles.
+
+   Every value below comes from 00-tokens.css; nothing here re-declares a
+   colour. Existing components keep their own sheet until they opt in, so this
+   file can only add to the product.
+   ========================================================================== */
+
+/* ============================================================ 1. POST TYPE */
+.gh-type-aid {
+    background: var(--gh-type-soft-aid);
+    color: var(--gh-type-ink-aid);
+    border-color: #C7EDE8;
+}
+
+/* ============================================================ 2. BLOCKS */
+.gh-pblocks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gh-s3);
+    margin-top: var(--gh-s4);
+}
+
+.gh-pblock {
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface);
+    padding: var(--gh-s4);
+}
+
+.gh-pblock-title {
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s2);
+    font-size: var(--gh-fs-small);
+    font-weight: var(--gh-fw-bold);
+    color: var(--gh-text);
+    margin: 0 0 var(--gh-s2);
+}
+
+.gh-pblock-title .ic {
+    width: 15px;
+    height: 15px;
+    color: var(--gh-green);
+}
+
+.gh-pblock-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.gh-pblock-items li {
+    position: relative;
+    padding-left: 18px;
+    font-size: var(--gh-fs-body);
+    line-height: 1.45;
+    color: var(--gh-text);
+}
+
+.gh-pblock-items li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 6px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gh-green);
+}
+
+.gh-pblock-list .gh-pblock-title .ic { color: var(--gh-green-ink); }
+
+/* health guidance reads as a "know this" card, safety as a precaution card */
+.gh-post .gh-type-health ~ .gh-pblocks .gh-pblock-list,
+.gh-pblocks .gh-pblock-list { background: #F8FCFA; }
+
+/* ------------------------------------------------------------- contacts */
+.gh-pcontact-rows { display: flex; flex-direction: column; gap: 4px; }
+
+.gh-pcontact {
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s3);
+    padding: 6px 0;
+    font-size: var(--gh-fs-small);
+    color: var(--gh-text);
+    text-decoration: none;
+}
+
+.gh-pcontact + .gh-pcontact { border-top: 1px solid var(--gh-line); }
+.gh-pcontact .ic { width: 14px; height: 14px; color: var(--gh-muted); flex: 0 0 auto; }
+.gh-pcontact-label { color: var(--gh-muted); font-weight: var(--gh-fw-medium); }
+.gh-pcontact-value { margin-left: auto; font-weight: var(--gh-fw-bold); color: var(--gh-green-ink); overflow-wrap: anywhere; }
+
+/* -------------------------------------------------------------- meta rows */
+.gh-pmeta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--gh-s2) 0 0;
+}
+
+.gh-pmeta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s2);
+    font-size: var(--gh-fs-small);
+    padding: 3px 0;
+}
+
+.gh-pmeta-row .ic { width: 13px; height: 13px; color: var(--gh-muted); flex: 0 0 auto; }
+.gh-pmeta-label { color: var(--gh-muted); }
+.gh-pmeta-value { color: var(--gh-text); font-weight: var(--gh-fw-medium); overflow-wrap: anywhere; }
+.gh-pmeta-value a { color: var(--gh-green-ink); text-decoration: underline; text-underline-offset: 2px; }
+
+/* ---------------------------------------------------------- verification */
+.gh-pverify {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    padding: 5px 10px;
+    border-radius: var(--gh-r-pill);
+    background: #F4F7F6;
+    color: var(--gh-muted);
+    font-size: var(--gh-fs-caption);
+    font-weight: var(--gh-fw-medium);
+    border: 1px solid var(--gh-line);
+}
+
+.gh-pverify .ic { width: 13px; height: 13px; }
+.gh-pverify.is-sample { background: #FBF3E0; border-color: #EFE0BE; color: #7A5B10; }
+.gh-pverify.is-ok { background: var(--gh-green-soft); border-color: #C7EADB; color: var(--gh-green-ink); }
+
+/* ------------------------------------------------------------- report CTA */
+.gh-preport { display: flex; flex-direction: column; gap: 4px; }
+
+.gh-post-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gh-s2);
+    min-height: var(--gh-tap);
+    padding: 0 var(--gh-s5);
+    border: 0;
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-green);
+    color: #FFFFFF;
+    font-size: var(--gh-fs-small);
+    font-weight: var(--gh-fw-bold);
+    box-shadow: var(--gh-shadow-1);
+}
+
+.gh-post-cta .ic { width: 16px; height: 16px; }
+.gh-post-cta:hover { background: var(--gh-green-deep); }
+.gh-post-cta:active { transform: translateY(1px); }
+
+.gh-preport-note {
+    margin: 0;
+    font-size: var(--gh-fs-micro);
+    color: var(--gh-faint);
+    text-align: center;
+}
+
+/* ============================================================ 3. SMALL */
+@media (max-width: 380px) {
+    .gh-pblock { padding: var(--gh-s3); }
+    .gh-pblock-items li { font-size: 12.2px; }
+    .gh-post-cta { width: 100%; }
+}
+
+/* ============================================================ 4. COMPOSER */
+/* Shortcut chips: one tap sets one field (type OR topic), never both. */
+.ghc-shortcuts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ghc-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 34px;
+    padding: 0 11px;
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface);
+    color: var(--gh-text);
+    font-size: var(--gh-fs-caption);
+    font-weight: var(--gh-fw-bold);
+    line-height: 1;
+}
+
+.ghc-shortcut .ic { width: 14px; height: 14px; color: var(--gh-muted); }
+
+.ghc-shortcut.is-active {
+    background: var(--gh-green-soft);
+    border-color: #BBE6D5;
+    color: var(--gh-green-ink);
+}
+
+.ghc-shortcut.is-active .ic { color: var(--gh-green-ink); }
+
+.ghc-shortcut[data-shortcut="majanga"] { color: #A11818; }
+.ghc-shortcut[data-shortcut="majanga"].is-active { background: var(--gh-red-soft); border-color: #F6C9C5; }
+.ghc-shortcut[data-shortcut="afya"] { color: #1D4ED8; }
+.ghc-shortcut[data-shortcut="afya"].is-active { background: var(--gh-blue-soft); border-color: #C9DAFB; }
+.ghc-shortcut[data-shortcut="taasisi"] { color: #8A6508; }
+.ghc-shortcut[data-shortcut="taasisi"].is-active { background: var(--gh-amber-soft); border-color: #EFE0BE; }
+
+/* topic chip colours follow the same five topics as the feed badges */
+.ghc-topicchip.is-topic-afya.is-active { background: var(--gh-blue); box-shadow: 0 4px 10px rgba(37, 99, 235, .22); }
+.ghc-topicchip.is-topic-usalama.is-active { background: var(--gh-green); box-shadow: 0 4px 10px rgba(24, 169, 130, .24); }
+.ghc-topicchip.is-topic-taasisi.is-active { background: var(--gh-amber); box-shadow: 0 4px 10px rgba(184, 134, 11, .22); }
+.ghc-topicchip.is-topic-kusaidiana.is-active { background: var(--gh-teal); box-shadow: 0 4px 10px rgba(13, 148, 136, .22); }
+.ghc-topicchip.is-topic-majanga.is-active { background: var(--gh-red); box-shadow: 0 4px 10px rgba(220, 38, 38, .22); }
+
+/* feed tile accents follow the topic taxonomy */
+.gh-topic[data-topic="afya"] .gh-topic-ico { background: var(--gh-blue-soft); color: var(--gh-blue); }
+.gh-topic[data-topic="usalama"] .gh-topic-ico { background: var(--gh-green-soft); color: var(--gh-green-ink); }
+.gh-topic[data-topic="taasisi"] .gh-topic-ico { background: var(--gh-amber-soft); color: var(--gh-amber); }
+.gh-topic[data-topic="kusaidiana"] .gh-topic-ico { background: #E6F7F5; color: #0B6E63; }
+.gh-topic[data-topic="majanga"] .gh-topic-ico { background: var(--gh-red-soft); color: var(--gh-red); }
+
+/* ========================================================= 5. FEED STATES */
+.gh-feed-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gh-s2);
+    padding: 26px 18px;
+    text-align: center;
+    border: 1px dashed var(--gh-line);
+    border-radius: var(--gh-r-lg);
+    background: var(--gh-surface);
+}
+
+.gh-feed-state > .ic { width: 26px; height: 26px; color: var(--gh-muted); }
+.gh-feed-state b { font-size: var(--gh-fs-sm); color: var(--gh-text); }
+.gh-feed-state span { font-size: var(--gh-fs-caption); color: var(--gh-muted); line-height: 1.5; max-width: 30ch; }
+.gh-feed-state.is-error { border-color: #F6C9C5; background: var(--gh-red-soft); }
+.gh-feed-state.is-error > .ic { color: var(--gh-red); }
+.gh-feed-state .gh-btn { min-height: var(--gh-tap-sm); font-size: var(--gh-fs-caption); }
+
+/* skeleton: shape only, never fake content */
+.gh-feed-skel { display: flex; flex-direction: column; gap: var(--gh-s3); }
+
+.gh-skel-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px;
+    border-radius: var(--gh-r-lg);
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-line);
+}
+
+.gh-skel-row { display: flex; align-items: center; gap: 8px; }
+.gh-skel-dot { width: 34px; height: 34px; border-radius: 50%; background: var(--gh-line); }
+.gh-skel-bar { height: 10px; border-radius: 6px; background: var(--gh-line); display: block; }
+.gh-skel-bar.w20 { width: 20%; }
+.gh-skel-bar.w40 { width: 40%; }
+.gh-skel-bar.w70 { width: 70%; }
+.gh-skel-bar.w90 { width: 90%; }
+
+.gh-feed-skel .gh-skel-card { opacity: .7; animation: gh-skel-pulse 1.4s ease-in-out infinite; }
+.gh-feed-skel .gh-skel-card:nth-child(2) { animation-delay: .2s; }
+
+@keyframes gh-skel-pulse {
+    0%, 100% { opacity: .45; }
+    50% { opacity: .85; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gh-feed-skel .gh-skel-card { animation: none; }
+}
+
+/* pending state while an engagement write is in flight */
+[data-act][data-pending="true"],
+[data-follow-btn][data-pending="true"] { opacity: .55; pointer-events: none; }
+
+/* the shortcut note is prose, not an icon+text row: it must not be a flex row */
+#ghcShortcutNote {
+    display: block;
+    font-size: var(--gh-fs-caption);
+    color: var(--gh-muted);
+    margin: 0;
+}
+
+#ghcShortcutNote b { color: var(--gh-text); }
+
+#ghcShortcutLabel { margin-bottom: 0; }
+
+/* small uppercase labels need a wider word gap than Poppins gives at 11px */
+.ghc-label { word-spacing: .18em; }

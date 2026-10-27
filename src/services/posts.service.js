@@ -51,6 +51,54 @@ export async function publishPost(form, { user = currentUser() } = {}) {
   }
 }
 
+/**
+ * Repost = a real second row in the feed that points back at the original.
+ * No new schema version: `repostOf` is an optional field, and old rows simply
+ * do not have it. Nothing leaves the device.
+ */
+export async function findMyRepost(postId, { user = currentUser() } = {}) {
+  const rows = (await listPosts({})).filter((p) => p.authorId === user.id && p.repostOf?.postId === postId);
+  return rows[0] || null;
+}
+
+export async function repost(original, { user = currentUser() } = {}) {
+  // a repost points at the original post, never at another repost
+  if (original.repostOf) return { ok: false, errors: ['Rudia chapisho asili, si rudio lingine.'] };
+
+  const existing = await findMyRepost(original.id, { user });
+  if (existing) return { ok: true, post: existing, already: true };
+
+  const copy = buildPost({
+    title: '',
+    text: original.text,
+    type: original.type,
+    topic: original.topic,
+    audience: original.audience,
+    media: original.media
+  }, { id: user.id, name: user.name, initials: user.initials, isSelf: true },
+  { repostOf: { postId: original.id, authorName: original.authorName } });
+
+  // reposting demo content must stay labelled as demo content
+  if (original.sample) copy.sample = true;
+
+  try {
+    const stored = await (await repo()).create(copy);
+    bus.emit(EVENTS.POST_CREATED, stored);
+    log.info('repost created', stored.id, '←', original.id);
+    return { ok: true, post: stored };
+  } catch (err) {
+    log.error('repost failed', err);
+    return { ok: false, errors: ['Haikuweza kuhifadhi rudio. Jaribu tena.'] };
+  }
+}
+
+export async function undoRepost(postId, { user = currentUser() } = {}) {
+  const mine = await findMyRepost(postId, { user });
+  if (!mine) return { ok: true, removed: false };
+  const ok = await deletePost(mine.id);
+  return { ok, removed: ok };
+}
+
 export async function deletePost(id) {
   const ok = await (await repo()).remove(id);
   if (ok) bus.emit(EVENTS.POST_REMOVED, { id });
