@@ -1,0 +1,283 @@
+/* ==========================================================================
+   GuardHai · 04-HOME
+   Part 4/8 of the stylesheet. Order matters:
+   these files are concatenated in filename order by index.html.
+   ========================================================================== */
+/* ============================================================
+   GUARDHAI — HOME REDESIGN (2026-10-27)
+   Additive only. Scoped to .gh-* plus the shared top/bottom nav
+   (nav is a direct dependency of the Home layout).
+   Brand: white surface, green #18A982, blue secondary, red = SOS only.
+   ============================================================ */
+:root {
+    --gh-green: #18A982;
+    --gh-green-ink: #0B7A5F;   /* accessible on white (~4.6:1) */
+    --gh-green-soft: #E7F6F1;
+    --gh-blue: #2563EB;
+    --gh-blue-soft: #EAF1FE;
+    --gh-gold: #B8860B;        /* accent only, accessible on white */
+    --gh-gold-soft: #FBF3E0;
+    --gh-red: #DC2626;
+    --gh-ink: #0E1B2A;
+    --gh-muted: #5B6779;       /* ~4.9:1 on white */
+    --gh-line: #E4E9F0;
+    --gh-surface: #FFFFFF;
+    --gh-radius: 16px;
+}
+
+/* ---------- TOP NAV ---------- */
+.top-nav.gh-topnav {
+    padding: 10px 14px;
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--gh-line);
+    gap: 10px;
+}
+.gh-brand {
+    display: flex; align-items: center; gap: 9px;
+    cursor: pointer; border-radius: 10px; padding: 2px 4px;
+}
+.gh-brand:focus-visible { outline: 2px solid var(--gh-green); outline-offset: 2px; }
+.gh-logo {
+    width: 30px; height: 30px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--gh-green) 0%, #0E8C6B 100%);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #fff; flex-shrink: 0;
+}
+.gh-logo .ic { width: 17px; height: 17px; stroke: #fff; fill: none; }
+.gh-brand-name {
+    font-size: 16.5px; font-weight: 800; color: var(--gh-ink);
+    letter-spacing: -0.2px;
+}
+.gh-top-actions { display: flex; align-items: center; gap: 4px; }
+.gh-icon-btn {
+    width: 36px; height: 36px; border-radius: 10px; border: 1px solid transparent;
+    background: transparent; color: #435063; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    position: relative; transition: background .15s ease, border-color .15s ease;
+}
+.gh-icon-btn:hover { background: #F3F6FA; }
+.gh-icon-btn:active { background: var(--gh-green-soft); }
+.gh-icon-btn:focus-visible { outline: 2px solid var(--gh-green); outline-offset: 1px; }
+.gh-icon-btn .ic { width: 19px; height: 19px; }
+.gh-icon-btn-avatar { padding: 0; overflow: hidden; border-color: var(--gh-line); }
+.gh-avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; display: block; }
+.gh-dot {
+    position: absolute; top: 5px; right: 6px; width: 7px; height: 7px;
+    border-radius: 50%; background: var(--gh-green); border: 1.5px solid #fff;
+}
+
+/* more menu */
+.gh-more-menu {
+    position: absolute; top: calc(100% + 6px); right: 12px; width: 216px;
+    background: #fff; border: 1px solid var(--gh-line); border-radius: 14px;
+    box-shadow: 0 18px 40px rgba(14, 27, 42, .16);
+    padding: 6px; display: none; z-index: 7000;
+}
+.gh-more-menu.open { display: block; }
+.gh-more-item {
+    width: 100%; display: flex; align-items: center; gap: 10px;
+    padding: 10px 10px; border: 0; background: transparent; border-radius: 10px;
+    font-size: 13px; font-weight: 600; color: var(--gh-ink); cursor: pointer;
+    font-family: inherit; text-align: left;
+}
+.gh-more-item:hover { background: #F3F6FA; }
+.gh-more-item .ic { width: 17px; height: 17px; color: var(--gh-muted); }
+.gh-more-danger, .gh-more-danger .ic { color: var(--gh-red); }
+.gh-more-sep { height: 1px; background: var(--gh-line); margin: 5px 4px; }
+.gh-more-lang {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 10px; font-size: 12.5px; color: var(--gh-muted); font-weight: 600;
+}
+.gh-lang-seg { display: flex; background: #F1F4F8; border-radius: 8px; padding: 2px; }
+.gh-lang-seg button {
+    border: 0; background: transparent; font-family: inherit; cursor: pointer;
+    font-size: 11px; font-weight: 800; color: var(--gh-muted);
+    padding: 4px 9px; border-radius: 6px;
+}
+.gh-lang-seg button.is-active { background: #fff; color: var(--gh-green-ink); box-shadow: 0 1px 3px rgba(14,27,42,.12); }
+
+/* ---------- HOME SURFACE ---------- */
+.page-container.gh-home {
+    background: #FFFFFF;
+    padding: 16px 16px 132px;
+    color: var(--gh-ink);
+}
+.gh-welcome { margin-bottom: 16px; }
+.gh-welcome-title {
+    font-size: 21px; font-weight: 800; letter-spacing: -0.4px; color: var(--gh-ink);
+    line-height: 1.2;
+}
+.gh-welcome-sub { font-size: 12.5px; color: var(--gh-muted); margin-top: 4px; }
+
+.gh-card {
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-radius);
+    padding: 14px;
+    box-shadow: 0 2px 10px rgba(14, 27, 42, .04);
+}
+
+/* safety status */
+.gh-safety { border-left: 3px solid var(--gh-green); margin-bottom: 14px; }
+.gh-safety-row { display: flex; gap: 11px; align-items: flex-start; }
+.gh-safety-ico {
+    width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+    background: var(--gh-green-soft); color: var(--gh-green-ink);
+    display: inline-flex; align-items: center; justify-content: center;
+}
+.gh-safety-ico .ic { width: 20px; height: 20px; }
+.gh-safety-text { min-width: 0; }
+.gh-safety-label { font-size: 10.5px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; color: var(--gh-muted); }
+.gh-safety-state { font-size: 15.5px; font-weight: 800; color: var(--gh-ink); margin-top: 1px; }
+.gh-safety-desc { font-size: 11.5px; color: var(--gh-muted); margin-top: 3px; line-height: 1.45; }
+.gh-safety-meta { display: flex; gap: 8px; margin: 12px 0 10px; flex-wrap: wrap; }
+.gh-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #F6F8FB; border: 1px solid var(--gh-line);
+    border-radius: 999px; padding: 5px 11px; font-size: 11px;
+}
+.gh-chip-k { color: var(--gh-muted); font-weight: 600; }
+.gh-chip b { font-size: 12px; font-weight: 800; color: var(--gh-ink); }
+
+/* buttons */
+.gh-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    font-family: inherit; font-size: 12.5px; font-weight: 700;
+    border-radius: 11px; padding: 0 14px; height: 40px; cursor: pointer;
+    border: 1px solid transparent; transition: background .15s ease, border-color .15s ease, transform .1s ease;
+}
+.gh-btn:active { transform: scale(.99); }
+.gh-btn:focus-visible { outline: 2px solid var(--gh-green); outline-offset: 2px; }
+.gh-btn .ic { width: 16px; height: 16px; }
+.gh-btn-block { width: 100%; }
+.gh-btn-outline { background: #fff; border-color: var(--gh-line); color: var(--gh-ink); }
+.gh-btn-outline:hover { background: #F6F8FB; border-color: #D3DAE4; }
+.gh-btn-primary { background: var(--gh-green); color: #fff; }
+.gh-btn-primary:hover { background: #149273; }
+.gh-btn-danger { background: var(--gh-red); color: #fff; }
+
+/* SOS */
+.gh-sos { margin-bottom: 20px; }
+.gh-sos-btn {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: #fff; border: 0; border-radius: var(--gh-radius);
+    padding: 16px; cursor: pointer; font-family: inherit;
+    box-shadow: 0 10px 24px rgba(220, 38, 38, .28);
+    transition: transform .1s ease, box-shadow .2s ease;
+}
+.gh-sos-btn:active { transform: scale(.99); box-shadow: 0 6px 14px rgba(220, 38, 38, .3); }
+.gh-sos-btn:focus-visible { outline: 3px solid #FCA5A5; outline-offset: 2px; }
+.gh-sos-ico {
+    width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,.18);
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.gh-sos-ico .ic { width: 22px; height: 22px; stroke: #fff; }
+.gh-sos-txt { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15; }
+.gh-sos-txt b { font-size: 19px; font-weight: 900; letter-spacing: .6px; }
+.gh-sos-txt span { font-size: 11.5px; font-weight: 700; opacity: .92; }
+.gh-sos-note {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    font-size: 10.5px; color: var(--gh-muted); margin-top: 8px; text-align: center;
+}
+.gh-sos-note .ic { width: 13px; height: 13px; color: var(--gh-gold); flex-shrink: 0; }
+
+/* sections */
+.gh-section { margin-bottom: 22px; }
+.gh-section-title { font-size: 14.5px; font-weight: 800; color: var(--gh-ink); letter-spacing: -0.2px; }
+.gh-section-sub { font-size: 11.5px; color: var(--gh-muted); margin-top: 2px; }
+.gh-section-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.gh-compose-btn { flex-shrink: 0; height: 36px; font-size: 11.5px; padding: 0 12px; }
+
+/* quick actions */
+.gh-qa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 11px; }
+.gh-qa {
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    background: #fff; border: 1px solid var(--gh-line); border-radius: 14px;
+    padding: 13px 6px; cursor: pointer; font-family: inherit;
+    transition: border-color .15s ease, background .15s ease, transform .1s ease;
+}
+.gh-qa:hover { border-color: #CFE9E1; background: #FBFEFD; }
+.gh-qa:active { transform: scale(.985); }
+.gh-qa:focus-visible { outline: 2px solid var(--gh-green); outline-offset: 2px; }
+.gh-qa-ico {
+    width: 34px; height: 34px; border-radius: 10px;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+.gh-qa-ico .ic { width: 17px; height: 17px; }
+.gh-qa-green { background: var(--gh-green-soft); color: var(--gh-green-ink); }
+.gh-qa-blue { background: var(--gh-blue-soft); color: var(--gh-blue); }
+.gh-qa-gold { background: var(--gh-gold-soft); color: var(--gh-gold); }
+.gh-qa-label { font-size: 10.5px; font-weight: 700; color: var(--gh-ink); text-align: center; line-height: 1.25; }
+
+/* topics */
+.gh-topics { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 12px; scrollbar-width: none; }
+.gh-topics::-webkit-scrollbar { display: none; }
+.gh-topic {
+    flex-shrink: 0; border: 1px solid var(--gh-line); background: #fff;
+    color: var(--gh-muted); border-radius: 999px; padding: 7px 12px;
+    font-size: 11px; font-weight: 700; font-family: inherit; cursor: pointer; white-space: nowrap;
+}
+.gh-topic.is-active { background: var(--gh-green); border-color: var(--gh-green); color: #fff; }
+
+/* feed */
+.gh-feed { display: flex; flex-direction: column; gap: 11px; }
+.gh-post {
+    background: #fff; border: 1px solid var(--gh-line); border-radius: var(--gh-radius);
+    padding: 13px; box-shadow: 0 2px 10px rgba(14, 27, 42, .04);
+}
+.gh-post-head { display: flex; gap: 10px; align-items: flex-start; }
+.gh-post-avatar {
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, #64748B, #94A3B8);
+}
+.gh-post-who { min-width: 0; flex: 1; }
+.gh-post-name { font-size: 12.5px; font-weight: 800; color: var(--gh-ink); display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.gh-post-type { font-size: 10px; color: var(--gh-muted); font-weight: 600; }
+.gh-badge-sample {
+    font-size: 8.5px; font-weight: 900; letter-spacing: .5px;
+    background: var(--gh-gold-soft); color: #8A6100;
+    border: 1px solid #EBD9AE; border-radius: 5px; padding: 1px 5px;
+    text-transform: uppercase;
+}
+.gh-badge-mine { background: var(--gh-green-soft); color: var(--gh-green-ink); border-color: #BFE6D9; }
+.gh-post-follow {
+    border: 1px solid var(--gh-line); background: #fff; color: var(--gh-green-ink);
+    border-radius: 8px; font-size: 10.5px; font-weight: 700; font-family: inherit;
+    padding: 5px 9px; cursor: pointer; flex-shrink: 0;
+}
+.gh-post-follow.is-on { background: var(--gh-green-soft); border-color: #BFE6D9; }
+.gh-post-meta { display: flex; gap: 6px; align-items: center; margin: 8px 0 7px; flex-wrap: wrap; }
+.gh-post-topic {
+    font-size: 9.5px; font-weight: 800; color: var(--gh-green-ink);
+    background: var(--gh-green-soft); border-radius: 5px; padding: 2px 6px;
+}
+.gh-post-time { font-size: 10px; color: var(--gh-muted); }
+.gh-post-text { font-size: 12.5px; line-height: 1.55; color: #26374B; white-space: pre-wrap; }
+.gh-post-media {
+    margin-top: 9px; border-radius: 11px; border: 1px dashed #CFD8E3;
+    background: #F7F9FC; height: 104px;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    font-size: 10.5px; color: var(--gh-muted); font-weight: 600;
+}
+.gh-post-media .ic { width: 16px; height: 16px; }
+.gh-post-actions { display: flex; gap: 4px; margin-top: 11px; padding-top: 10px; border-top: 1px solid #F1F4F8; flex-wrap: wrap; }
+.gh-act {
+    display: inline-flex; align-items: center; gap: 5px;
+    border: 0; background: transparent; color: var(--gh-muted);
+    font-size: 10.5px; font-weight: 700; font-family: inherit;
+    padding: 6px 8px; border-radius: 8px; cursor: pointer;
+}
+.gh-act:hover { background: #F3F6FA; }
+.gh-act .ic { width: 14px; height: 14px; }
+.gh-act.is-on { color: var(--gh-green-ink); background: var(--gh-green-soft); }
+.gh-act-report { margin-left: auto; }
+.gh-act-report:hover { background: #FEF2F2; color: var(--gh-red); }
+.gh-feed-empty { font-size: 12px; color: var(--gh-muted); padding: 18px; text-align: center; border: 1px dashed var(--gh-line); border-radius: 12px; }
+.gh-feed-note {
+    display: flex; gap: 6px; align-items: flex-start;
+    font-size: 10px; color: var(--gh-muted); margin-top: 10px; line-height: 1.45;
+}
+.gh-feed-note .ic { width: 13px; height: 13px; color: var(--gh-gold); flex-shrink: 0; margin-top: 1px; }

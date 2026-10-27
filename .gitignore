@@ -1,0 +1,32 @@
+# GuardHai — runtime and packaging noise
+
+# dependencies / tooling (no build step, but keep the repo clean anyway)
+node_modules/
+.npm/
+.pnpm-store/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# local secrets and machine state
+.env
+.env.*
+!.env.example
+.pki/
+.cache/
+
+# test + package output
+/tmp/
+*.log
+/docs/test-artifacts/
+dist/
+GuardHai*.zip
+GuardHai*.zip.sha256
+GuardHai*.contents.txt
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+muundo-guardhai.txt

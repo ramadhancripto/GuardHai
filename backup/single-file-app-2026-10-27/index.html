@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuardHai - Real Device Guardian System & Security Cockpit</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS & JS for Real Satellite Map view -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <link rel="stylesheet" href="css/guardhai.css">
+</head>
+<body>
+    <!-- PROTOTYPE / DEMO BANNER: always visible, states plainly what is not connected -->
+    <div id="demoBanner" class="demo-banner" role="status">
+        <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>PROTOTYPE / DEMO — SOS, notifications and device pairing are not connected to real services.</span>
+    </div>
+
+    <!-- SVG ICON SPRITE (REAL APP ICONS) -->
+    <svg width="0" height="0" style="position: absolute;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+            <linearGradient id="gShieldBrand" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4DA3FF"/>
+                <stop offset="100%" stop-color="#18C37E"/>
+            </linearGradient>
+        </defs>
+        <symbol id="i-shield-fill" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="url(#gShieldBrand)" stroke="none"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+        <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+        <symbol id="i-google" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></symbol>
+        <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></symbol>
+        <symbol id="i-log-in" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></symbol>
+        <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+        <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+        <symbol id="i-key" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></symbol>
+        <symbol id="i-send" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></symbol>
+        <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+        <symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></symbol>
+        <symbol id="i-hdd" viewBox="0 0 24 24"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></symbol>
+        <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+        <symbol id="i-more-vertical" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></symbol>
+        <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
+        <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></symbol>
+        <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V4s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></symbol>
+        <symbol id="i-camera" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
+        <symbol id="i-video" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
+        <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></symbol>
+        <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+        <symbol id="i-book-open" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+        <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
+        <symbol id="i-edit" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></symbol>
+        <symbol id="i-image-plus" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></symbol>
+        <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+        <symbol id="i-alert-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></symbol>
+        <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></symbol>
+        <symbol id="i-corner-up-left" viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></symbol>
+        <symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+        <symbol id="i-check-circle" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
+        <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+        <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></symbol>
+        <symbol id="i-map" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></symbol>
+        <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+        <symbol id="i-bell-off" viewBox="0 0 24 24"><path d="M13.73 21a2 2 0 0 1-3.46 0"/><path d="M18.63 13A17.89 17.89 0 0 1 18 8"/><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"/><path d="M18 8a6 6 0 0 0-9.33-5"/><line x1="1" y1="1" x2="23" y2="23"/></symbol>
+        <symbol id="i-alert-triangle" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+        <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+        <symbol id="i-plane" viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></symbol>
+        <symbol id="i-activity" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></symbol>
+        <symbol id="i-bluetooth" viewBox="0 0 24 24"><polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"/></symbol>
+        <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></symbol>
+        <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></symbol>
+        <symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></symbol>
+        <symbol id="i-laptop" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="20" x2="22" y2="20"/></symbol>
+        <symbol id="i-watch" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><polyline points="12 9 12 12 13.5 13.5"/><path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83"/></symbol>
+        <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+        <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></symbol>
+        <symbol id="i-siren" viewBox="0 0 24 24"><path d="M7 18v-6a5 5 0 1 1 10 0v6"/><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1z"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="4.9" y1="4.9" x2="6.3" y2="6.3"/><line x1="19.1" y1="4.9" x2="17.7" y2="6.3"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></symbol>
+        <symbol id="i-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
+        <symbol id="i-volume" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></symbol>
+        <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+        <symbol id="i-chart" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></symbol>
+        <symbol id="i-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></symbol>
+        <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></symbol>
+        <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+        <symbol id="i-flask" viewBox="0 0 24 24"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 13 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></symbol>
+        <symbol id="i-radio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></symbol>
+        <symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.4 1 2.3h6c0-.9.4-1.8 1-2.3A7 7 0 0 0 12 2z"/></symbol>
+        <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+        <symbol id="i-heart-pulse" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/><polyline points="3.68 12.05 8 12.05 10 8.5 14 15.5 16 12.05 20.32 12.05"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+        <symbol id="i-building" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><line x1="8" y1="6" x2="10" y2="6"/><line x1="14" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/></symbol>
+        <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+        <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></symbol>
+        <symbol id="i-satellite" viewBox="0 0 24 24"><path d="M13 7 9 3 5 7l4 4"/><path d="m17 11 4 4-4 4-4-4"/><path d="m8 12 4 4 6-6-4-4Z"/><path d="m16 8 3-3"/><path d="M9 21a6 6 0 0 0-6-6"/></symbol>
+        <symbol id="i-stop" viewBox="0 0 24 24"><path d="M7.86 2h8.28L22 7.86v8.28L16.14 22H7.86L2 16.14V7.86z"/></symbol>
+    </svg>
+
+
+    <!-- OFFLINE BANNER -->
+    <div id="offlineBanner" class="offline-banner">
+        <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+        <span>You're offline. Displaying cached security status.</span>
+    </div>
+
+        <!-- SCREEN 1: SPLASH SCREEN -->
+    <div id="screen-splash" class="auth-screen dark-theme auth-centered active">
+        <div class="auth-orb-layer"><div class="auth-orb orb-a"></div><div class="auth-orb orb-b"></div></div>
+        <div style="flex: 1;"></div>
+        <div style="position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 24px;">
+            <div class="brand-logo-mark logo-mark-lg">
+                <svg class="brand-shield" width="50" height="50" viewBox="0 0 24 24"><use href="#i-shield-fill"/></svg>
+            </div>
+            <h1 class="brand-wordmark">GuardHai</h1>
+            <p class="brand-tagline">Protect Yourself. Protect Your Devices.</p>
+        </div>
+        <div style="position: relative; text-align: center; padding-bottom: 46px;">
+            <div class="splash-loader"><span></span></div>
+            <p class="splash-status">Initializing Device Guardian System...</p>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: WELCOME ANIMATION -->
+    <div id="screen-welcome-anim" class="auth-screen dark-theme" style="justify-content: space-between; padding: 40px 20px 30px; text-align: center;">
+        <div style="display: flex; justify-content: flex-end; width: 100%; position: relative;">
+            <select class="lang-toggle" onchange="I18N.setLanguage(this.value)">
+                <option value="sw">SW</option>
+                <option value="en">EN</option>
+            </select>
+        </div>
+        <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+            <div class="brand-logo-mark logo-mark-md" style="margin: 0 auto 22px;">
+                <svg class="brand-shield" width="36" height="36" viewBox="0 0 24 24"><use href="#i-shield-fill"/></svg>
+            </div>
+            <h2 style="font-size: 20px; font-weight: 900; color: white;">Welcome to Device Guardian</h2>
+            <p style="font-size: 12px; color: #94A3B8; max-width: 290px; margin: 8px auto 0;">Continuous monitoring, risk intelligence, and instant emergency response.</p>
+            <div class="feature-chips">
+                <span class="feature-chip"><svg class="ic"><use href="#i-activity"/></svg> 24/7 Monitoring</span>
+                <span class="feature-chip"><svg class="ic"><use href="#i-map-pin"/></svg> Real GPS</span>
+                <span class="feature-chip"><svg class="ic"><use href="#i-siren"/></svg> Instant SOS</span>
+            </div>
+        </div>
+        <button class="btn-gradient green btn-lg" onclick="AuthFlow.goTo('landing')">
+            <span>Continue</span>
+            <svg class="ic"><use href="#i-arrow-right"/></svg>
+        </button>
+    </div>
+
+    <!-- SCREEN 3: LANDING -->
+    <div id="screen-landing" class="auth-screen auth-light">
+        <div class="auth-orb-layer"><div class="auth-orb orb-c"></div><div class="auth-orb orb-d"></div></div>
+        <div class="auth-top-bar">
+            <div class="brand-mini">
+                <div class="brand-mini-mark"><svg class="brand-shield" width="20" height="20" viewBox="0 0 24 24"><use href="#i-shield-fill"/></svg></div>
+                <b>GuardHai</b>
+            </div>
+            <select class="lang-toggle light" onchange="I18N.setLanguage(this.value)">
+                <option value="sw">SW</option>
+                <option value="en">EN</option>
+            </select>
+        </div>
+
+        <div class="landing-hero">
+            <div class="brand-logo-mark logo-mark-md" style="margin: 0 auto;">
+                <svg class="brand-shield" width="36" height="36" viewBox="0 0 24 24"><use href="#i-shield-fill"/></svg>
+            </div>
+            <h1 class="landing-title">GuardHai</h1>
+            <p class="landing-sub">Access your Security Guardian Cockpit</p>
+        </div>
+
+        <div class="auth-options">
+            <div class="auth-option-card" onclick="AuthFlow.goTo('register')">
+                <div class="auth-option-icon blue"><svg class="ic"><use href="#i-user-plus"/></svg></div>
+                <div class="auth-option-text">
+                    <b data-i18n="btn_register">Tengeneza Akaunti Mpya</b>
+                    <span>Anza kulinda vifaa vyako 24/7</span>
+                </div>
+                <svg class="ic auth-option-chev"><use href="#i-chevron-right"/></svg>
+            </div>
+
+            <div class="auth-option-card" onclick="AuthFlow.goTo('login')">
+                <div class="auth-option-icon green"><svg class="ic"><use href="#i-log-in"/></svg></div>
+                <div class="auth-option-text">
+                    <b data-i18n="btn_login">Ingia Kwenye Akaunti Yako</b>
+                    <span>Endelea na ulinzi wako wa sasa</span>
+                </div>
+                <svg class="ic auth-option-chev"><use href="#i-chevron-right"/></svg>
+            </div>
+        </div>
+
+        <div class="auth-divider"><span></span><b>AU</b><span></span></div>
+
+        <div style="position: relative; padding: 0 22px;">
+            <button class="btn-google-auth" onclick="FirebaseService.loginWithGoogle()">
+                <svg class="google-g" width="20" height="20" viewBox="0 0 48 48"><use href="#i-google"/></svg>
+                <span>Continue with Google</span>
+            </button>
+        </div>
+
+        <p class="auth-terms">By continuing, you agree to <a>Terms</a> & <a>Privacy Policy</a>.</p>
+    </div>
+
+    <!-- SCREEN 4: REGISTER -->
+    <div id="screen-register" class="auth-screen auth-light">
+        <div class="auth-orb-layer"><div class="auth-orb orb-c"></div><div class="auth-orb orb-d"></div></div>
+        <div class="auth-header">
+            <button class="back-btn" onclick="AuthFlow.goTo('landing')" aria-label="Rudi"><svg class="ic"><use href="#i-arrow-left"/></svg></button>
+            <div class="auth-header-title">
+                <b>Tengeneza Akaunti</b>
+                <span>Anza kuunda mtandao wako wa ulinzi</span>
+            </div>
+            <div style="width: 42px;"></div>
+        </div>
+        <div class="auth-form-card">
+            <form id="form-register" onsubmit="AuthActions.handleRegister(event)">
+                <div class="form-group">
+                    <label class="form-label" for="reg-name">First Name *</label>
+                    <div class="input-wrap">
+                        <span class="lead"><svg class="ic"><use href="#i-user"/></svg></span>
+                        <input id="reg-name" type="text" class="input-field" required placeholder="DR KAPAMA" autocomplete="name" spellcheck="false">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reg-email">Email *</label>
+                    <div class="input-wrap">
+                        <span class="lead"><svg class="ic"><use href="#i-mail"/></svg></span>
+                        <input id="reg-email" type="email" class="input-field" required placeholder="user@domain.com" autocomplete="email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reg-pass">Password *</label>
+                    <div class="input-wrap">
+                        <span class="lead"><svg class="ic"><use href="#i-lock"/></svg></span>
+                        <input id="reg-pass" type="password" class="input-field" required placeholder="••••••••" minlength="6" autocomplete="new-password">
+                        <button type="button" class="toggle-eye" onclick="AuthActions.togglePassword('reg-pass', this)" aria-label="Onyesha nenosiri"><svg class="ic"><use href="#i-eye"/></svg></button>
+                    </div>
+                    <p class="field-hint">Tumia herufi 6 au zaidi kwa usalama zaidi.</p>
+                </div>
+                <button type="submit" class="btn-gradient green btn-lg">
+                    <svg class="ic"><use href="#i-user-plus"/></svg>
+                    <span>Create Account</span>
+                </button>
+            </form>
+        </div>
+        <p class="auth-switch">Tayari una akaunti? <a onclick="AuthFlow.goTo('login')">Ingia</a></p>
+    </div>
+
+    <!-- SCREEN 5: LOGIN -->
+    <div id="screen-login" class="auth-screen auth-light">
+        <div class="auth-orb-layer"><div class="auth-orb orb-c"></div><div class="auth-orb orb-d"></div></div>
+        <div class="auth-header">
+            <button class="back-btn" onclick="AuthFlow.goTo('landing')" aria-label="Rudi"><svg class="ic"><use href="#i-arrow-left"/></svg></button>
+            <div class="auth-header-title">
+                <b>Sign In</b>
+                <span>Ingia kwenye akaunti yako kuendelea</span>
+            </div>
+            <div style="width: 42px;"></div>
+        </div>
+        <div class="auth-form-card">
+            <form id="form-login" onsubmit="AuthActions.handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="login-id">Email or Phone</label>
+                    <div class="input-wrap">
+                        <span class="lead"><svg class="ic"><use href="#i-mail"/></svg></span>
+                        <input id="login-id" type="text" class="input-field" required placeholder="user@domain.com" autocomplete="username" spellcheck="false">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="login-pass">Password</label>
+                    <div class="input-wrap">
+                        <span class="lead"><svg class="ic"><use href="#i-lock"/></svg></span>
+                        <input id="login-pass" type="password" class="input-field" required placeholder="••••••••" autocomplete="current-password">
+                        <button type="button" class="toggle-eye" onclick="AuthActions.togglePassword('login-pass', this)" aria-label="Onyesha nenosiri"><svg class="ic"><use href="#i-eye"/></svg></button>
+                    </div>
+                </div>
+                <div class="login-options">
+                    <label class="remember-row"><input type="checkbox" checked> <span>Nisikumbuke</span></label>
+                    <button type="button" class="forgot-link" onclick="AuthFlow.goTo('forgot')">Forgot Password?</button>
+                </div>
+                <button type="submit" class="btn-gradient btn-lg">
+                    <svg class="ic"><use href="#i-log-in"/></svg>
+                    <span>Sign In to Dashboard</span>
+                </button>
+            </form>
+
+            <div class="auth-divider" style="margin: 20px 0;"><span></span><b>AU</b><span></span></div>
+
+            <button class="btn-google-auth" onclick="FirebaseService.loginWithGoogle()">
+                <svg class="google-g" width="20" height="20" viewBox="0 0 48 48"><use href="#i-google"/></svg>
+                <span>Continue with Google</span>
+            </button>
+        </div>
+        <p class="auth-switch">Huna akaunti? <a onclick="AuthFlow.goTo('register')">Tengeneza Sasa</a></p>
+    </div>
+
+    <!-- SCREEN 6: FORGOT PASSWORD -->
+    <div id="screen-forgot" class="auth-screen auth-light">
+        <div class="auth-orb-layer"><div class="auth-orb orb-c"></div><div class="auth-orb orb-d"></div></div>
+        <div class="auth-header">
+            <button class="back-btn" onclick="AuthFlow.goTo('login')" aria-label="Rudi"><svg class="ic"><use href="#i-arrow-left"/></svg></button>
+            <div class="auth-header-title">
+                <b>Forgot Password</b>
+                <span>Urejeshe upya nenosiri lako</span>
+            </div>
+            <div style="width: 42px;"></div>
+        </div>
+        <div class="auth-form-card" style="text-align: center;">
+            <div class="forgot-icon"><svg class="ic"><use href="#i-key"/></svg></div>
+            <h3 style="font-size: 15px; font-weight: 900; color: var(--deep-navy);">Umesahau Nenosiri?</h3>
+            <p style="font-size: 11.5px; color: var(--text-muted); margin: 8px 0 18px; line-height: 1.6;">Andika barua pepe yako na tutakutumia kiungo cha kuweka upya nenosiri.</p>
+
+            <form id="form-forgot" onsubmit="AuthActions.handleForgot(event)">
+                <div class="form-group" style="text-align: left;">
+                    <label class="form-label" for="forgot-email">Barua Pepe</label>
+                    <div class="input-wrap">
+                        <span class="lead"><svg class="ic"><use href="#i-mail"/></svg></span>
+                        <input id="forgot-email" type="email" class="input-field" required placeholder="user@domain.com" autocomplete="email">
+                    </div>
+                </div>
+                <button type="submit" class="btn-gradient btn-lg" id="btn-forgot-submit">
+                    <svg class="ic"><use href="#i-send"/></svg>
+                    <span>Tuma Kiungo cha Kuweka Upya</span>
+                </button>
+            </form>
+
+            <div id="forgot-success" style="display: none;" class="forgot-success">
+                <svg class="ic"><use href="#i-check-circle"/></svg>
+                <b>Kiungo kimetumwa!</b>
+                <p>Angalia barua pepe yako. Ikiwa akaunti ipo, kiungo cha kuweka upya kitafika ndani ya dakika chache.</p>
+                <button class="btn-outline" style="height: 44px; font-size: 12px; margin-top: 14px;" onclick="AuthFlow.goTo('login')">Rudi Kwenye Ingia</button>
+            </div>
+        </div>
+        <p class="auth-switch"><a onclick="AuthFlow.goTo('login')">Rudi kwenye Ingia</a></p>
+    </div>
+
+<!-- TOP NAVIGATION BAR -->
+    <header class="top-nav gh-topnav" id="appTopNav" style="display: none;">
+        <div class="gh-brand" onclick="HomeUI.go('home')" role="button" tabindex="0"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();HomeUI.go('home');}"
+             aria-label="GuardHai — nyumbani">
+            <span class="gh-logo" aria-hidden="true"><svg class="ic"><use href="#i-shield-check"/></svg></span>
+            <span class="gh-brand-name">GuardHai</span>
+        </div>
+
+        <!-- Order is fixed: Storage, Notifications, Account, More -->
+        <div class="gh-top-actions">
+            <button type="button" class="gh-icon-btn" onclick="HomeUI.openStorage()" aria-label="Storage" title="Storage">
+                <svg class="ic"><use href="#i-hdd"/></svg>
+            </button>
+            <button type="button" class="gh-icon-btn" onclick="HomeUI.openNotifications()" aria-label="Notifications" title="Notifications">
+                <svg class="ic"><use href="#i-bell"/></svg>
+                <span class="gh-dot" id="ghNotifDot" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="gh-icon-btn gh-icon-btn-avatar" onclick="HomeUI.openAccount()" aria-label="Account" title="Account">
+                <img id="topNavUserPic" class="gh-avatar" alt="" src="https://ui-avatars.com/api/?name=DR+KAPAMA&background=1565FF&color=fff">
+            </button>
+            <button type="button" class="gh-icon-btn" id="ghMoreBtn" onclick="HomeUI.toggleMore(event)"
+                    aria-label="More" aria-haspopup="true" aria-expanded="false" title="More">
+                <svg class="ic"><use href="#i-more-vertical"/></svg>
+            </button>
+        </div>
+
+        <div class="gh-more-menu" id="ghMoreMenu" role="menu" aria-labelledby="ghMoreBtn">
+            <button type="button" class="gh-more-item" role="menuitem" onclick="HomeUI.go('map')">
+                <svg class="ic"><use href="#i-map"/></svg> <span data-i18n="nav_map">Ramani</span></button>
+            <button type="button" class="gh-more-item" role="menuitem" onclick="HomeUI.closeMore(); toggleSidebar(true);">
+                <svg class="ic"><use href="#i-menu"/></svg> <span data-i18n="gh_more_full">Menyu kamili</span></button>
+            <div class="gh-more-sep"></div>
+            <div class="gh-more-lang">
+                <span data-i18n="gh_lang">Lugha</span>
+                <div class="gh-lang-seg" id="ghLangSeg">
+                    <button type="button" data-lang="sw" onclick="I18N.setLanguage('sw'); HomeUI.syncLang(); HomeUI.closeMore();">SW</button>
+                    <button type="button" data-lang="en" onclick="I18N.setLanguage('en'); HomeUI.syncLang(); HomeUI.closeMore();">EN</button>
+                </div>
+            </div>
+            <div class="gh-more-sep"></div>
+            <button type="button" class="gh-more-item gh-more-danger" role="menuitem"
+                    onclick="HomeUI.closeMore(); handleSignOut();">
+                <svg class="ic"><use href="#i-logout"/></svg> <span data-i18n="nav_logout">Ondoka</span></button>
+        </div>
+    </header>
+
+    <!-- SIDEBAR DRAWER -->
+    <div id="sidebarOverlay" class="drawer-overlay" onclick="toggleSidebar(false)"></div>
+    <div id="sidebarDrawer" class="sidebar-drawer">
+        <div class="sidebar-header">
+            <b style="font-size: 15px;" id="sidebarUserName">DR KAPAMA</b>
+            <span style="font-size: 11px; color: #3EF0A2;">● Device Guardian Engine Active</span>
+        </div>
+        <div class="sidebar-menu-list">
+            <div class="sidebar-menu-item" onclick="toggleSidebar(false); switchTab('home');"><svg class="ic"><use href="#i-home"/></svg> Nyumbani (Home)</div>
+            <div class="sidebar-menu-item" onclick="toggleSidebar(false); switchTab('shield');"><svg class="ic"><use href="#i-shield"/></svg> Shield Center (Ulinzi)</div>
+            <div class="sidebar-menu-item" onclick="toggleSidebar(false); switchTab('map');"><svg class="ic"><use href="#i-map"/></svg> Ramani (Map)</div>
+            <div class="sidebar-menu-item" onclick="toggleSidebar(false); handleSignOut();" style="color: var(--emergency-red);"><svg class="ic ic-danger"><use href="#i-logout"/></svg> Ondoka (Logout)</div>
+        </div>
+    </div>
+
+    <!-- PAGE 1: HOME -->
+    <div id="homePage" class="page-container gh-home">
+
+        <!-- B. Welcome -->
+        <section class="gh-welcome">
+            <h1 class="gh-welcome-title" data-i18n="gh_welcome">Karibu GuardHai</h1>
+            <p class="gh-welcome-sub" data-i18n="gh_welcome_sub">Usalama wako, afya yako, maisha yako.</p>
+        </section>
+
+        <!-- B. Safety status — states "not assessed", never claims protection -->
+        <section class="gh-card gh-safety" aria-labelledby="ghSafetyTitle">
+            <div class="gh-safety-row">
+                <span class="gh-safety-ico" aria-hidden="true"><svg class="ic"><use href="#i-shield-check"/></svg></span>
+                <div class="gh-safety-text">
+                    <div class="gh-safety-label" id="ghSafetyTitle" data-i18n="gh_safety_title">Hali ya usalama</div>
+                    <div class="gh-safety-state" data-i18n="gh_safety_unknown">Haijapimwa bado</div>
+                    <div class="gh-safety-device">
+                        <span data-i18n="gh_device_line">Kifaa unachotumia:</span>
+                        <b id="lbl-controller-home-desc">&mdash;</b>
+                    </div>
+                    <p class="gh-safety-desc" data-i18n="gh_safety_desc">
+                        Hakuna huduma ya dharura iliyounganishwa. Kagua mazingira ya kifaa chako.
+                    </p>
+                </div>
+            </div>
+            <div class="gh-safety-meta">
+                <span class="gh-chip">
+                    <span class="gh-chip-k" data-i18n="kpi_protected">Zilizolindwa</span>
+                    <b id="kpi-real-device-count">0</b>
+                </span>
+                <span class="gh-chip" title="Kinakokotolewa kutoka ishara za browser — si tathmini ya usalama wako">
+                    <span class="gh-chip-k" data-i18n="gh_risk_index">Kipimo cha hatari</span>
+                    <b id="lbl-system-risk-kpi">&mdash;</b>
+                </span>
+            </div>
+            <p class="gh-safety-fine" data-i18n="gh_risk_note">
+                Kipimo hiki kinatokana na ishara za kifaa (mtandao, betri, ruhusa) — si tathmini ya usalama wako.
+            </p>
+            <button type="button" class="gh-btn gh-btn-outline gh-btn-block" onclick="HomeUI.reviewSafety()">
+                <svg class="ic"><use href="#i-search"/></svg>
+                <span data-i18n="gh_safety_cta">Kagua / Sanidi taarifa za usalama</span>
+            </button>
+        </section>
+
+        <!-- C. SOS — reuses the existing demo handler, labelled as demo -->
+        <section class="gh-sos" aria-labelledby="ghSosTitle">
+            <button type="button" class="gh-sos-btn" onclick="GHSos.trigger()">
+                <span class="gh-sos-ico" aria-hidden="true"><svg class="ic"><use href="#i-siren"/></svg></span>
+                <span class="gh-sos-txt">
+                    <b id="ghSosTitle">SOS</b>
+                    <span data-i18n="gh_sos_text">Dharura</span>
+                </span>
+            </button>
+            <p class="gh-sos-note">
+                <svg class="ic" aria-hidden="true"><use href="#i-alert-triangle"/></svg>
+                <span data-i18n="gh_sos_demo">Demo — hakuna msaada unaotumwa kwa mtu yeyote.</span>
+            </p>
+        </section>
+
+        <!-- D. Quick actions -->
+        <section class="gh-section">
+            <h2 class="gh-section-title" data-i18n="gh_quick">Vitendo vya haraka</h2>
+            <div class="gh-qa-grid">
+                <button type="button" class="gh-qa" onclick="HomeUI.go('health')">
+                    <span class="gh-qa-ico gh-qa-green" aria-hidden="true"><svg class="ic"><use href="#i-heart-pulse"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_health">Afya</span>
+                </button>
+                <button type="button" class="gh-qa" onclick="HomeUI.go('shield')">
+                    <span class="gh-qa-ico gh-qa-blue" aria-hidden="true"><svg class="ic"><use href="#i-shield"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_shield">Shield</span>
+                </button>
+                <button type="button" class="gh-qa" onclick="HomeUI.goFind()">
+                    <span class="gh-qa-ico gh-qa-blue" aria-hidden="true"><svg class="ic"><use href="#i-search"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_find">Tafuta Kifaa</span>
+                </button>
+                <button type="button" class="gh-qa" onclick="HomeUI.go('map')">
+                    <span class="gh-qa-ico gh-qa-gold" aria-hidden="true"><svg class="ic"><use href="#i-map"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_map">Ramani</span>
+                </button>
+                <button type="button" class="gh-qa" onclick="HomeUI.openGuardians()">
+                    <span class="gh-qa-ico gh-qa-green" aria-hidden="true"><svg class="ic"><use href="#i-users"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_guardians">Walezi</span>
+                </button>
+                <button type="button" class="gh-qa" onclick="HomeUI.scrollToUwanja()">
+                    <span class="gh-qa-ico gh-qa-gold" aria-hidden="true"><svg class="ic"><use href="#i-book-open"/></svg></span>
+                    <span class="gh-qa-label" data-i18n="gh_qa_learn">Elimu ya Usalama</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- E + F. Uwanja wa GuardHai -->
+        <section class="gh-section" id="ghUwanja" aria-labelledby="ghUwanjaTitle">
+            <div class="gh-section-head">
+                <div>
+                    <h2 class="gh-section-title" id="ghUwanjaTitle" data-i18n="gh_uwanja">Uwanja wa GuardHai</h2>
+                    <p class="gh-section-sub" data-i18n="gh_uwanja_sub">Jifunze, shiriki maarifa, saidiana.</p>
+                </div>
+                <button type="button" class="gh-btn gh-btn-primary gh-compose-btn" onclick="HomeUI.openComposer()">
+                    <svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>
+                    <span data-i18n="gh_compose">Shiriki Elimu</span>
+                </button>
+            </div>
+
+            <div class="gh-topics" id="ghTopics" role="group" aria-label="Mada">
+                <button type="button" class="gh-topic is-active" data-topic="all" onclick="HomeUI.filterTopic('all', this)" data-i18n="gh_topic_all">Zote</button>
+                <button type="button" class="gh-topic" data-topic="people" onclick="HomeUI.filterTopic('people', this)" data-i18n="gh_topic_people">Usalama wa Watu</button>
+                <button type="button" class="gh-topic" data-topic="health" onclick="HomeUI.filterTopic('health', this)" data-i18n="gh_topic_health">Afya</button>
+                <button type="button" class="gh-topic" data-topic="crime" onclick="HomeUI.filterTopic('crime', this)" data-i18n="gh_topic_crime">Uhalifu na Mali</button>
+                <button type="button" class="gh-topic" data-topic="disaster" onclick="HomeUI.filterTopic('disaster', this)" data-i18n="gh_topic_disaster">Ajali na Majanga</button>
+                <button type="button" class="gh-topic" data-topic="digital" onclick="HomeUI.filterTopic('digital', this)" data-i18n="gh_topic_digital">Usalama wa Kidijitali</button>
+            </div>
+
+            <div class="gh-feed" id="ghFeed"></div>
+
+            <p class="gh-feed-note">
+                <svg class="ic" aria-hidden="true"><use href="#i-alert-triangle"/></svg>
+                <span data-i18n="gh_feed_note">Machapisho yaliyowekwa "SAMPULI" ni mfano wa UI — hayatoki kwa watumiaji halisi.</span>
+            </p>
+        </section>
+    </div>
+
+    <!-- PAGE 2: CHATS -->
+    <div id="commPage" class="page-container">
+        <div style="text-align: center; padding: 60px 20px;">
+            <div class="modal-big-icon blue" style="margin-bottom: 12px;"><svg class="ic"><use href="#i-message"/></svg></div>
+            <b style="font-size: 15px; color: var(--deep-navy); display: block;">Soga & Ujumbe</b>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Chat & Emergency requests appear here.</p>
+        </div>
+    </div>
+
+    <!-- PAGE 3: GUARDHAI SHIELD CENTER & PROTECT SUB-APPLICATION -->
+    <div id="shieldPage" class="page-container">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="back-btn" style="width: 38px; height: 38px;" onclick="switchTab('home')"><svg class="ic"><use href="#i-arrow-left"/></svg></span>
+                <b style="font-size: 16px; color: var(--deep-navy); display: flex; align-items: center; gap: 8px;"><svg class="ic" style="color: var(--royal-blue);"><use href="#i-shield"/></svg> Shield Center</b>
+            </div>
+        </div>
+
+        <!-- THREE PILLARS (PROTECT / FIND / RECOVER) -->
+        <div class="shield-pillars-grid">
+            <div class="pillar-nav-btn active protect" id="btn-pillar-protect" onclick="switchShieldPillar('protect')">
+                <span class="pillar-icon protect"><svg class="ic"><use href="#i-shield-check"/></svg></span>
+                <b>Protect</b>
+            </div>
+            <div class="pillar-nav-btn find" id="btn-pillar-find" onclick="switchShieldPillar('find')">
+                <span class="pillar-icon find"><svg class="ic"><use href="#i-compass"/></svg></span>
+                <b>Find</b>
+            </div>
+            <div class="pillar-nav-btn recover" id="btn-pillar-recover" onclick="switchShieldPillar('recover')">
+                <span class="pillar-icon recover"><svg class="ic"><use href="#i-siren"/></svg></span>
+                <b>Recover</b>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             PILLAR 1: GUARDHAI PROTECTION CENTER (FINAL ARCHITECTURE V1.0)
+             ============================================================ -->
+        <div id="pillar-content-protect">
+            
+            <!-- PROTECT SUB-NAV TABS -->
+            <div class="protect-sub-nav">
+                <button class="protect-sub-btn active" id="psub-dashboard" onclick="ProtectEngine.switchSubTab('dashboard')"><svg class="ic"><use href="#i-chart"/></svg> <span data-i18n="tab_dashboard">Dashboard</span></button>
+                <button class="protect-sub-btn" id="psub-remote" onclick="ProtectEngine.switchSubTab('remote'); RemoteShield.renderDevices()"><svg class="ic"><use href="#i-cloud"/></svg> Remote Shield</button>
+                <button class="protect-sub-btn" id="psub-devices" onclick="ProtectEngine.switchSubTab('devices')"><svg class="ic"><use href="#i-smartphone"/></svg> My Devices</button>
+                <button class="protect-sub-btn" id="psub-health" onclick="ProtectEngine.switchSubTab('health')"><svg class="ic"><use href="#i-heart-pulse"/></svg> Protection Health</button>
+                <button class="protect-sub-btn" id="psub-layers" onclick="ProtectEngine.switchSubTab('layers')">
+    <svg class="ic"><use href="#i-wifi"/></svg> Offline Methods
+</button>
+                <button class="protect-sub-btn" id="psub-comms" onclick="ProtectEngine.switchSubTab('comms')"><svg class="ic"><use href="#i-radio"/></svg> Communication</button>
+                <button class="protect-sub-btn" id="psub-response" onclick="ProtectEngine.switchSubTab('response')"><svg class="ic"><use href="#i-zap"/></svg> Grace & Response</button>
+                <button class="protect-sub-btn" id="psub-intel" onclick="ProtectEngine.switchSubTab('intel')"><svg class="ic"><use href="#i-cpu"/></svg> Protection Intelligence</button>
+                <button class="protect-sub-btn" id="psub-statusmap" onclick="ProtectEngine.switchSubTab('statusmap')"><svg class="ic"><use href="#i-map"/></svg> Zone Map</button>
+                <button class="protect-sub-btn" id="psub-history" onclick="ProtectEngine.switchSubTab('history')"><svg class="ic"><use href="#i-list"/></svg> Timeline</button>
+            </div>
+
+            <!-- SUB-TAB 1: PROTECTION DASHBOARD -->
+            <div id="protect-view-dashboard" class="protect-view-block">
+                <!-- PROTECTION SENSITIVITY & RADIUS CARD -->
+<div class="glass-card" style="margin-bottom: 16px; background: white;">
+    <b style="font-size: 13px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+        <svg class="ic"><use href="#i-settings"/></svg> Protection Distance & Sensitivity
+    </b>
+    <p style="font-size: 10.5px; color: var(--text-muted); margin-bottom: 12px;">
+        Chagua kiwango cha unyeti wa mawimbi kulingana na mazingira yako.
+    </p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+        <div>
+            <label class="form-label">Smart Sensitivity</label>
+            <select class="input-field" style="height: 40px; font-size: 11px; padding: 4px;" onchange="ProtectEngine.setSensitivity(this.value)">
+                <option value="low">Low (Home Safe)</option>
+                <option value="medium" selected>Medium (Balanced)</option>
+                <option value="high">High (Office/School)</option>
+                <option value="maximum">Maximum (Anti-Theft)</option>
+            </select>
+        </div>
+        <div>
+            <label class="form-label">Protection Radius</label>
+            <select class="input-field" style="height: 40px; font-size: 11px; padding: 4px;" onchange="ProtectEngine.setRadius(this.value)">
+                <option value="very_close">Very Close (1-3m)</option>
+                <option value="close" selected>Close (3-8m)</option>
+                <option value="medium">Medium (8-15m)</option>
+                <option value="long">Long Range (15-30m)</option>
+            </select>
+        </div>
+    </div>
+
+    <span style="font-size: 9.5px; color: var(--text-muted); font-style: italic; display: block; background: #F8FAFC; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--card-border);">
+        <svg class="ic" style="width: 12px; height: 12px;"><use href="#i-lightbulb"/></svg> Note: Umbali ni makadirio na unaweza kubadilika kulingana na mazingira na nguvu ya Bluetooth.
+    </span>
+</div>
+               
+                <div class="glass-card" style="text-align: center; padding: 22px 18px; background: radial-gradient(circle at top, #0E243A 0%, #071A2E 100%); color: white; border: 1px solid rgba(255,255,255,0.15); margin-bottom: 16px;">
+                    <div id="shield-core-status-pill" style="background: rgba(24, 195, 126, 0.2); color: #3EF0A2; border: 1px solid var(--emerald-green); font-size: 10px; font-weight: 800; padding: 4px 14px; border-radius: 20px; display: inline-block; margin-bottom: 8px;">
+                        PROTECTION ENGINE RUNNING <span class="status-dot"></span>
+                    </div>
+                    <h1 style="font-size: 36px; font-weight: 900; color: white;" id="lbl-protection-confidence">100%</h1>
+                    <p style="font-size: 11px; color: #94A3B8; margin-top: 4px;">Protection Confidence Index (System Health)</p>
+
+                    <!-- ACTIVE METHODS BADGES -->
+                    <div style="margin-top: 14px; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">
+                        <span class="layer-badge ble"><svg class="ic"><use href="#i-bluetooth"/></svg> BLE Layer</span>
+                        <span class="layer-badge wifi"><svg class="ic"><use href="#i-wifi"/></svg> Local Wi-Fi Layer</span>
+                        <span class="layer-badge cloud"><svg class="ic"><use href="#i-cloud"/></svg> Cloud Sync Layer</span>
+                    </div>
+
+                    <div style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.06); border-radius: 12px; display: flex; justify-content: space-between; font-size: 11px;">
+                        <span>Heartbeat Session:</span>
+                        <b style="color: #3EF0A2;" id="lbl-heartbeat-status">Active (5s pulse)</b>
+                    </div>
+
+                    <!-- PROTECTION CONFIDENCE BREAKDOWN -->
+                    <div style="margin-top: 12px; padding: 10px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);" id="confidence-breakdown-panel">
+                        <span style="font-size: 9px; font-weight: 800; color: #94A3B8; text-transform: uppercase; display: block; margin-bottom: 6px;">Confidence Breakdown</span>
+                        <div style="display: flex; flex-direction: column; gap: 4px; font-size: 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: #94A3B8;">Bluetooth Signal (30%)</span>
+                                <b style="color: #3EF0A2;" id="conf-bt-score">100%</b>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: #94A3B8;">Heartbeat (30%)</span>
+                                <b style="color: #3EF0A2;" id="conf-hb-score">100%</b>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: #94A3B8;">Monitoring (20%)</span>
+                                <b style="color: #3EF0A2;" id="conf-mon-score">100%</b>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: #94A3B8;">Permissions (10%)</span>
+                                <b style="color: #3EF0A2;" id="conf-perm-score">100%</b>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: #94A3B8;">Battery (10%)</span>
+                                <b style="color: #3EF0A2;" id="conf-bat-score">100%</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OVERVIEW KPIs -->
+                <div class="safety-overview-grid" style="margin-bottom: 16px;">
+                    <div class="safety-kpi-card">
+                        <div class="kpi-label">Protected</div>
+                        <div class="kpi-val" id="dash-protected-val">0</div>
+                    </div>
+                    <div class="safety-kpi-card">
+                        <div class="kpi-label">Active Links</div>
+                        <div class="kpi-val" style="color: var(--royal-blue);" id="dash-connected-val">0</div>
+                    </div>
+                    <div class="safety-kpi-card">
+                        <div class="kpi-label">Warnings</div>
+                        <div class="kpi-val" style="color: var(--emergency-red);" id="dash-warnings-val">0</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
+                    <button class="btn-gradient green" style="height: 48px; font-size: 12px;" onclick="testProtect()">
+                        <svg class="ic"><use href="#i-shield-check"/></svg> Protect My Device
+                    </button>
+                    <button class="btn-outline" style="height: 48px; font-size: 12px;" onclick="ProtectEngine.runReal7StepSecurityCheck()">
+                        <svg class="ic"><use href="#i-heart-pulse"/></svg> Health Diagnostics
+                    </button>
+                </div>
+            </div>
+
+            <!-- REMOTE SHIELD DASHBOARD: REMOTE DEVICES ARE KEPT SEPARATE FROM NEARBY-ONLY DEVICES -->
+            <div id="protect-view-remote" class="protect-view-block" style="display:none;">
+                <div style="background:linear-gradient(135deg,#071A2E,#11335c);color:white;border-radius:var(--radius-lg);padding:18px;margin-bottom:14px;">
+                    <span style="font-size:10px;font-weight:800;color:#3EF0A2;letter-spacing:.5px;">REMOTE SHIELD DASHBOARD</span>
+                    <b style="display:block;font-size:17px;margin-top:4px;">Your remote protection network</b>
+                    <span style="font-size:10px;color:#C7D6E8;display:block;margin-top:4px;">Nearby Shield detects separation first. Remote Tracking keeps monitoring and alerts you through the cloud.</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
+                    <div class="safety-kpi-card"><div class="kpi-label">Remote</div><div class="kpi-val" id="remote-stat-devices">0</div></div>
+                    <div class="safety-kpi-card"><div class="kpi-label">Alerts</div><div class="kpi-val" style="color:var(--amber);" id="remote-stat-alerts">0</div></div>
+                    <div class="safety-kpi-card"><div class="kpi-label">Cloud</div><div class="kpi-val" style="font-size:11px;color:var(--royal-blue);" id="remote-stat-cloud">Checking</div></div>
+                </div>
+                <div class="device-card-premium" style="cursor:default;border-left:4px solid var(--royal-blue);">
+                    <div style="display:flex;justify-content:space-between;align-items:center;"><div><b style="font-size:13px;color:var(--deep-navy);">📱 My Phone — Remote Controller</b><span style="display:block;font-size:10px;color:var(--emerald-green);margin-top:4px;" id="remote-owner-online">● Internet status checking…</span></div><button class="mini-btn" onclick="RemoteShield.trackOwnerPhone()">Update Location</button></div>
+                    <div style="font-size:10px;color:var(--text-muted);margin-top:8px;line-height:1.6;">Role: Owner notification receiver · Cloud relay<br>Last location: <b id="remote-owner-location">Not requested</b></div>
+                </div>
+                <div class="section-header"><span class="section-title">Remote Protected Devices</span><span style="display:flex;gap:5px;"><button class="mini-btn" onclick="RemoteShield.showSettings()">Settings</button><button class="mini-btn" style="background:var(--royal-blue);color:white;border:0;" onclick="RemoteShield.addDevice()">+ Add Device</button></span></div>
+                <div id="remote-shield-dashboard-list"></div>
+                <div class="section-header"><span class="section-title">Nearby-Only Devices</span></div>
+                <p style="font-size:10px;color:var(--text-muted);margin:-5px 5px 9px;">These devices use normal/Nearby Shield only. Enable Remote Tracking individually to avoid mixing protection modes.</p>
+                <div id="remote-nearby-only-list"></div>
+                <div class="section-header"><span class="section-title">Remote Protection Timeline</span></div>
+                <div class="timeline-container" id="remote-shield-timeline"></div>
+            </div>
+
+            <!-- SUB-TAB 2: MY PROTECTED DEVICES -->
+            <div id="protect-view-devices" class="protect-view-block" style="display: none;">
+                <!-- CONTROLLER NODE SPECS -->
+                <div style="background: white; border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <span style="font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Controller Node</span>
+                        <b style="font-size: 13px; color: var(--deep-navy); display: block;" id="real-controller-device-name">Detecting...</b>
+                        <span style="font-size: 10px; color: var(--royal-blue);" id="real-controller-battery">Battery: Reading...</span>
+                    </div>
+                    <span style="font-size: 10px; background: #ECFDF5; color: var(--emerald-green); padding: 4px 8px; border-radius: 10px; font-weight: 800;">VERIFIED MASTER</span>
+                </div>
+
+                <div class="section-header">
+                    <span class="section-title">Protected Devices (<span id="protected-devices-count">0</span>)</span>
+                    <button class="mini-btn" style="background: var(--royal-blue); color: white; border: none; font-size: 11px; padding: 6px 14px;" onclick="ProtectWizard.startWizard()">
+                        <svg class="ic"><use href="#i-plus"/></svg> Add Device
+                    </button>
+                </div>
+
+                <div id="protected-devices-list"></div>
+            </div>
+
+            <!-- SUB-TAB 3: PROTECTION HEALTH -->
+            <div id="protect-view-health" class="protect-view-block" style="display: none;">
+                <div class="section-header">
+                    <span class="section-title">Protection Health & System State</span>
+                </div>
+
+                <div class="card-stack">
+                    <div class="item-row-card">
+                        <div>
+                            <b style="font-size: 12.5px; color: var(--deep-navy);">Bluetooth Hardware</b>
+                            <p style="font-size: 10px; color: var(--text-muted);" id="lbl-health-ble-desc">Checking BLE Interface...</p>
+                        </div>
+                        <span style="font-size: 11px; font-weight: 800; color: var(--emerald-green);" id="lbl-health-ble-status">PASS <span class="status-dot"></span></span>
+                    </div>
+                    <div class="item-row-card">
+                        <div>
+                            <b style="font-size: 12.5px; color: var(--deep-navy);">Heartbeat Guardian Engine</b>
+                            <p style="font-size: 10px; color: var(--text-muted);">Continuous background check interval</p>
+                        </div>
+                        <span style="font-size: 11px; font-weight: 800; color: var(--emerald-green);">RUNNING <span class="status-dot"></span></span>
+                    </div>
+                    <div class="item-row-card">
+                        <div>
+                            <b style="font-size: 12.5px; color: var(--deep-navy);">Background Monitoring Service</b>
+                            <p style="font-size: 10px; color: var(--text-muted);">Active in system background</p>
+                        </div>
+                        <span style="font-size: 11px; font-weight: 800; color: var(--emerald-green);">ACTIVE <span class="status-dot"></span></span>
+                    </div>
+                    <div class="item-row-card">
+                        <div>
+                            <b style="font-size: 12.5px; color: var(--deep-navy);">Battery Optimization</b>
+                            <p style="font-size: 10px; color: var(--text-muted);" id="lbl-health-battery-desc">Monitoring power state</p>
+                        </div>
+                        <span style="font-size: 11px; font-weight: 800; color: var(--emerald-green);">OPTIMIZED <span class="status-dot"></span></span>
+                    </div>
+                </div>
+
+                <button class="btn-gradient" style="height: 46px; font-size: 12px; margin-top: 10px;" onclick="ProtectEngine.runReal7StepSecurityCheck()">
+                    <svg class="ic"><use href="#i-flask"/></svg> Run Full System Security Check
+                </button>
+            </div>
+<!-- SUB-TAB: OFFLINE PROTECTION METHODS (BLE, Wi-Fi, Hotspot, Wi-Fi Direct) -->
+<div id="protect-view-layers" class="protect-view-block" style="display: none;">
+    <div class="glass-card" style="margin-bottom: 16px; background: white;">
+        <b style="font-size: 13px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+            <svg class="ic"><use href="#i-cpu"/></svg> Smart Offline Protection Layers
+        </b>
+        <p style="font-size: 10.5px; color: var(--text-muted); margin-bottom: 12px;">
+            Mfumo unachagua njia bora ya mawasiliano kiotomatiki kuzuia matumizi makubwa ya betri.
+        </p>
+
+        <div style="padding: 10px; background: #F8FAFC; border-radius: 12px; border: 1px solid var(--card-border); display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                <span style="color: var(--text-muted);">Active Primary Method:</span>
+                <b style="color: var(--emerald-green); display: flex; align-items: center; gap: 4px;" id="lbl-active-primary-layer">
+                    <svg class="ic" style="width: 14px; height: 14px;"><use href="#i-bluetooth"/></svg> Bluetooth BLE <span class="status-dot"></span>
+                </b>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                <span style="color: var(--text-muted);">Backup Fallback Layer:</span>
+                <b style="color: var(--royal-blue); display: flex; align-items: center; gap: 4px;" id="lbl-active-backup-layer">
+                    <svg class="ic" style="width: 14px; height: 14px;"><use href="#i-wifi"/></svg> Local Wi-Fi / LAN <span class="status-dot blue"></span>
+                </b>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                <span style="color: var(--text-muted);">Standby Layer:</span>
+                <b style="color: var(--text-muted); display: flex; align-items: center; gap: 4px;">
+                    <svg class="ic" style="width: 14px; height: 14px;"><use href="#i-radio"/></svg> Wi-Fi Direct <span class="status-dot gray"></span>
+                </b>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-header">
+        <span class="section-title">Offline Protection Methods</span>
+    </div>
+
+    <div class="card-stack">
+        <div class="item-row-card">
+            <div>
+                <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                    <svg class="ic"><use href="#i-bluetooth"/></svg> Bluetooth BLE (Primary Offline)
+                </b>
+                <p style="font-size: 10px; color: var(--text-muted);">Low power physical distance heartbeat</p>
+            </div>
+            <input type="checkbox" checked onchange="ProtectEngine.toggleOfflineMethod('ble', this.checked)" style="width: 18px; height: 18px; accent-color: var(--emerald-green);">
+        </div>
+
+        <div class="item-row-card">
+            <div>
+                <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                    <svg class="ic"><use href="#i-wifi"/></svg> Local Network Protection
+                </b>
+                <p style="font-size: 10px; color: var(--text-muted);">Protection via Wi-Fi/LAN when on same router. Home, Office, School.</p>
+                <span class="comm-module-badge wifi" style="margin-top: 4px;">Module 2</span>
+            </div>
+            <input type="checkbox" checked onchange="ProtectEngine.toggleOfflineMethod('localWifi', this.checked); CommunicationModule.toggleModule('localNetwork', this.checked)" style="width: 18px; height: 18px; accent-color: var(--emerald-green);">
+        </div>
+
+        <div class="item-row-card">
+            <div>
+                <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                    <svg class="ic"><use href="#i-radio"/></svg> Wi-Fi Direct Protection
+                </b>
+                <p style="font-size: 10px; color: var(--text-muted);">P2P direct link without router. For areas without Wi-Fi.</p>
+                <span class="comm-module-badge wifidirect" style="margin-top: 4px;">Module 3</span>
+            </div>
+            <input type="checkbox" onchange="ProtectEngine.toggleOfflineMethod('wifiDirect', this.checked); CommunicationModule.toggleModule('wifiDirect', this.checked)" style="width: 18px; height: 18px; accent-color: #7C3AED;">
+        </div>
+
+        <div class="item-row-card">
+            <div>
+                <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                    <svg class="ic"><use href="#i-plane"/></svg> Travel Protection (Hotspot-Based)
+                </b>
+                <p style="font-size: 10px; color: var(--text-muted);">Monitors tethered devices during travel. Laptop, Tablet, Camera.</p>
+                <span class="comm-module-badge travel" style="margin-top: 4px;">Module 4</span>
+            </div>
+            <input type="checkbox" checked onchange="ProtectEngine.toggleOfflineMethod('hotspot', this.checked); CommunicationModule.toggleModule('travel', this.checked)" style="width: 18px; height: 18px; accent-color: #EA580C;">
+        </div>
+
+        <div class="item-row-card">
+            <div>
+                <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                    <svg class="ic"><use href="#i-link"/></svg> USB Cable Protection
+                </b>
+                <p style="font-size: 10px; color: var(--text-muted);">Physical connection monitoring. Detects cable removal. Charging stations, offices.</p>
+                <span class="comm-module-badge usb" style="margin-top: 4px;">Module 5</span>
+            </div>
+            <input type="checkbox" onchange="ProtectEngine.toggleOfflineMethod('usb', this.checked); CommunicationModule.toggleModule('usbCable', this.checked)" style="width: 18px; height: 18px; accent-color: var(--deep-navy);">
+        </div>
+
+        <div class="item-row-card">
+            <div>
+                <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                    <svg class="ic"><use href="#i-zap"/></svg> Smart Auto Switch
+                </b>
+                <p style="font-size: 10px; color: var(--text-muted);">Auto-switch methods without breaking link</p>
+            </div>
+            <input type="checkbox" checked onchange="ProtectEngine.toggleOfflineMethod('autoSwitch', this.checked)" style="width: 18px; height: 18px; accent-color: var(--emerald-green);">
+        </div>
+    </div>
+</div>
+            <!-- SUB-TAB: COMMUNICATION MODULES DASHBOARD -->
+            <div id="protect-view-comms" class="protect-view-block" style="display: none;">
+                <div class="glass-card" style="margin-bottom: 16px; background: white;">
+                    <b style="font-size: 13px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                        <svg class="ic"><use href="#i-radio"/></svg> Communication Module Engine
+                    </b>
+                    <p style="font-size: 10.5px; color: var(--text-muted); margin-bottom: 12px;">
+                        Kila module inafanya kazi kama sensor ya mawasiliano. Mfumo unachagua module bora kiotomatiki.
+                    </p>
+                    <div style="padding: 10px; background: #F8FAFC; border-radius: 12px; border: 1px solid var(--card-border);">
+                        <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px;">
+                            <span style="color: var(--text-muted);">Active Module:</span>
+                            <b style="color: var(--emerald-green);" id="comm-active-module">Bluetooth BLE</b>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px;">
+                            <span style="color: var(--text-muted);">Fallback Ready:</span>
+                            <b style="color: var(--royal-blue);" id="comm-fallback-module">Local Network</b>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                            <span style="color: var(--text-muted);">Auto-Switch:</span>
+                            <b style="color: var(--emerald-green);">Enabled</b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <span class="section-title">Module 1: Bluetooth BLE Protection</span>
+                </div>
+                <div class="item-row-card" style="border-left: 3px solid var(--royal-blue);">
+                    <div>
+                        <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                            <svg class="ic"><use href="#i-bluetooth"/></svg> Bluetooth Protection Module
+                        </b>
+                        <p style="font-size: 10px; color: var(--text-muted);">RSSI-based proximity monitoring with 6 signal states</p>
+                        <div style="margin-top: 4px;">
+                            <span class="comm-module-badge ble">Primary Module</span>
+                            <span style="font-size: 9px; color: var(--emerald-green); font-weight: 700; margin-left: 4px;">Active</span>
+                        </div>
+                    </div>
+                    <span style="font-size: 11px; font-weight: 800; color: var(--emerald-green);">ON</span>
+                </div>
+
+                <div class="section-header">
+                    <span class="section-title">Module 2: Local Network Protection</span>
+                </div>
+                <div class="item-row-card" style="border-left: 3px solid var(--emerald-green);">
+                    <div>
+                        <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                            <svg class="ic"><use href="#i-wifi"/></svg> Local Network Protection Module
+                        </b>
+                        <p style="font-size: 10px; color: var(--text-muted);">Protection via Wi-Fi/LAN when on same router. Supports Home, Office, School.</p>
+                        <div style="margin-top: 4px;">
+                            <span class="comm-module-badge wifi">Fallback Module</span>
+                            <span style="font-size: 9px; color: var(--royal-blue); font-weight: 700; margin-left: 4px;">Standby</span>
+                        </div>
+                    </div>
+                    <input type="checkbox" checked onchange="CommunicationModule.toggleModule('localNetwork', this.checked)" style="width: 18px; height: 18px; accent-color: var(--emerald-green);">
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
+                    <b style="font-size: 11px; color: var(--deep-navy); display: block; margin-bottom: 6px;">Local Network Health</b>
+                    <div class="comm-health-grid">
+                        <div class="comm-health-item" style="background: #F8FAFC;">
+                            <span class="label">Network</span>
+                            <b class="value" style="color: var(--emerald-green);" id="ln-network-status">Connected</b>
+                        </div>
+                        <div class="comm-health-item" style="background: #F8FAFC;">
+                            <span class="label">Latency</span>
+                            <b class="value" style="color: var(--emerald-green);" id="ln-latency">12ms</b>
+                        </div>
+                        <div class="comm-health-item" style="background: #F8FAFC;">
+                            <span class="label">Heartbeat</span>
+                            <b class="value" style="color: var(--emerald-green);" id="ln-heartbeat">Healthy</b>
+                        </div>
+                        <div class="comm-health-item" style="background: #F8FAFC;">
+                            <span class="label">Agent</span>
+                            <b class="value" style="color: var(--royal-blue);" id="ln-agent-status">Running</b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <span class="section-title">Module 3: Wi-Fi Direct Protection</span>
+                </div>
+                <div class="item-row-card" style="border-left: 3px solid #7C3AED;">
+                    <div>
+                        <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                            <svg class="ic"><use href="#i-radio"/></svg> Wi-Fi Direct Protection Module
+                        </b>
+                        <p style="font-size: 10px; color: var(--text-muted);">P2P direct link without router. For areas without Wi-Fi infrastructure.</p>
+                        <div style="margin-top: 4px;">
+                            <span class="comm-module-badge wifidirect">P2P Module</span>
+                            <span style="font-size: 9px; color: var(--text-muted); font-weight: 700; margin-left: 4px;">Available</span>
+                        </div>
+                    </div>
+                    <input type="checkbox" onchange="CommunicationModule.toggleModule('wifiDirect', this.checked)" style="width: 18px; height: 18px; accent-color: #7C3AED;">
+                </div>
+
+                <div class="section-header">
+                    <span class="section-title">Module 4: Travel Protection (Hotspot-Based)</span>
+                </div>
+                <div class="item-row-card" style="border-left: 3px solid #EA580C;">
+                    <div>
+                        <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                            <svg class="ic"><use href="#i-plane"/></svg> Travel Protection Module
+                        </b>
+                        <p style="font-size: 10px; color: var(--text-muted);">Monitors devices tethered to your hotspot during travel. Laptop, Tablet, Camera.</p>
+                        <div style="margin-top: 4px;">
+                            <span class="comm-module-badge travel">Travel Module</span>
+                            <span style="font-size: 9px; color: var(--emerald-green); font-weight: 700; margin-left: 4px;">Active</span>
+                        </div>
+                    </div>
+                    <input type="checkbox" checked onchange="CommunicationModule.toggleModule('travel', this.checked)" style="width: 18px; height: 18px; accent-color: #EA580C;">
+                </div>
+
+                <div style="background: #FFF7ED; border: 1px solid rgba(234,88,12,0.2); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
+                    <b style="font-size: 11px; color: #EA580C; display: block; margin-bottom: 6px;">Travel Protection Status</b>
+                    <div style="display: flex; flex-direction: column; gap: 4px; font-size: 10px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">Hotspot Status:</span>
+                            <b style="color: var(--emerald-green);" id="travel-hotspot-status">Ready</b>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">Tethered Devices:</span>
+                            <b style="color: var(--deep-navy);" id="travel-tethered-count">0</b>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">Travel Mode:</span>
+                            <b style="color: #EA580C;" id="travel-mode-status">Auto-Detect</b>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">Travel Session:</span>
+                            <b style="color: var(--text-muted);" id="travel-session-status">Inactive</b>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRAVEL KIT SECTION -->
+                <div class="section-header">
+                    <span class="section-title">Travel Kit (Group Monitoring)</span>
+                </div>
+                <div style="background: #FFF7ED; border: 1.5px solid rgba(234,88,12,0.3); border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px;">
+                    <b style="font-size: 12px; color: #EA580C; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                        <svg class="ic"><use href="#i-bag"/></svg> Travel Kit
+                    </b>
+                    <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 10px;">
+                        Monitor all your travel devices as one group. If any device disconnects, get notified immediately.
+                    </p>
+                    <div id="travel-kit-devices" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px;">
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: white; border-radius: 8px; border: 1px solid var(--card-border); font-size: 10px;">
+                            <svg class="ic" style="color: var(--royal-blue);"><use href="#i-smartphone"/></svg>
+                            <b style="color: var(--deep-navy);">Phone (Host)</b>
+                            <span style="margin-left: auto; color: var(--emerald-green); font-weight: 800;">Connected</span>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <button class="btn-gradient green" style="height: 36px; font-size: 10px;" onclick="TravelProtectionEngine.startTravelSession()">
+                            <svg class="ic"><use href="#i-play"/></svg> Start Travel
+                        </button>
+                        <button class="btn-outline" style="height: 36px; font-size: 10px;" onclick="TravelProtectionEngine.stopTravelSession()">
+                            <svg class="ic"><use href="#i-stop"/></svg> End Travel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TRAVEL ESCALATION TIMING -->
+                <div class="section-header">
+                    <span class="section-title">Travel Disconnect Escalation</span>
+                </div>
+                <div style="background: #F8FAFC; border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
+                    <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 8px;">If a travel device disconnects, the system escalates gradually:</p>
+                    <div style="display: flex; flex-direction: column; gap: 4px; font-size: 10px;">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span style="background: #EBF3FF; color: var(--royal-blue); padding: 2px 6px; border-radius: 6px; font-weight: 800;">0s</span>
+                            <span style="color: var(--text-muted);">Device disconnected → Reconnect attempt</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span style="background: #FFFBEB; color: var(--amber); padding: 2px 6px; border-radius: 6px; font-weight: 800;">15s</span>
+                            <span style="color: var(--text-muted);">Still missing → Notification</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span style="background: #FFF7ED; color: #EA580C; padding: 2px 6px; border-radius: 6px; font-weight: 800;">30s</span>
+                            <span style="color: var(--text-muted);">Still missing → Vibration</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span style="background: #FFF0F0; color: var(--emergency-red); padding: 2px 6px; border-radius: 6px; font-weight: 800;">60s</span>
+                            <span style="color: var(--text-muted);">Still missing → Alarm + Guardian Alert</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <span class="section-title">Module 5: USB Cable Protection</span>
+                </div>
+                <div class="item-row-card" style="border-left: 3px solid var(--deep-navy);">
+                    <div>
+                        <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                            <svg class="ic"><use href="#i-link"/></svg> USB Cable Protection Module
+                        </b>
+                        <p style="font-size: 10px; color: var(--text-muted);">Physical connection monitoring. Detects unauthorized cable removal.</p>
+                        <div style="margin-top: 4px;">
+                            <span class="comm-module-badge usb">Module 5</span>
+                            <span style="font-size: 9px; color: var(--text-muted); font-weight: 700; margin-left: 4px;" id="usb-module-status">Available</span>
+                        </div>
+                    </div>
+                    <input type="checkbox" onchange="CommunicationModule.toggleModule('usbCable', this.checked)" style="width: 18px; height: 18px; accent-color: var(--deep-navy);">
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
+                    <b style="font-size: 11px; color: var(--deep-navy); display: block; margin-bottom: 6px;">USB Cable Health</b>
+                    <div style="display: flex; flex-direction: column; gap: 4px; font-size: 10px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">Cable Status:</span>
+                            <b style="color: var(--text-muted);" id="usb-cable-status">Not Connected</b>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">Device:</span>
+                            <b style="color: var(--deep-navy);" id="usb-device-name">No Device</b>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">Monitoring:</span>
+                            <b style="color: var(--text-muted);" id="usb-monitoring-status">Stopped</b>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-muted);">Detach Grace:</span>
+                            <b style="color: var(--royal-blue);" id="usb-detach-grace">5 seconds</b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <span class="section-title">Smart Auto-Switch Engine</span>
+                </div>
+                <div class="item-row-card">
+                    <div>
+                        <b style="font-size: 12px; color: var(--deep-navy); display: flex; align-items: center; gap: 6px;">
+                            <svg class="ic"><use href="#i-zap"/></svg> Automatic Module Switching
+                        </b>
+                        <p style="font-size: 10px; color: var(--text-muted);">BLE fails → Local Network → Wi-Fi Direct → Travel Protection</p>
+                    </div>
+                    <input type="checkbox" checked onchange="CommunicationModule.toggleAutoSwitch(this.checked)" style="width: 18px; height: 18px; accent-color: var(--emerald-green);">
+                </div>
+            </div>
+
+            <!-- SUB-TAB 4: DISCONNECT GRACE PERIOD & RESPONSE PROFILES -->
+            <div id="protect-view-response" class="protect-view-block" style="display: none;">
+                <div style="margin-bottom: 12px;">
+                    <span style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Response Profile</span>
+                </div>
+
+                <div class="protection-modes-bar">
+                    <div class="mode-pill" id="prof-quiet" onclick="ProtectEngine.setProfile('Quiet')">
+                        <span><svg class="ic"><use href="#i-bell-off"/></svg></span> Quiet Mode
+                    </div>
+                    <div class="mode-pill active" id="prof-standard" onclick="ProtectEngine.setProfile('Standard')">
+                        <span><svg class="ic"><use href="#i-shield"/></svg></span> Standard
+                    </div>
+                    <div class="mode-pill" id="prof-highsecurity" onclick="ProtectEngine.setProfile('High Security')">
+                        <span><svg class="ic"><use href="#i-zap"/></svg></span> High Security
+                    </div>
+                    <div class="mode-pill" id="prof-travel" onclick="ProtectEngine.setProfile('Travel')">
+                        <span><svg class="ic"><use href="#i-plane"/></svg></span> Travel Guard
+                    </div>
+                </div>
+
+                <div class="section-header" style="margin-top: 20px;">
+                    <span class="section-title">Disconnect Grace Period Timer</span>
+                </div>
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Waiting time before sounding siren alarm to prevent false alarms.</p>
+
+                <div class="card-stack">
+                    <div class="item-row-card">
+                        <div>
+                            <b style="font-size: 12.5px; color: var(--deep-navy);">Grace Period Duration</b>
+                            <p style="font-size: 10px; color: var(--text-muted);">Current: <b style="color: var(--royal-blue);" id="lbl-current-grace">30 Seconds</b></p>
+                        </div>
+                        <select class="input-field" style="width: 110px; height: 38px; font-size: 11px; padding: 4px;" onchange="ProtectEngine.setGracePeriod(this.value)">
+                            <option value="0">Immediately</option>
+                            <option value="30" selected>30 Sec</option>
+                            <option value="60">1 Min</option>
+                            <option value="180">3 Min</option>
+                            <option value="300">5 Min</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 5: PROTECTION INTELLIGENCE (INTELLIGENT RULES ENGINE) -->
+            <div id="protect-view-intel" class="protect-view-block" style="display: none;">
+                <div class="section-header">
+                    <span class="section-title"><svg class="ic"><use href="#i-cpu"/></svg> Protection Intelligence Engine</span>
+                </div>
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 14px;">Rule-based environmental intelligence to detect unusual movement and leave-behind risks.</p>
+
+                <div class="card-stack">
+                    <div class="item-row-card">
+                        <div>
+                            <b style="font-size: 12.5px; color: var(--deep-navy);">Leave-Behind Alert</b>
+                            <p style="font-size: 10px; color: var(--text-muted);">Warn immediately if walking away while device remains still</p>
+                        </div>
+                        <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: var(--emerald-green);">
+                    </div>
+                    <div class="item-row-card">
+                        <div>
+                            <b style="font-size: 12.5px; color: var(--deep-navy);">Travel Auto-Profile Switch</b>
+                            <p style="font-size: 10px; color: var(--text-muted);">Auto-enable Travel Guard Profile when moving at high speed</p>
+                        </div>
+                        <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: var(--emerald-green);">
+                    </div>
+                    <div class="item-row-card">
+                        <div>
+                            <b style="font-size: 12.5px; color: var(--deep-navy);">Frequent Disconnect Intelligence</b>
+                            <p style="font-size: 10px; color: var(--text-muted);">Suggest profile tuning if signal drops repeatedly in same area</p>
+                        </div>
+                        <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: var(--emerald-green);">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 6: STATUS MAP -->
+            <div id="protect-view-statusmap" class="protect-view-block" style="display: none;">
+                <div style="background: white; border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 14px; margin-bottom: 16px;">
+                    <b style="font-size: 13px; color: var(--deep-navy); display: block; margin-bottom: 4px;">Protection Geofence Map</b>
+                    <p style="font-size: 10.5px; color: var(--text-muted); margin-bottom: 10px;">Displays Device Protection Status and Safe Zone Geofence Overlays.</p>
+                    <div id="protectStatusMap" style="width: 100%; height: 280px; border-radius: var(--radius-md); background: #E2E8F0;"></div>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 7: TIMELINE LOGS -->
+            <div id="protect-view-history" class="protect-view-block" style="display: none;">
+                <div class="section-header">
+                    <span class="section-title">Protection Timeline History</span>
+                </div>
+                <div class="timeline-container" id="security-events-log"></div>
+            </div>
+
+        </div>
+
+        <!-- PILLAR 2: FIND -->
+        <div id="pillar-content-find" style="display: none;">
+            <div class="card-stack">
+                <div class="item-row-card" style="border-left: 4px solid var(--royal-blue);">
+                    <div>
+                        <b style="font-size: 13px; color: var(--deep-navy);"><svg class="ic"><use href="#i-map"/></svg> Real GPS Location Map</b>
+                        <p style="font-size: 10px; color: var(--text-muted);">Uses Browser Navigator Geolocation API</p>
+                    </div>
+                    <button class="mini-btn" onclick="switchTab('map')">Open Map</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PILLAR 3: RECOVER — RECOVERY OPERATIONS CENTER (ROC) -->
+        <div id="pillar-content-recover" style="display: none;">
+            <div style="background:linear-gradient(135deg,#27111A,#071A2E);border-radius:var(--radius-lg);padding:18px;color:white;margin-bottom:13px;">
+                <span style="font-size:10px;font-weight:900;color:#FF9A94;letter-spacing:.6px;">RECOVERY OPERATIONS CENTER</span>
+                <b style="font-size:17px;display:block;margin-top:4px;">Recover My Device</b>
+                <p style="font-size:10px;color:#C7D6E8;margin-top:4px;">Coordinate safe recovery only after Find My Device provides usable information.</p>
+            </div>
+            <div style="background:linear-gradient(135deg,#071A2E,#11335c);border:1px solid rgba(77,163,255,.32);border-radius:var(--radius-lg);padding:14px;margin-bottom:12px;color:white;">
+                <b style="font-size:11px;color:#4DA3FF;letter-spacing:.5px;">LIVE RECOVERY COMMAND CENTER</b>
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px;font-size:10px;">
+                    <div style="background:rgba(255,255,255,.07);padding:7px;border-radius:9px;">Mission<br><b id="roc-command-mission" style="color:#3EF0A2;">Waiting</b></div>
+                    <div style="background:rgba(255,255,255,.07);padding:7px;border-radius:9px;">Device<br><b id="roc-command-device" style="color:#94A3B8;">No evidence</b></div>
+                    <div style="background:rgba(255,255,255,.07);padding:7px;border-radius:9px;">Owner<br><b style="color:#3EF0A2;">Online</b></div>
+                    <div style="background:rgba(255,255,255,.07);padding:7px;border-radius:9px;">Guardian<br><b id="roc-command-guardian" style="color:#94A3B8;">Not assigned</b></div>
+                    <div style="background:rgba(255,255,255,.07);padding:7px;border-radius:9px;">Community<br><b id="roc-command-community" style="color:#94A3B8;">Waiting</b></div>
+                    <div style="background:rgba(255,255,255,.07);padding:7px;border-radius:9px;">Recovery AI<br><b style="color:#4DA3FF;">Evidence-based</b></div>
+                </div>
+            </div>
+            <div class="glass-card" style="background:white;margin-bottom:12px;">
+                <label class="form-label">Recovery Device</label>
+                <select id="roc-device-select" class="input-field" style="height:42px;padding:4px;" onchange="RecoveryROC.selectDevice(this.value)"></select>
+                <div id="roc-device-summary" style="font-size:10px;color:var(--text-muted);margin-top:10px;line-height:1.7;"></div>
+                <button class="btn-gradient red" style="height:42px;font-size:11px;margin-top:10px;" onclick="RecoveryROC.startRecovery()"><svg class="ic"><use href="#i-siren"/></svg> Start Recovery Operations</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:13px;">
+                <div class="safety-kpi-card"><div class="kpi-label">Status</div><div class="kpi-val" id="roc-status" style="font-size:10px;color:var(--text-muted);">Waiting</div></div>
+                <div class="safety-kpi-card"><div class="kpi-label">Risk</div><div class="kpi-val" id="roc-risk" style="font-size:10px;color:var(--amber);">Unknown</div></div>
+                <div class="safety-kpi-card"><div class="kpi-label">Confidence</div><div class="kpi-val" id="roc-confidence" style="font-size:10px;color:var(--text-muted);">No data</div></div>
+            </div>
+            <div class="glass-card" style="background:#FFF7ED;border-color:rgba(234,88,12,.25);margin-bottom:12px;">
+                <b style="font-size:12px;color:#EA580C;">Recovery Assistant</b>
+                <p id="roc-assistant" style="font-size:10px;color:var(--text-muted);margin-top:5px;">Select a device. Recovery advice requires a verified Find My Device location and risk evidence.</p>
+            </div>
+            <div class="glass-card" style="background:white;margin-bottom:12px;">
+                <b style="font-size:12px;color:var(--deep-navy);">Recovery Message</b>
+                <select id="roc-message-template" class="input-field" style="height:38px;padding:4px;font-size:10px;margin:8px 0;">
+                    <option value="lost">Lost: Please return this device to the owner.</option>
+                    <option value="guardian">Guardian: Return this device to the nearest GuardHai Guardian.</option>
+                    <option value="business">Business: Please contact company security.</option>
+                </select>
+                <button class="mini-btn" onclick="RecoveryROC.requestAction('message')">Queue Verified Message</button>
+                <p style="font-size:9px;color:var(--text-muted);margin-top:6px;">Messages can be delivered only to an authenticated online Device Agent that supports display messages.</p>
+            </div>
+            <div class="section-header"><span class="section-title">Recovery Actions</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px;">
+                <button class="btn-outline" style="height:42px;font-size:10px;" onclick="RecoveryROC.requestAction('alarm')">Play Alarm</button>
+                <button class="btn-outline" style="height:42px;font-size:10px;" onclick="RecoveryROC.requestAction('message')">Recovery Message</button>
+                <button class="btn-outline" style="height:42px;font-size:10px;" onclick="RecoveryROC.requestAction('share')">Share Session</button>
+                <button class="btn-outline" style="height:42px;font-size:10px;" onclick="RecoveryROC.requestAction('guardian')">Notify Guardian</button>
+                <button class="btn-outline" style="height:42px;font-size:10px;" onclick="RecoveryROC.requestAction('map')">Open Recovery Map</button>
+                <button class="btn-outline" style="height:42px;font-size:10px;" onclick="RecoveryROC.requestAction('safePoint')">Nearest Safe Point</button>
+            </div>
+            <div class="section-header"><span class="section-title">Recovery Zone & Team</span></div>
+            <div class="card-stack">
+                <div class="item-row-card"><div><b style="font-size:11px;color:var(--deep-navy);">Recovery Zone</b><p id="roc-zone" style="font-size:10px;color:var(--text-muted);">Location not verified — no zone can be classified.</p></div><span id="roc-zone-badge" class="device-status-badge disconnected">UNKNOWN</span></div>
+                <div class="item-row-card"><div><b style="font-size:11px;color:var(--deep-navy);">Recovery Team</b><p id="roc-team" style="font-size:10px;color:var(--text-muted);">Owner only. Add Guardians and trusted contacts through account settings.</p></div><button class="mini-btn" onclick="RecoveryROC.requestAction('team')">Manage</button></div>
+            </div>
+            <div class="section-header"><span class="section-title">Recovery Team & Chat</span></div>
+            <div class="glass-card" style="background:white;margin-bottom:12px;">
+                <div id="roc-chat" style="max-height:110px;overflow-y:auto;font-size:10px;color:var(--text-muted);margin-bottom:8px;"></div>
+                <div style="display:flex;gap:6px;"><input id="roc-chat-message" class="input-field" style="height:36px;padding:6px;font-size:10px;" placeholder="Message Recovery Team…"><button class="mini-btn" onclick="RecoveryROC.sendChat()">Send</button></div>
+                <p style="font-size:9px;color:var(--text-muted);margin-top:6px;">Live recovery chat requires Guardian/Trusted Contact cloud roles. Current view records only authorized local session notes.</p>
+            </div>
+            <div class="section-header"><span class="section-title">Recovery Checklist</span></div>
+            <div id="roc-checklist" class="timeline-container" style="font-size:10px;"></div>
+            <div class="section-header"><span class="section-title">Evidence & Timeline</span><button class="mini-btn" onclick="RecoveryROC.requestAction('report')">Recovery Report</button></div>
+            <p style="font-size:10px;color:var(--text-muted);margin:-4px 5px 8px;">Evidence only shows genuine Find, Guardian, and recovery events that were recorded with authorization.</p>
+            <div class="timeline-container" id="roc-timeline"></div>
+            <div class="section-header"><span class="section-title">Recovery Analytics & History</span></div>
+            <div class="item-row-card" style="margin-bottom:10px;"><div><b style="font-size:11px;color:var(--deep-navy);">Mission Analytics</b><p id="roc-analytics" style="font-size:10px;color:var(--text-muted);">No completed recovery missions yet.</p></div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;"><button class="btn-outline" style="height:42px;font-size:10px;" onclick="RecoveryROC.pauseRecovery()">Pause Recovery</button><button class="btn-outline" style="height:42px;font-size:10px;" onclick="RecoveryROC.resumeRecovery()">Continue Recovery</button></div>
+            <button class="btn-gradient green" style="height:44px;font-size:11px;margin-top:10px;" onclick="RecoveryROC.completeRecovery()"><svg class="ic"><use href="#i-check"/></svg> Confirm Device Recovered & End Mission</button>
+        </div>
+
+    </div>
+
+    <!-- PAGE 4: MAP -->
+    <div id="mapPage" class="page-container">
+        <h3 style="display: flex; align-items: center; gap: 8px;"><svg class="ic" style="color: var(--royal-blue);"><use href="#i-map"/></svg> Ramani ya GPS</h3>
+        <div id="mainMap" style="width:100%; height:calc(100vh - 220px); border-radius: 20px; background: #E2E8F0;"></div>
+    </div>
+
+    <!-- PROTECTION TYPE CHOOSER: KEEP NEARBY AND REMOTE SHIELD SEPARATE -->
+    <div id="modalProtectionChooser" class="overlay-modal">
+        <div style="background: white; border-radius: var(--radius-lg); padding: 22px; width: 95%; max-width: 420px; text-align: left;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <div><b style="font-size:16px;color:var(--deep-navy);">🛡 REMOTE SHIELD</b><span style="display:block;font-size:11px;color:var(--text-muted);margin-top:2px;">Choose a protection engine</span></div>
+                <button onclick="closeProtectionModals()" style="background:none;border:0;cursor:pointer;color:var(--text-muted);"><svg class="ic"><use href="#i-x"/></svg></button>
+            </div>
+            <!-- Remote Shield architecture: two engines, one protection system -->
+            <div style="text-align:center;background:#F8FAFC;border:1px solid var(--card-border);border-radius:12px;padding:9px;margin:10px 0 12px;font-size:9px;color:var(--text-muted);">
+                <b style="display:block;color:var(--royal-blue);font-size:10px;letter-spacing:.5px;">REMOTE SHIELD</b>
+                <span style="display:block;color:var(--royal-blue);line-height:10px;">│</span>
+                <span style="display:block;letter-spacing:1px;color:#94A3B8;">┌───────┴───────┐</span>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:3px;">
+                    <b style="color:var(--emerald-green);">Nearby Shield<br>Engine</b>
+                    <b style="color:var(--royal-blue);">Remote Tracking<br>Engine</b>
+                    <span>Bluetooth Detection<br>↓<br>Separation Detection<br>↓<br><b style="color:var(--emerald-green);">Immediate Alert</b></span>
+                    <span>Internet + Cloud<br>↓<br>Location / Status<br>↓<br><b style="color:var(--royal-blue);">Owner Notification</b></span>
+                </div>
+            </div>
+            <button class="item-row-card" style="width:100%;margin:10px 0;text-align:left;border-left:4px solid var(--emerald-green);" onclick="startNearbyShield()">
+                <span><b style="display:block;color:var(--deep-navy);font-size:13px;">Nearby Shield Engine</b><span style="font-size:10px;color:var(--text-muted);">Bluetooth detection · separation detection · immediate alert</span></span>
+                <svg class="ic" style="color:var(--emerald-green);"><use href="#i-bluetooth"/></svg>
+            </button>
+            <button class="item-row-card" style="width:100%;margin:10px 0;text-align:left;border-left:4px solid var(--royal-blue);" onclick="RemoteShield.showHome()">
+                <span><b style="display:block;color:var(--deep-navy);font-size:13px;">Remote Tracking Engine</b><span style="font-size:10px;color:var(--text-muted);">Internet + Cloud · location/status · owner notification</span></span>
+                <svg class="ic" style="color:var(--royal-blue);"><use href="#i-cloud"/></svg>
+            </button>
+            <button class="btn-outline" style="height:42px;font-size:11px;margin-top:2px;" onclick="RemoteShield.showHome()"><svg class="ic"><use href="#i-list"/></svg> My Protected Devices</button>
+        </div>
+    </div>
+
+    <!-- REMOTE SHIELD: PARENT SYSTEM WITH NEARBY DETECTION AS FIRST LAYER -->
+    <div id="modalRemoteShield" class="overlay-modal">
+        <div style="background:white;border-radius:var(--radius-lg);padding:22px;width:95%;max-width:420px;text-align:left;max-height:90vh;overflow-y:auto;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <div><b style="font-size:16px;color:var(--deep-navy);">🛡 Remote Shield</b><span style="display:block;font-size:10px;color:var(--text-muted);">Nearby Shield Engine + Remote Tracking Engine</span></div>
+                <button onclick="closeProtectionModals()" style="background:none;border:0;cursor:pointer;color:var(--text-muted);"><svg class="ic"><use href="#i-x"/></svg></button>
+            </div>
+            <div style="padding:10px;background:#EBF3FF;border:1px solid rgba(21,101,255,.2);border-radius:12px;margin-bottom:12px;font-size:10px;color:var(--text-muted);">
+                <b style="color:var(--royal-blue);">Two-layer protection</b><br>1. Nearby Shield: Bluetooth separation detection<br>2. Remote Shield: Internet, cloud updates & owner alerts
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><b style="font-size:12px;color:var(--deep-navy);">Protected Devices</b><button class="mini-btn" style="background:var(--royal-blue);color:#fff;border:0;" onclick="RemoteShield.addDevice()">+ Add Device</button></div>
+            <div id="remote-shield-device-list"></div>
+            <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;"><button class="btn-outline" style="height:40px;font-size:10px;" onclick="RemoteShield.showSettings()">Settings</button><button class="btn-gradient" style="height:40px;font-size:10px;" onclick="RemoteShield.addDevice()">Add Device</button></div>
+        </div>
+    </div>
+
+    <!-- REMOTE SHIELD SETTINGS -->
+    <div id="modalRemoteSettings" class="overlay-modal">
+        <div style="background:white;border-radius:var(--radius-lg);padding:22px;width:95%;max-width:400px;text-align:left;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><b style="font-size:15px;color:var(--deep-navy);">Remote Shield Settings</b><button onclick="RemoteShield.backToHome()" style="background:none;border:0;cursor:pointer;"><svg class="ic"><use href="#i-x"/></svg></button></div>
+            <label class="form-label">Sensitivity</label><select id="remote-setting-sensitivity" class="input-field" style="height:42px;padding:4px;margin-bottom:12px;" onchange="RemoteShield.setSensitivity(this.value)"><option>High</option><option selected>Medium</option><option>Low</option></select>
+            <b style="font-size:11px;color:var(--deep-navy);">When Connection Lost</b>
+            <label class="remember-row" style="margin-top:8px;"><input id="remote-setting-vibrate" type="checkbox" checked onchange="RemoteShield.updateSetting('vibrate',this.checked)"> Vibrate</label><label class="remember-row" style="margin-top:8px;"><input id="remote-setting-alarm" type="checkbox" checked onchange="RemoteShield.updateSetting('alarm',this.checked)"> Alarm</label><label class="remember-row" style="margin-top:8px;"><input id="remote-setting-notify" type="checkbox" checked onchange="RemoteShield.updateSetting('notify',this.checked)"> Notify Guardian</label><label class="remember-row" style="margin-top:8px;"><input id="remote-setting-tracking" type="checkbox" checked onchange="RemoteShield.updateSetting('tracking',this.checked)"> Start Tracking</label>
+            <b style="font-size:11px;color:var(--deep-navy);display:block;margin-top:14px;">Recovery</b><label class="remember-row" style="margin-top:8px;"><input id="remote-setting-reconnect" type="checkbox" checked onchange="RemoteShield.updateSetting('autoReconnect',this.checked)"> Auto reconnect</label><label class="remember-row" style="margin-top:8px;"><input id="remote-setting-location" type="checkbox" checked onchange="RemoteShield.updateSetting('saveLocation',this.checked)"> Save last location</label>
+            <button class="btn-gradient green" style="height:40px;font-size:11px;margin-top:15px;" onclick="RemoteShield.requestNotifications()">Enable Device Notifications</button>
+        </div>
+    </div>
+
+    <!-- WIZARD MODAL: PROTECT NEW DEVICE WIZARD -->
+    <div id="modalProtectWizard" class="overlay-modal">
+        <div style="background: white; border-radius: var(--radius-lg); padding: 22px; width: 95%; max-width: 420px; text-align: left; position: relative; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <b style="font-size: 15px; color: var(--deep-navy);" id="wizard-title-heading">Protect New Device Wizard</b>
+                <button onclick="ProtectEngine.closeModals()" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted);"><svg class="ic"><use href="#i-x"/></svg></button>
+            </div>
+
+            <!-- WIZARD STEP CONTENTS -->
+            <div id="wizard-step-body">
+                <!-- Rendered dynamically by ProtectWizard engine -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: DEVICE DETAILS & DISTANCE COCKPIT -->
+    <div id="modalDeviceDetail" class="overlay-modal">
+        <div style="background: white; border-radius: var(--radius-lg); padding: 22px; width: 95%; max-width: 420px; text-align: left; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                    <b style="font-size: 16px; color: var(--deep-navy);" id="detail-dev-name">Device Name</b>
+                    <span style="font-size: 10px; color: var(--text-muted); display: block;" id="detail-dev-id">Protection Reference: Active Link</span>
+                </div>
+                <button onclick="ProtectEngine.closeModals()" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted);"><svg class="ic"><use href="#i-x"/></svg></button>
+            </div>
+
+            <!-- BLUETOOTH PROTECTION STATE MACHINE DISPLAY -->
+            <div style="margin-bottom: 12px; padding: 10px; background: linear-gradient(135deg, #0E243A 0%, #071A2E 100%); border-radius: var(--radius-md); color: white;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 10px; color: #94A3B8; font-weight: 700;">Bluetooth Protection State</span>
+                    <span class="state-indicator" id="detail-dev-state-badge" style="background: rgba(24, 195, 126, 0.2); color: #3EF0A2;">MONITORING</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 10px;">
+                    <div>
+                        <span style="color: #94A3B8;">Signal Quality:</span>
+                        <b style="color: #3EF0A2; display: block;" id="detail-dev-signal-quality">Excellent</b>
+                    </div>
+                    <div>
+                        <span style="color: #94A3B8;">RSSI Trend:</span>
+                        <b style="color: #4DA3FF; display: block;" id="detail-dev-rssi-trend">Stable</b>
+                    </div>
+                    <div>
+                        <span style="color: #94A3B8;">Heartbeat:</span>
+                        <b style="color: #3EF0A2; display: block;" id="detail-dev-heartbeat">Running</b>
+                    </div>
+                    <div>
+                        <span style="color: #94A3B8;">Session:</span>
+                        <b style="color: #4DA3FF; display: block;" id="detail-dev-session">Active</b>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMMUNICATION MODULE HEALTH (DYNAMIC) -->
+            <div id="detail-comm-health"></div>
+            <div id="detail-sleep-indicator" style="display: none; margin-bottom: 8px;"></div>
+
+            <div style="background: #F8FAFC; border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px;">
+                    <span style="color: var(--text-muted);">Owner Trust Status:</span>
+                    <b style="color: var(--royal-blue);" id="detail-dev-trust">Mmiliki Aliyethibitishwa</b>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px;">
+                    <span style="color: var(--text-muted);">Connection Status:</span>
+                    <b id="detail-dev-risk-index" style="color: var(--emerald-green);">Protected <span class="status-dot"></span></b>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px;">
+                    <span style="color: var(--text-muted);">Umbali na Nguvu (RSSI):</span>
+                    <b style="color: var(--emerald-green);" id="detail-dev-distance">Very Near <span class="status-dot"></span> (-58 dBm)</b>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                    <span style="color: var(--text-muted);">Layer Inayotumika:</span>
+                    <b style="color: var(--deep-navy);" id="detail-dev-method">Web Bluetooth BLE Layer</b>
+                </div>
+            </div>
+
+            <!-- DISTANCE SIMULATION CONTROLS FOR TESTING -->
+            <div style="margin-bottom: 14px; padding: 10px; background: #EBF3FF; border-radius: var(--radius-sm); border: 1px solid rgba(21,101,255,0.2);">
+                <span style="font-size: 10px; font-weight: 800; color: var(--royal-blue); display: block; margin-bottom: 6px;"><svg class="ic"><use href="#i-flask"/></svg> SIGNAL STATE SIMULATION (TESTING):</span>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+                    <button class="mini-btn" style="font-size: 9px; background: #ECFDF5; color: var(--emerald-green);" onclick="ProtectEngine.simulateSignalState('excellent')">Excellent</button>
+                    <button class="mini-btn" style="font-size: 9px; background: #ECFDF5; color: var(--emerald-green);" onclick="ProtectEngine.simulateSignalState('good')">Good</button>
+                    <button class="mini-btn" style="font-size: 9px; background: #FFFBEB; color: var(--amber);" onclick="ProtectEngine.simulateSignalState('weak')">Weak</button>
+                    <button class="mini-btn" style="font-size: 9px; background: #FFFBEB; color: var(--amber);" onclick="ProtectEngine.simulateSignalState('moving')">Moving Away</button>
+                    <button class="mini-btn" style="font-size: 9px; background: #FFF0F0; color: var(--emergency-red);" onclick="ProtectEngine.simulateSignalState('critical')">Critical</button>
+                    <button class="mini-btn" style="font-size: 9px; background: #FFF0F0; color: var(--emergency-red);" onclick="ProtectEngine.simulateSignalState('disconnected')">Disconnected</button>
+                </div>
+            </div>
+
+            <button class="btn-gradient red" style="margin-bottom: 10px;" onclick="ProtectEngine.triggerSelectedDeviceDisconnectTest()">
+                <svg class="ic"><use href="#i-siren"/></svg> Trigger Emergency Alert Test
+            </button>
+
+            <!-- ACTION BUTTONS -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <button class="btn-outline" style="font-size: 11px; height: 42px;" onclick="ProtectEngine.disconnectDeviceOnly()">
+                    <svg class="ic"><use href="#i-stop"/></svg> Pause Link
+                </button>
+                <button class="btn-outline" style="color: var(--emergency-red); border-color: #FCA5A5; font-size: 11px; height: 42px;" onclick="ProtectEngine.unpairWithAntiRemoveCheck()">
+                    <svg class="ic"><use href="#i-trash"/></svg> Remove Device
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <!-- G. Bottom navigation: exactly Home, Afya, SOS (raised), Shield, Chat -->
+    <nav class="bottom-nav-wrapper" id="appBottomNav" style="display: none;" aria-label="Urambazaji mkuu">
+        <div class="bottom-nav-main">
+            <div class="nav-tabs-container">
+                <button type="button" class="nav-tab-btn active" id="tab-home" onclick="HomeUI.go('home')">
+                    <svg class="ic"><use href="#i-home"/></svg>
+                    <span class="tab-label" data-i18n="nav_home">Nyumbani</span>
+                </button>
+                <button type="button" class="nav-tab-btn" id="tab-health" onclick="HomeUI.go('health')">
+                    <svg class="ic"><use href="#i-heart-pulse"/></svg>
+                    <span class="tab-label" data-i18n="nav_health">Afya</span>
+                </button>
+                <button type="button" class="nav-sos-slot" id="tab-sos" onclick="GHSos.trigger()"
+                        aria-label="SOS — dharura (demo)">
+                    <span class="nav-sos-raised">SOS</span>
+                </button>
+                <button type="button" class="nav-tab-btn" id="tab-shield" onclick="HomeUI.go('shield')">
+                    <svg class="ic"><use href="#i-shield"/></svg>
+                    <span class="tab-label" data-i18n="nav_shield">Ulinzi</span>
+                </button>
+                <button type="button" class="nav-tab-btn" id="tab-chat" onclick="HomeUI.go('chat')">
+                    <svg class="ic"><use href="#i-message"/></svg>
+                    <span class="tab-label" data-i18n="nav_chat">Chat</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MODAL: SECURITY CHECK DIAGNOSTICS COCKPIT -->
+    <div id="modalSecurityCheck" class="overlay-modal">
+        <div style="background: white; border-radius: var(--radius-lg); padding: 22px; width: 95%; max-width: 420px; text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <b style="font-size: 15px; color: var(--deep-navy);"><svg class="ic"><use href="#i-heart-pulse"/></svg> Ripoti Kamili ya Health Diagnostics</b>
+                <button onclick="document.getElementById('modalSecurityCheck').style.display='none'" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted);"><svg class="ic"><use href="#i-x"/></svg></button>
+            </div>
+            
+            <div id="security-check-results-body" style="display: flex; flex-direction: column; gap: 8px; margin: 14px 0;">
+                <!-- Matokeo ya Diagnostics yataonyeshwa hapa -->
+            </div>
+
+            <button class="btn-gradient green" style="height: 44px; font-size: 12px;" onclick="document.getElementById('modalSecurityCheck').style.display='none'">
+                <svg class="ic"><use href="#i-check"/></svg> Funga Ripoti
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT ENGINE (FIREBASE AUTH & GUARDIAN CORE) -->
+
+    <script type="module" src="js/firebase-service.js"></script>
+    <!-- HOME REDESIGN: info sheet (storage / notifications / account / guardians / safety) -->
+    <div id="ghSheet" class="gh-modal" role="dialog" aria-modal="true" aria-labelledby="ghSheetTitle">
+        <div class="gh-modal-card gh-sheet-card">
+            <div class="gh-modal-head">
+                <b id="ghSheetTitle">GuardHai</b>
+                <button type="button" class="gh-modal-x" onclick="HomeUI.closeSheet()" aria-label="Funga">&#10005;</button>
+            </div>
+            <div class="gh-modal-body" id="ghSheetBody"></div>
+        </div>
+    </div>
+
+    <!-- HOME REDESIGN: composer v2 (front-end prototype — media stays on this device) -->
+    <div id="ghComposer" class="gh-modal" role="dialog" aria-modal="true" aria-labelledby="ghcTitle">
+        <div class="gh-modal-card gh-compose-card">
+
+            <div class="gh-modal-head">
+                <b id="ghcTitle" data-i18n="ghc_title">Shiriki Elimu</b>
+                <div class="ghc-head-tools">
+                    <span class="ghc-step" id="ghcStepLabel">1/2</span>
+                    <button type="button" class="gh-modal-x" id="ghcCancel" onclick="HomeUI.cancelComposer()" aria-label="Ghairi chapisho" title="Ghairi">&#10005;</button>
+                </div>
+            </div>
+
+            <!-- STEP 1: EDIT -->
+            <div class="gh-modal-body" id="ghcStepEdit">
+                <div class="ghc-note">
+                    <svg class="ic" aria-hidden="true"><use href="#i-alert-triangle"/></svg>
+                    <span data-i18n="ghc_note">Prototype: chapisho lako linabaki kwenye kifaa hiki. Hakuna kinachotumwa au kuonekana kwa watu wengine.</span>
+                </div>
+
+                <div class="ghc-draftrow" id="ghcDraftRow" style="display:none;"></div>
+
+                <label class="ghc-label" for="ghcTitleInput" data-i18n="ghc_post_title">Kichwa (hiari)</label>
+                <input id="ghcTitleInput" class="ghc-input" type="text" maxlength="120"
+                       placeholder="Kichwa kifupi cha chapisho lako">
+                <div class="ghc-count"><span id="ghcTitleCount">0</span>/120</div>
+
+                <label class="ghc-label" data-i18n="ghc_type">Aina ya chapisho</label>
+                <div class="ghc-chips" id="ghcTypes" role="group" aria-label="Aina ya chapisho">
+                    <button type="button" class="ghc-chip is-active" data-type="elimu" data-i18n="ghc_type_elimu">Elimu</button>
+                    <button type="button" class="ghc-chip" data-type="swali" data-i18n="ghc_type_swali">Swali</button>
+                    <button type="button" class="ghc-chip" data-type="uzoefu" data-i18n="ghc_type_uzoefu">Uzoefu wa Jamii</button>
+                    <button type="button" class="ghc-chip" data-type="taarifa" data-i18n="ghc_type_taarifa">Taarifa ya Taasisi</button>
+                    <button type="button" class="ghc-chip" data-type="fursa" data-i18n="ghc_type_fursa">Fursa ya Kusaidia</button>
+                </div>
+
+                <label class="ghc-label" for="ghcText" data-i18n="ghc_text">Maelezo</label>
+                <textarea id="ghcText" class="ghc-textarea" rows="4" maxlength="600"
+                          placeholder="Andika elimu, swali au uzoefu wako…"></textarea>
+                <div class="ghc-count"><span id="ghcCount">0</span>/600</div>
+
+                <div class="ghc-two">
+                    <div>
+                        <label class="ghc-label" for="ghcTopic" data-i18n="ghc_topic">Mada</label>
+                        <select id="ghcTopic" class="ghc-select">
+                            <option value="people" data-i18n="gh_topic_people">Usalama wa Watu</option>
+                            <option value="health" data-i18n="gh_topic_health">Afya</option>
+                            <option value="crime" data-i18n="gh_topic_crime">Uhalifu na Mali</option>
+                            <option value="disaster" data-i18n="gh_topic_disaster">Ajali na Majanga</option>
+                            <option value="digital" data-i18n="gh_topic_digital">Usalama wa Kidijitali</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="ghc-label" for="ghcAudience" data-i18n="ghc_audience">Watazamaji</label>
+                        <select id="ghcAudience" class="ghc-select">
+                            <option value="public" data-i18n="ghc_aud_public">Umma (sampuli)</option>
+                            <option value="community" data-i18n="ghc_aud_community">Jamii fulani (sampuli)</option>
+                            <option value="guardians" data-i18n="ghc_aud_guardians">Walezi pekee (sampuli)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label class="ghc-label" data-i18n="ghc_media">Viambatisho</label>
+                <div class="ghc-media" role="group" aria-label="Viambatisho">
+                    <button type="button" class="ghc-media-btn" onclick="HomeUI.pickMedia('image')">
+                        <svg class="ic"><use href="#i-image-plus"/></svg> <span data-i18n="ghc_photo">Picha</span>
+                    </button>
+                    <button type="button" class="ghc-media-btn" onclick="HomeUI.pickMedia('video')">
+                        <svg class="ic"><use href="#i-video"/></svg> <span data-i18n="ghc_video">Video</span>
+                    </button>
+                    <button type="button" class="ghc-media-btn" onclick="HomeUI.pickMedia('audio')">
+                        <svg class="ic"><use href="#i-mic"/></svg> <span data-i18n="ghc_audio">Sauti</span>
+                    </button>
+                    <button type="button" class="ghc-media-btn" id="ghcRecBtn" onclick="HomeUI.toggleRecording()">
+                        <svg class="ic"><use href="#i-radio"/></svg> <span data-i18n="ghc_record">Rekodi</span>
+                    </button>
+                    <button type="button" class="ghc-media-btn" onclick="HomeUI.focusLink()">
+                        <svg class="ic"><use href="#i-link"/></svg> <span data-i18n="ghc_link">Kiungo</span>
+                    </button>
+                </div>
+
+                <!-- real file inputs (never displayed) -->
+                <input type="file" id="ghcFileImage" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+                <input type="file" id="ghcFileVideo" accept="video/mp4,video/webm,video/ogg" hidden>
+                <input type="file" id="ghcFileAudio" accept="audio/mpeg,audio/wav,audio/ogg,audio/webm,audio/mp4" hidden>
+
+                <div class="ghc-linkrow" id="ghcLinkRow">
+                    <input type="url" id="ghcLinkInput" class="ghc-input" inputmode="url"
+                           placeholder="https://chanzo.example/elimu" aria-label="Kiungo cha chanzo">
+                    <button type="button" class="gh-btn gh-btn-outline ghc-linkadd" onclick="HomeUI.addLink()">
+                        <svg class="ic"><use href="#i-plus"/></svg>
+                    </button>
+                </div>
+
+                <p class="ghc-note-sm" data-i18n="ghc_media_note">Faili zinabaki kwenye kifaa hiki — hakuna kinachopakiwa. Picha: JPEG/PNG/WEBP/GIF ≤ 5 MB (max 4). Video: MP4/WEBM/OGG ≤ 50 MB. Sauti: ≤ 15 MB.</p>
+
+                <ul class="ghc-tray" id="ghcAttachments" aria-live="polite"></ul>
+                <div class="ghc-errors" id="ghcErrors" role="alert" aria-live="assertive"></div>
+            </div>
+
+            <!-- STEP 2: PREVIEW -->
+            <div class="gh-modal-body" id="ghcStepPreview" style="display:none;">
+                <p class="ghc-preview-hint" data-i18n="ghc_preview_hint">Hivi ndivyo chapisho litakavyoonekana kwenye Uwanja:</p>
+                <div id="ghcPreviewHost"></div>
+                <div class="ghc-note" style="margin-top:12px;">
+                    <svg class="ic" aria-hidden="true"><use href="#i-alert-triangle"/></svg>
+                    <span data-i18n="ghc_preview_note">Hakiki: hii ni onyesho la kifaa pekee. Chapisho halitachapishwa mtandaoni.</span>
+                </div>
+            </div>
+
+            <div class="gh-modal-foot" id="ghcFoot">
+                <button type="button" class="gh-btn gh-btn-outline" id="ghcBackBtn" onclick="HomeUI.composerBack()" style="display:none;">
+                    <svg class="ic"><use href="#i-corner-up-left"/></svg> <span data-i18n="ghc_back">Rudi</span>
+                </button>
+                <button type="button" class="gh-btn gh-btn-outline" id="ghcDraftBtn" onclick="HomeUI.saveDraft()">
+                    <svg class="ic"><use href="#i-bookmark"/></svg> <span data-i18n="ghc_draft">Hifadhi Rasimu</span>
+                </button>
+                <button type="button" class="gh-btn gh-btn-outline" id="ghcPreviewBtn" onclick="HomeUI.showPreview()">
+                    <svg class="ic"><use href="#i-eye"/></svg> <span data-i18n="ghc_preview">Hakiki</span>
+                </button>
+                <button type="button" class="gh-btn gh-btn-primary" id="ghcPublish" onclick="HomeUI.publish()">
+                    <span data-i18n="ghc_publish">Chapisha</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOME REDESIGN: toast -->
+    <div id="ghToast" class="gh-toast" role="status" aria-live="polite"></div>
+
+    <script src="js/guardhai-app.js"></script>
+    <script src="js/guardhai-home.js"></script>
+</body>
+</html>

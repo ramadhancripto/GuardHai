@@ -1,0 +1,40 @@
+/* ==========================================================================
+   GuardHai · 05-NAVIGATION
+   Part 5/8 of the stylesheet. Order matters:
+   these files are concatenated in filename order by index.html.
+   ========================================================================== */
+/* ---------- BOTTOM NAV (shared, restyled to match Home) ---------- */
+.bottom-nav-main {
+    background: #FFFFFF;
+    border-top: 1px solid var(--gh-line);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 26px rgba(14, 27, 42, .09);
+}
+.nav-tabs-container { height: 66px; padding-bottom: env(safe-area-inset-bottom, 0px); }
+.nav-tab-btn { color: #8A94A6; gap: 2px; background: transparent; border: 0; font-family: inherit; }
+.nav-tab-btn .tab-label { font-size: 9.5px; font-weight: 700; }
+.nav-tab-btn .ic { width: 21px; height: 21px; }
+.nav-tab-btn.active { color: var(--gh-green-ink); }
+.nav-tab-btn.active::after {
+    content: ""; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gh-green); margin-top: 1px;
+}
+.nav-tab-btn:focus-visible { outline: 2px solid var(--gh-green); outline-offset: -3px; border-radius: 10px; }
+.nav-sos-slot {
+    flex: 0 0 74px; display: flex; align-items: flex-start; justify-content: center;
+    background: transparent; border: 0; cursor: pointer; padding: 0; height: 100%;
+}
+.nav-sos-raised {
+    margin-top: -26px; width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: #fff; font-size: 12.5px; font-weight: 900; letter-spacing: .6px;
+    display: flex; align-items: center; justify-content: center;
+    border: 4px solid #fff; box-shadow: 0 8px 18px rgba(220, 38, 38, .34);
+    animation: ghSosPulse 2.4s ease-in-out infinite;
+}
+.nav-sos-slot:active .nav-sos-raised { transform: scale(.96); }
+.nav-sos-slot:focus-visible .nav-sos-raised { outline: 3px solid #FCA5A5; outline-offset: 2px; }
+@keyframes ghSosPulse {
+    0%, 100% { box-shadow: 0 8px 18px rgba(220, 38, 38, .34); }
+    50%      { box-shadow: 0 8px 26px rgba(220, 38, 38, .55); }
+}

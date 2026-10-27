@@ -1,0 +1,178 @@
+/* ==========================================================================
+   GuardHai · 01-CORE
+   Part 1/8 of the stylesheet. Order matters:
+   these files are concatenated in filename order by index.html.
+   ========================================================================== */
+/* ============================================================
+   GUARDHAI ULTRA-PREMIUM DESIGN SYSTEM (EMERALD & BLUE)
+   ============================================================ */
+:root {
+    --deep-navy: #071A2E;
+    --navy-surface: #0E243A;
+    --royal-blue: #1565FF;
+    --royal-blue-glow: rgba(21, 101, 255, 0.4);
+    --emerald-green: #18C37E;
+    --emerald-glow: rgba(24, 195, 126, 0.4);
+    --emergency-red: #FF3B30;
+    --amber: #F5A623;
+    --light-bg: #F8FAFC;
+    --text-dark: #071A2E;
+    --text-muted: #64748B;
+    --card-border: #E2E8F0;
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --radius-lg: 26px;
+    --radius-md: 18px;
+    --radius-sm: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--light-bg);
+    color: var(--text-dark);
+    overflow-x: hidden;
+    min-height: 100vh;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+.svg-icon {
+    display: inline-block;
+    vertical-align: middle;
+    stroke-width: 2.3;
+    stroke: currentColor;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.08));
+}
+
+.offline-banner {
+    background: linear-gradient(135deg, var(--amber) 0%, #D97706 100%);
+    color: white; font-size: 11px; font-weight: 800; text-align: center;
+    padding: 8px 15px; display: none; align-items: center; justify-content: center;
+    gap: 8px; position: sticky; top: 0; z-index: 9000;
+}
+
+/* System status bar — always on top so an unconnected service is never hidden */
+.status-banner {
+    background: linear-gradient(135deg, #7C2D12 0%, #B45309 100%);
+    color: #FFFFFF; font-size: 10.5px; font-weight: 800; line-height: 1.35;
+    letter-spacing: 0.01em; text-align: center;
+    padding: 7px 14px; display: flex; align-items: center; justify-content: center;
+    gap: 8px; position: sticky; top: 0; z-index: 10001;
+}
+.status-banner svg { flex-shrink: 0; }
+
+.auth-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    display: none; flex-direction: column; overflow-y: auto; overflow-x: clip;
+    z-index: 10000; background: linear-gradient(135deg, #F8FAFC 0%, #EEF2F6 100%);
+    animation: slideInScreen 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.auth-screen.active { display: flex; }
+
+.auth-screen.dark-theme {
+    background: radial-gradient(circle at top, #112B47 0%, #071A2E 70%, #020B18 100%);
+    color: white;
+}
+
+@keyframes slideInScreen {
+    from { transform: translateY(15px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes shieldGlowPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 var(--royal-blue-glow); }
+    50% { transform: scale(1.05); box-shadow: 0 0 35px 14px var(--emerald-glow); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 var(--royal-blue-glow); }
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(18px);
+    border: 1px solid var(--card-border); border-radius: var(--radius-lg);
+    padding: 20px; text-align: left; transition: all 0.25s ease;
+    box-shadow: 0 12px 35px rgba(7, 26, 46, 0.05);
+}
+
+.dark-theme .glass-card { background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); }
+.glass-card.interactive { cursor: pointer; }
+.glass-card.interactive:active { transform: scale(0.98); border-color: var(--royal-blue); }
+
+.btn-gradient {
+    width: 100%; height: 52px; background: linear-gradient(135deg, var(--royal-blue) 0%, #0B4AD6 100%);
+    color: white; border: none; border-radius: var(--radius-md); font-size: 13.5px; font-weight: 800;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s ease;
+}
+
+.btn-gradient.green { background: linear-gradient(135deg, var(--emerald-green) 0%, #0E8555 100%); }
+.btn-gradient.red { background: linear-gradient(135deg, var(--emergency-red) 0%, #B91C1C 100%); }
+
+.btn-outline {
+    width: 100%; height: 52px; background: white; color: var(--text-dark);
+    border: 1.5px solid var(--card-border); border-radius: var(--radius-md); font-size: 13.5px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+
+.btn-google-auth {
+    width: 100%; height: 52px; background: #FFFFFF; color: #3C4043; border: 1.5px solid #DADCE0;
+    border-radius: var(--radius-md); font-size: 13.5px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+}
+
+.form-group { margin-bottom: 16px; text-align: left; }
+.form-label { display: block; font-size: 10.5px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 7px; }
+.input-field { width: 100%; height: 50px; padding: 12px 14px; border: 1.5px solid var(--card-border); border-radius: var(--radius-md); font-size: 13px; font-weight: 500; outline: none; background: #FFFFFF; }
+
+.lang-toggle { background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 20px; padding: 5px 12px; color: white; font-size: 11px; font-weight: 800; outline: none; cursor: pointer; }
+.lang-toggle option { background: var(--deep-navy); color: white; }
+
+.auth-header { padding: 20px; display: flex; align-items: center; justify-content: space-between; }
+.back-btn { width: 40px; height: 40px; border-radius: 50%; background: white; border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+.top-nav { background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(16px); color: var(--deep-navy); padding: 12px 20px; position: sticky; top: 0; z-index: 2000; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); }
+.top-nav-left { display: flex; align-items: center; gap: 12px; }
+.user-avatar-top { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--royal-blue); }
+.avatar-status-ring { position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--emerald-green); border: 2px solid white; }
+.brand-logo-text { display: flex; flex-direction: column; text-align: left; }
+.user-greeting { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+.user-name-display { font-size: 14px; font-weight: 800; color: var(--deep-navy); line-height: 1.2; }
+
+.top-nav-right { display: flex; gap: 8px; align-items: center; }
+.top-icon-btn { background: #FFFFFF; border: 1px solid var(--card-border); border-radius: 12px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: var(--royal-blue); cursor: pointer; }
+
+.page-container { padding: 15px; display: none; padding-bottom: 120px; animation: fadeIn 0.3s ease-out; }
+.page-container.active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.status-hero-card { background: linear-gradient(135deg, var(--deep-navy) 0%, #11335c 100%); color: white; padding: 22px; border-radius: var(--radius-lg); margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+.status-pill { background: rgba(24, 195, 126, 0.22); border: 1px solid var(--emerald-green); color: #3EF0A2; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+.status-dot { width: 7px; height: 7px; background-color: var(--emerald-green); border-radius: 50%; display: inline-block; }
+.shield-animated-box { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, rgba(21,101,255,0.35) 0%, rgba(24,195,126,0.35) 100%); border: 2.5px solid var(--royal-blue); display: flex; align-items: center; justify-content: center; color: #4DA3FF; animation: shieldGlowPulse 2.5s infinite; flex-shrink: 0; }
+
+.safety-overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.safety-kpi-card { background: white; border: 1px solid var(--card-border); border-radius: 20px; padding: 16px 10px; text-align: center; }
+.safety-kpi-card .kpi-val { font-size: 16px; font-weight: 800; color: var(--deep-navy); }
+.safety-kpi-card .kpi-label { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+
+.section-header { display: flex; justify-content: space-between; align-items: center; margin: 22px 0 12px; padding: 0 5px; }
+.section-title { font-size: 12.5px; font-weight: 800; color: var(--deep-navy); text-transform: uppercase; letter-spacing: 0.4px; }
+
+.card-stack { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.item-row-card { background: white; border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; text-align: left; }
+.mini-btn { padding: 6px 12px; border-radius: 10px; border: 1px solid var(--card-border); background: #F8FAFC; font-size: 10px; font-weight: 800; color: var(--deep-navy); cursor: pointer; }
+
+.timeline-container { background: white; border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 20px; }
+.timeline-item { display: flex; gap: 12px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--card-border); text-align: left; }
+.timeline-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.timeline-icon { width: 36px; height: 36px; border-radius: 50%; background: #EBF3FF; color: var(--royal-blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }

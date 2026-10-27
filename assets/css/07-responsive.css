@@ -1,0 +1,52 @@
+/* ==========================================================================
+   GuardHai · 07-RESPONSIVE
+   Part 7/8 of the stylesheet. Order matters:
+   these files are concatenated in filename order by index.html.
+   ========================================================================== */
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 359px) {
+    .gh-qa-grid { grid-template-columns: repeat(2, 1fr); }
+    .gh-brand-name { font-size: 15px; }
+    .gh-top-actions { gap: 1px; }
+    .gh-icon-btn { width: 33px; height: 33px; }
+    .ghc-media { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 560px) {
+    .gh-qa-grid { grid-template-columns: repeat(6, 1fr); }
+    .ghc-media { grid-template-columns: repeat(4, 1fr); }
+}
+@media (min-width: 720px) {
+    .page-container.gh-home { max-width: 720px; margin: 0 auto; padding: 20px 20px 132px; }
+    .gh-modal { align-items: center; padding: 24px; }
+    .gh-modal-card { border-radius: 20px; max-height: 86vh; }
+    .gh-welcome-title { font-size: 24px; }
+    .gh-sos-btn { padding: 18px; }
+    .bottom-nav-main { max-width: 720px; margin: 0 auto; border-radius: 20px 20px 0 0; }
+}
+@media (min-width: 1024px) {
+    .page-container.gh-home { max-width: 860px; }
+    .bottom-nav-main { max-width: 860px; }
+}
+
+/* --- Home refinements (2026-10-27) --- */
+.gh-safety-device { font-size: 11px; color: var(--gh-muted); margin-top: 5px; display: flex; gap: 5px; flex-wrap: wrap; }
+.gh-safety-device b { color: #33445A; font-weight: 700; }
+.gh-safety-fine { font-size: 9.5px; color: #7C8899; line-height: 1.45; margin: -2px 0 10px; }
+.gh-logo .ic { stroke-width: 2.4; }
+
+/* keep the five post actions on one line on 360px+ screens */
+@media (min-width: 360px) {
+    .gh-post-actions { gap: 1px; }
+    .gh-act { padding: 6px 5px; font-size: 10px; gap: 4px; }
+    .gh-act .ic { width: 13px; height: 13px; }
+}
+.ghc-draftrow {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    background: var(--gh-green-soft); border: 1px solid #BFE6D9; border-radius: 10px;
+    padding: 8px 10px; font-size: 11px; color: var(--gh-green-ink); margin-bottom: 4px;
+}
+.ghc-linkbtn {
+    border: 0; background: transparent; color: var(--gh-green-ink);
+    font-family: inherit; font-size: 11px; font-weight: 800; cursor: pointer;
+    text-decoration: underline; padding: 0;
+}
