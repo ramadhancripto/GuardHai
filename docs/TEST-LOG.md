@@ -731,12 +731,12 @@ Idadi ya checks haijapungua: **H1–H23 = 23/23** bado.
 
 ### M7 — Kifurushi
 
-`GuardHai-Complete-Project.zip` — files **215**, zip **36,163,890 B**
-(37,878,498 B kabla ya kubanwa), sha256
-`cfb6c4394fca72b52ae2fa1b75b9d018a564b6f33a0f116a6c643532de722fea`;
-`unzip -t` OK, `sha256sum -c` OK. Kutoka kwenye zip iliyotolewa (port 8131):
-`verify_app.py` **12/12**, `identity.spec.js` **24/24**, `hero.spec.js` **23/23**,
-`home.spec.js` **62/62**.
+Baada ya marekebisho ya M8: files **216**, zip **36,729,164 B**
+(38,447,964 B kabla ya kubanwa), sha256
+`29539964faf6af8638297615987473a8672c1cae444487467549f3e06f182045`;
+`unzip -t` OK, `sha256sum -c` OK. (Kabla ya M8: 215 files, sha
+`cfb6c439…fea`; kutoka zip ile `verify_app.py` 12/12, identity 24/24,
+hero 23/23, home 62/62 zilipita.)
 
 ### M8 — Marekebisho: ikoni ya utafutaji moja tu (ombi la mtumiaji)
 
@@ -755,3 +755,454 @@ Mabadiliko ya test: `home.spec.js` A1 (order kamili = vitufe 4, hakuna “Tafuta
 `#ghSearchBtn`), `composer.spec.js` K4 (order kamili), `identity.spec.js` I4c mpya
 (ikoni moja tu, iko ndani ya bar) na I5 (ikoni hiyo inafungua sheet).
 Jumla mpya: **307/307**. Picha: `docs/screens/after-search-field.png`.
+
+---
+
+## N — GuardHai Health P1 (header, introduction panel, top partitions, bottom nav)
+
+Awamu P1 pekee. Hakuna hifadhi ya data ya afya, hakuna backend, hakuna deployment.
+Maelezo kamili: `docs/HEALTH-P1.md`.
+
+### N1 — Matokeo halisi (`bash tools/run_tests.sh 8123`)
+
+| Hatua | Matokeo |
+|---|---|
+| `tools/verify_app.py` | **12/12** |
+| home | 62/62 · composer 72/72 · bugfix 23/23 · profile 20/20 · showcase 20/20 |
+| refine 29/29 · posttypes 33/33 · hero 23/23 · identity 25/25 |
+| **health.spec.js (mpya)** | **28/28** |
+| **Jumla** | **335/335** — `RESULT: all checks passed` |
+
+### N2 — Mabadiliko ya test yaliyokusudiwa
+
+| Faili | Check | Kabla | Baada | Sababu |
+|---|---|---|---|---|
+| `home.spec.js` | D2 | Afya → Shield sub-tab | Afya → `#healthPage` | Health ina ukurasa wake |
+| `bugfix.spec.js` | R5 | `#protect-view-health` | `#healthPage` + tab active | idem |
+
+`Protection Health` (hali ya mfumo) haijaguzwa — inabaki kwenye Shield.
+
+### N3 — Kilichothibitishwa na `health.spec.js`
+
+* **HG1–HG2** `#healthPage` inafanya kazi; bottom nav ni ile ile (vitu 5), hakuna
+  navigation ya pili ndani ya Health.
+* **HG3–HG5** header: `GuardHai Health`, ikoni moja ya afya (`#i-heart-pulse`),
+  kengele inafungua sheet ya notifications iliyopo.
+* **HG6–HG7** panel ya utangulizi ina maneno yaliyokubaliwa; gradient ya
+  identity inatumika hapa pekee; contrast **15.66:1**.
+* **HG8–HG9** partitions 6 kwa mpangilio; `role="tablist"`, moja `aria-selected`,
+  iliyochaguliwa ni kijani `rgb(24,169,130)`, nyingine `tabindex="-1"`.
+* **HG10** kila partition inabadilisha maudhui bila kupakia ukurasa (moja tu
+  inaonekana; `navigation` entry = 1).
+* **HG11** keyboard: →, End, Home zinafanya kazi na focus inafuata.
+* **HG12** `sessionStorage` ina **id ya partition pekee**; hakuna key ya afya.
+* **HG13–HG15** Muhtasari una viungo 7 vilivyokubaliwa; empty state ya mtumiaji
+  mpya ipo; kadi inaruka moja kwa moja kwenye partition yake.
+* **HG16–HG17** hakuna kundi la damu, dozi wala “imethibitishwa” za kubuni;
+  moduli zisizojengwa zina lebo ya awamu (P2–P5) na “haijaunganishwa”.
+* **HG18–HG19** Medical SOS ni tofauti na SOS ya jumla; inasema wazi “hakuna ombi
+  linalotumwa”, ina namba 112/114/110; SOS ya jumla ipo kama ilivyo.
+* **HG20–HG21** error state inajieleza na retry inarudisha maudhui; `aria-busy`
+  inasafishwa baada ya kuchora.
+* **HG22** sw ↔ en bila reload.
+* **HG23–HG24** 320/390/768/1280 hakuna overflow; nav haigongani (padding 132px);
+  kwenye simu chips zinasogea, kwenye desktop zote zinaingia.
+* **HG25** contracts 6, modules 7 — zote `store: null`.
+* **HG26–HG28** hakuna request ya nje, hakuna page/console error.
+
+### N4 — Picha
+
+`docs/screens/health-p1-mobile.png`, `health-p1-desktop.png` na panels tano
+(`health-p1-medical|records|meds|experts|more.png`), 390×844 @2x pamoja na
+1280×900.
+
+### N5 — Kifurushi
+
+`GuardHai-Complete-Project.zip` — files **228**, zip **38,280,432 B**
+(40,091,403 B kabla ya kubanwa), sha256
+`25d0da96f990753b90f357c4cc7cf1be6ef2e981679623212cb09752cee8d398`;
+`unzip -t` OK, `sha256sum -c` OK. Kutoka zip iliyotolewa (port 8133):
+`verify_app.py` **12/12**, health **28/28**, home **62/62**, bugfix **23/23**,
+identity **25/25**.
+
+## O — Mtandao wa mawasiliano na msaada (Chats, Walezi, Msaada, Jamii, Gundua) — 2026-10-30
+
+Awamu ya P2 ya mtandao. Hakuna seva, hakuna backend, hakuna deployment.
+Maelezo kamili: `docs/NETWORK-P2.md`.
+
+### O1 — Matokeo halisi (`bash tools/run_tests.sh 8123`)
+
+| Hatua | Matokeo |
+|---|---|
+| `tools/verify_app.py` | **12/12** · ids 350 · i18n 128 (sw/en sawa) |
+| home 62/62 · composer 72/72 · bugfix 23/23 · profile 20/20 · showcase 20/20 | sawa |
+| refine 29/29 · posttypes 33/33 · hero 23/23 · identity 25/25 · health 54/54 | sawa |
+| **network.spec.js (mpya)** | **65/65** |
+| **Jumla** | **makundi 11, zote zimepita** — `RESULT: all checks passed` |
+
+### O2 — Hitilafu halisi ya bidhaa iliyopatikana na test
+
+`network-seed.js` ilikuwa na `SEED_MARK = 'sample'` wakati safu zilizoandikwa
+zina `sample: true`. `clearDemo()` ililinganisha `row.sample === SEED_MARK`,
+kwa hiyo **kufuta data ya sampuli hakukufanya kitu** (NC63: `before:true,
+after:true`, mazungumzo 4 yalibaki). Sasa `SEED_MARK = true`; kufuta kunafuta
+safu za sampuli tu na kuacha zile zilizoundwa na mtumiaji.
+
+### O3 — Mabadiliko ya test yaliyokusudiwa (si ya bidhaa)
+
+* NC16 — lebo ya faragha iko kwenye `chats.thread`, si `chats.settings`.
+* NC28/NC30 — maandishi ya ombi la msaada yako kwenye `body`, si `subject`.
+* NC21/22/24/51 — kitambulisho cha mtumiaji si `'me'`; kinatoka `chat.selfId()`.
+* NC63 — `page.evaluate` iliyopangwa ndani ya nyingine ilitupa `page is not defined`;
+  sasa ni moja.
+* showcase S11 — "hakuna request" sasa inahesabu maombi ya data pekee; picha za
+  ndani (`.jpg`) zilizopakiwa upya ni rasilimali za ukurasa, si mawasiliano na seva.
+* home D4 — maneno mapya ya Walezi (`hakuna seva · kukubali · ruhusa`), si
+  `hawajaunganishwa` ya awali.
+* `import()` tatu zilibadilishwa kuwa `import` za kawaida (`home-controller.js`,
+  `home-sheets.js`, `profile.service.js`) — kufungua sheet au "Message" hakutoi
+  tena ombi la moduli wakati wa kugusa.
+
+### O4 — Picha
+
+`docs/screens/network-p2-01-chats-empty.png` … `network-p2-15-chats-desktop.png`
+— 15 picha (390×844 @2x; ya mwisho 1280×900): mazungumzo matupu, yaliyowekwa
+sampuli, thread, thread baada ya kutuma, mipangilio, walezi, ruhusa za mlezi,
+msaada, ombi la msaada, jamii, jamii ndani, wanachama, gundua, gundua kwa
+Kiingereza, na desktop. Hakuna page/console error wakati wa kunasa.
+
+### O5 — Kinachobaki
+
+Real-device na screen-reader pass; uthibitisho wa transport halisi (WebSocket /
+Firebase) ni uamuzi wa Phase 8, si wa awamu hii.
+
+## P — Redesign R1: Shield Center, SOS na Mfumo wa Design (GDS v1) — 2026-10-31
+
+Maelezo kamili: `docs/REDESIGN-R1.md`, `docs/DESIGN-SYSTEM.md`, `docs/REDESIGN-AUDIT.md`.
+
+### P1 — Matokeo halisi (`bash tools/run_tests.sh 8123`)
+
+| Hatua | Matokeo |
+|---|---|
+| `tools/verify_app.py` | **12/12** · ids 375 · i18n 130 · handlers 69 |
+| home 62/62 · composer 72/72 · bugfix 23/23 · profile 20/20 · showcase 20/20 | sawa |
+| refine 29/29 · posttypes 33/33 · hero 23/23 · identity 25/25 | sawa |
+| health 54/54 · network 65/65 | sawa |
+| **shield.spec.js (mpya)** | **45/45** |
+| **Jumla** | **makundi 12, zote zimepita** — `RESULT: all checks passed` |
+
+### P2 — Kilichojengwa
+
+* **Shield Center**: dashibodi (hali halisi, orodha ya uangalizi, tiles 6) +
+  sehemu 7. Kifaa = injini ile ile iliyokamilika (pillars 3, sub-views 10).
+* **Usalama binafsi**: skrini 7 zinazofanya kazi — walezi, safari, check-in,
+  mipango, matukio, mapendeleo (+ historia ya pamoja).
+* **SOS**: ukurasa kamili, aina 2, namba 3 za `tel:` juu ya fold, jedwali la
+  "kinatumwa", kumbukumbu ya majaribio iliyo wazi `delivered: false`.
+* **GDS v1**: `17-system.css` (mistari 750) + `shield-ui.js` (204) — tokeni,
+  components 22, kontrasti iliyopimwa, reduced-motion.
+* DB v4 (+stores 5), domain +`incident`, i18n +2 keys, gate +suite 1.
+
+### P3 — Mabadiliko ya test yaliyokusudiwa (si ya bidhaa)
+
+* home C2 — SOS ya bottom-nav sasa ni **ukurasa**, si sheet; hivyo inahakiki
+  ukurasa huo (namba, uaminifu, modi 2). Sheet bado inafanya kazi (SC37).
+* bugfix B4 — inasoma ukurasa wa SOS au sheet, ipi itakayoonekana.
+* **Hitilafu halisi iliyopatikana na test**: `runAction()` ilikuwa na kinga ya
+  `busy` kwa vitendo vyote; kugusa kitendo kingine wakati mmoja kilitupwa kimya
+  (kitufe kikafa). Sasa kinga ni kwa kitendo kile kile tu (`busyAction`).
+
+### P4 — Kinachobaki (R2)
+
+Chat → GDS; transport halisi ili `shareWithGuardians` ifanye kazi; Home → GDS;
+kontrasti ya paneli za Device Protection; real-device + screen-reader;
+Asset Protection ikiwa tu kuna mshirika wa uthibitisho.
+
+---
+
+# Awamu R2 — Kujenga upya Chat (2026-10-31)
+
+**Lengo:** inbox ya Chat ilikuwa imejaa (bango 2, toolbar 3 + link, preview
+zilizokatwa) na upande wa mazungumzo haukuwa umeunganishwa vizuri (kiambatisho,
+sauti, kufuta, hesabu ya ujumbe kwenye menyu).
+
+## A. Kilichobadilika
+
+| Faili | Badiliko |
+|---|---|
+| `src/features/network/screens-chats.js` | `home()` imejengwa upya (strip 1, vichujio 5 na hesabu, avatar ya herufi, preview mstari 1, saa juu ya badge); `thread()` imejengwa upya (bar ya utambulisho, separator za siku, bubble za media, composer sticky) |
+| `src/features/network/network-actions.js` | +`chats.filter`, +`chats.delete`, +`chats.unattach`; `chats.attach` sasa inathibitisha na kuhifadhi blob; sauti inahifadhi blob; hakuna bango la ziada kwa kila ujumbe |
+| `src/features/network/network-view.js` | `markRead()` kwenye `open('chats.thread')`, `schedulePaint()` ya kuunganisha matukio, `paintChatBadge()` kwa `#tab-chat`, `afterPaint` hook |
+| `src/services/*` | hakuna mabadiliko ya API; `media.repo` + `media.service` zimetumika kama zilivyo |
+| `assets/css/16-network.css` | sehemu mpya ya chat (mistari ~300): rows, strip, filters, chatbar, composer, media, badge |
+| `docs/REDESIGN-R2.md` | hati ya awamu hii |
+| `docs/screens/r2-01…08*.png` | screenshots 8 (390, 1280, kiambatisho, sauti, tupu, Kiingereza) |
+
+## B. Matokeo halisi
+
+```
+python3 tools/verify_app.py            12/12  (module > 600? hapana · ids 375 · i18n 130)
+bash tools/run_tests.sh 8123           12 suites · 471 checks · RESULT: all checks passed
+```
+
+| Suite | Matokeo |
+|---|---|
+| home | 62/62 |
+| composer | 72/72 |
+| bugfix | 23/23 |
+| profile | 20/20 |
+| showcase | 20/20 |
+| refine | 29/29 |
+| posttypes | 33/33 |
+| hero | 23/23 |
+| identity | 25/25 |
+| health | 54/54 |
+| **network** | **65/65** (NC1–NC65) |
+| shield | 45/45 |
+
+## C. Vipimo vya layout
+
+| Viewport | overflowX | panel | transcript |
+|---|---|---|---|
+| 390×844 | 0 | fitted, 428 px | inascroll ndani |
+| 768×1024 | 0 | fitted, 468 px | haihitaji scroll |
+| 1280×900 | 0 | fitted, 468 px (column 780 px) | haihitaji scroll |
+
+Hakuna `pageerror` wala `console.error` kwenye run zote za R2.
+
+## D. Mtego wa test uliokutwa
+
+* `NC6` ilishindwa kwa sababu `text-transform: uppercase` ilibadilisha
+  `innerText` kuwa `SAMPULI`, na test inatafuta `/Sampuli/` (bila `i`).
+  Suluhisho: tag `Sampuli` haipinduliwi kwa CSS — neno linaandikwa kama
+  lilivyo (na hivyo linabaki haki kwa screen reader pia).
+* `NC16` inahitaji `Faragha: imefungwa` kwenye **thread**, si kwenye fomu ya
+  mipangilio: hiyo sasa ni sehemu ya mstari wa utambulisho wa mazungumzo.
+
+## E. Kinachobaki (R3)
+
+Transport halisi (ujumbe kufika kwa mtu mwingine), majaribio ya skrini ndogo
+320 px na screen reader halisi, na `deleteMessage()` kufuta blob ya media pamoja
+na ujumbe.
+
+## F. Marekebisho ya R2b — "mazungumzo yachukue skrini" (2026-10-31)
+
+Baada ya inbox/thread kujengwa, tatizo lililobaki lilikuwa la **muktadha**:
+thread ilifunguka chini ya kadi ya sehemu (~350 px ya chrome) hivyo ilichanganyika
+na sehemu zisizohusiana.
+
+| Badiliko | Mahali |
+|---|---|
+| `#commPage.is-focus` — kichwa cha sehemu (`.gh-net-head`) kinafichwa kwenye `chats.thread` tu | `network-view.js` · `16-network.css` |
+| Kitufe cha nyuma ndani ya bar ya mazungumzo (`data-act="back"`) | `screens-chats.js` |
+| Chips za usafirishaji (`#ghNetStrip`) zinafichwa kwenye sehemu ya chats (zilirudia maneno ya strip ya inbox) | `network-view.js` |
+| Panel inachukua urefu uliobaki (`height`, si `maxHeight`) + ujumbe hukaa juu ya composer | `screens-chats.js` · `16-network.css` |
+| Jina kamili kwenye bar: `Sampuli` imehamia mstari wa meta ("Faragha · Sampuli") | `screens-chats.js` |
+| Bubble haiwezi kuzidi 640 px kwenye skrini pana | `16-network.css` |
+
+Vipimo: 360/390/430 — bar haikati jina wala meta (`scrollWidth == clientWidth`);
+768 panel 762 px; 1280 panel 638 px; `overflowX = 0` kote.
+
+```
+python3 tools/verify_app.py     12/12
+bash tools/run_tests.sh 8123    12 suites · 471 checks · all green
+```
+
+## G. Universal Secure Storage Center — S1 (2026-10-31)
+
+Ukurasa mpya `#storagePage` (skrini 15) ulichukua nafasi ya sheet ya Storage ya
+awali. Vipimo vyake havijapotea: `storage.usage` inaonyesha jumla ya kifaa,
+kikomo cha browser, posts, drafts, blobs za IndexedDB na funguo za
+`guardhai*` za localStorage — row kwa row, kama zamani.
+
+| Ombi | Kinachothibitisha |
+|---|---|
+| Kituo kimoja cha kila kumbukumbu | home: jamii 12 + aina 11 za ushahidi + kesi (ST5, ST7) |
+| Utafutaji na vichujio | ST9–ST13 (vipimo 12, pipeline moja) |
+| Kuongeza rekodi halisi | ST15–ST17 (pamoja na kukataa fomu tupu) |
+| Rekodi za faragha | ST18–ST19 (locked page → unlock inaandikwa kwenye custody) |
+| Halisi haibadilishwi | ST21–ST22 (`originId`, `version`) |
+| Alama halisi ya faili | ST23 (hakuna blob → hakuna SHA-256, na inasemwa) |
+| Kesi na ushahidi | ST24–ST25 |
+| Kushiriki ni kumbukumbu | ST26 (pending; hakuna anayepokea) |
+| Afya inabaki Afya | ST27–ST28 (pointer `readOnly`, bila blob, huondolewa ikifutwa) |
+| Sampuli | ST4, ST31 (seed mara moja; clear haigusi data ya mtumiaji) |
+| Muonekano | ST35 (hakuna overflow 390/1280), aria ST34 |
+
+```
+python3 tools/verify_app.py     12/12
+bash tools/run_tests.sh 8123    13 suites · 509 checks · all green
+  home 62 · composer 72 · bugfix 23 · profile 20 · showcase 20 · refine 29
+  posttypes 33 · hero 23 · identity 25 · health 54 · network 65 · shield 45 · storage 38
+```
+
+Mtego mmoja uliogunduliwa wakati wa kujenga: `btn(..., { extra: 'type="submit"' })`
+iliunda `<button type="button" … type="submit">` — attribute ya pili ilipuuzwa,
+hivyo fomu hazikuwasilishwa kamwe. Sasa `form()` inachora submit button yenyewe
+(`storage-ui.js`), na ST15 inathibitisha fomu inafanya kazi.
+
+Kumbuka: `DB_VERSION` 4 → 5. Build ya zamani ikifungua DB hii baadaye itapata
+`VersionError` na `db.js` itashuka kwenye in-memory (data inaonekana tupu).
+Maelezo: `docs/STORAGE-CENTER.md` §10.
+
+## H. Storage — pass ya maneno (2026-10-31)
+
+Ombi: "mfumo uwe safi, usiwe na maneno mengi." Ukurasa ulipunguzwa maneno bila
+kupunguza ukweli: hero ya mstari mmoja, tiles bila maelezo, `footNote` ya
+mstari mmoja badala ya kadi za uaminifu, metadata bila kurudia badges, sehemu
+3 badala ya 5 kwenye rekodi, na empty state moja badala ya dashboard ya sifuri.
+`HONESTY` (ndefu) inabaki pale inapohitajika: rekodi na fomu ya kushiriki.
+
+```
+python3 tools/verify_app.py     12/12
+bash tools/run_tests.sh 8123    13 suites · 509 checks · all green
+```
+
+## I. Storage — muonekano v2 (2026-10-31)
+
+Rangi kwa aina ya rekodi (`data-tone` → `--tone`), hero yenye kina, kadi za jamii
+za rangi, record sheet yenye kichwa cha tint na vitendo kwenye grid (hakuna
+kukatwa), list zote ndani ya kadi, na `i-filter` iliyoongezwa kwenye sprite
+(ilikuwa haipo — kitufe cha vichujio kilikuwa tupu).
+
+```
+python3 tools/verify_app.py     12/12
+bash tools/run_tests.sh 8123    13 suites · 509 checks · all green
+```
+
+## J. Health — mfumo wa kimatibabu v3 (2026-10-31)
+
+Ukurasa wa Afya ulipangwa upya kama mfumo mmoja: rangi ina maana ya kimatibabu,
+kila kitu kiko ndani ya kadi moja, na hakuna kitufe kinachovunjwa au
+kinachosongana.
+
+**Rangi (tone map)** — inatumika kupitia `data-tone` → `--hx-tone/--hx-soft/--hx-ink2`:
+
+| Rangi | Maana | Inatumika |
+|---|---|---|
+| green | utambulisho, usalama, wataalamu | wasifu wa kitaalamu, mtaalamu, elimu, jamii ya huduma |
+| teal | kadi ya afya, majadiliano | Medical ID, kesi, mikutano |
+| blue | miadi | miadi, ratiba |
+| violet | rekodi na nyaraka | rekodi, QR, damu, jamii |
+| amber | dawa na tahadhari | ratiba ya dozi, rufaa, arifa |
+| red | dharura pekee | dharura, watu wa dharura |
+| slate | kifaa / huduma zisizounganishwa | mipangilio, mipaka |
+
+**Mpangilio**
+* Tabs: grid 3×2 (390 px) → mstari mmoja (≥720). Hakuna scoroll ya mlalo —
+  awali 4 za mwisho zilikatwa nusu.
+* Stat tiles: nukta ya rangi + lebo + namba + mstari mmoja wa maelezo, 2 → 4 safu.
+* Block: kichwa chenye ikoni ya rangi, mstari mmoja chini, nukuu ikiwa chini.
+* Rows: grid `ikoni · copy · hesabu · kitendo`; vitendo `white-space: nowrap`
+  (awali "Nimeitumia"/"Funga" zilikatwa kwa nusu).
+* `progressRow()` mpya: lebo + asilimia juu, meter chini (Medical ID na dozi).
+* Medical ID: kichwa cha gradient, facts 2→4 safu, vitendo 1 → 2 → 3 safu.
+* Empty states: `.is-inline` (kadi moja yenye mstari mmoja) ndani ya block.
+* Screen tone: kila sub-screen ina rangi yake kupitia `[data-health-screen]`,
+  pamoja na mstari wa juu kwenye kadi ya kwanza.
+
+**Uthibitisho**
+```
+bash tools/run_tests.sh 8123    13 suites · 509 checks · all green
+python3 tools/verify_app.py     12/12
+```
+`HG17` ilibadilishwa kuwa case-insensitive (`/Iliongezwa/i`) kwa sababu lebo za
+`dl` sasa zinaonyeshwa kwa HERUFI KUBWA kwa muundo. Picha: `docs/screens/h1-01…h1-07`.
+
+## K. Home — pass ya muonekano v2 (2026-10-31)
+
+Muundo: `docs/HOME-V2.md`. Hii ni kumbukumbu ya vipimo vilivyogusa muundo huo.
+
+```
+bash tools/run_tests.sh 8123    13 suites · 510 checks · all green
+python3 tools/verify_app.py     12/12
+```
+
+| Suite | Kipimo | Kabla | Sasa | Sababu |
+|---|---|---|---|---|
+| home | E6 (topic pill) | FAIL | PASS | CSS inaweka `text-transform: uppercase`; spec inasoma `textContent` + `/i` |
+| home | H1 (kichwa cha Uwanja) | FAIL | PASS | hiyo hiyo |
+| refine | R3 (chuja kwa topic) | FAIL | PASS | `innerText` ilitoa `AFYA`; sasa `textContent.toLowerCase()` |
+| posttypes | C5 (chapa ya topic) | FAIL | PASS | hiyo hiyo (`Taasisi` vs `TAASISI`) |
+| showcase | S3 (SOS) | PASS* | PASS | *pasi ya SOS imerudishwa kuwa 72 px duara (v2 ilijaribu 56 px) |
+| showcase | S9 (vitendo 6) | PASS* | PASS | reli ina safu 6 kila upana; ⋮ ya reli haifichwi |
+| hero | H19 (hero haina mgongano) | PASS* | PASS | nakala haigusani na vidhibiti; hero 306/320/360 |
+| identity | I7 (ukubwa wa ikoni) | PASS* | PASS | ikoni ya reli ni 20 px (ngazi 16/20/22/24) |
+| identity | I12 (overlay ya hero) | — | PASS | gredi ya kijani→bluu imerudishwa kwa uwazi sawa |
+
+### Mtego wa mazingira (si bug ya app)
+
+Baada ya run nyingi, suites zilianza kushindwa kwa
+`net::ERR_INSUFFICIENT_RESOURCES` na `Target crashed`. Chanzo: `/tmp` ni
+tmpfs ya 992 MB na Playwright huacha profaili `ghc-*` (~58 MB kila moja)
+baada ya browser kuanguka; 14 zilijaa 797 MB. Suluhisho:
+
+```
+rm -rf /tmp/ghc-*        # 826 MB hurudi
+```
+
+Baada ya kusafisha, gate yote ilipita mara moja. Pia `showcase.spec.js` sasa
+inasubiri `AuthActions`/`AuthFlow`/`HomeUI` ipatikane badala ya `waitForTimeout`
+zisizobadilika — hiyo ilikuwa ikitoa `ReferenceError` kwenye mashine
+iliyobana.
+
+### Vipimo vya layout
+
+| Kipimo | Thamani |
+|---|---|
+| kadi @390 | 793 / 524 / 548 / 768 / 620 / 276 / 770 / 487 px |
+| ukurasa @390 | 6641 px (awali 6080) |
+| hero | 306 px simu · 320 ≥620 · 360 ≥900 |
+| ukurasa ≥1024 | 1120 px, feed safu 2 × 536 px |
+| overflow | `docW === innerWidth` @320/360/390/430/768/1024/1440 |
+
+Picha: `docs/screens/hm-01…hm-09`.
+
+## L. Mazungumzo + Ulinzi — muonekano v2 (2026-10-31)
+
+Muundo: `docs/COMM-SHIELD-V2.md`. Karatasi mpya: `assets/css/20-comm-shield-v2.css`.
+
+```
+bash tools/run_tests.sh 8123    13 suites · 510 checks · all green
+python3 tools/verify_app.py     12/12
+```
+
+| Kipimo | Kabla | Sasa | Sababu |
+|---|---|---|---|
+| network NC14 / NC16 | PASS | PASS | kitufe cha `chats.settings` kimehamia `#ghNetActions`; `act()` inapekua pia kichwa |
+| network NC15–NC24 | PASS | PASS | `enter()` sasa inarudi kwenye sehemu — nav Chat haifungui thread ya mwisho |
+| network NC3 / NC5 / NC6 | PASS | PASS | inbox tupu, "hakuna seva" na `Sampuli` zimebaki (ukweli haujabadilika) |
+| identity I11 | PASS | PASS | band ya Shield imebaki (nyembamba), si kuondolewa |
+| shield SC1 / SC42 | PASS | PASS | kichwa kimebaki `Shield Center`; tabs zinaonyesha `Overview` / `Personal Safety` |
+
+### Kilichogundulika wakati wa pass hii
+
+1. **`#shieldPage > div:first-child` (14-identity)** ilikuwa na nguvu zaidi ya
+   `#shieldPage .gds-head`; band ilibaki ikichorwa. Suluhisho: kichaguzi cha
+   `#shieldPage > .gds-head#shieldHead`.
+2. **`.gds-emergency` ilikuwa na margin 16 px ndani ya `.shield-view` yenye
+   padding 16 px** — gutter mara mbili, kwa hiyo maandishi yalikatwa. Margin
+   imeondolewa.
+3. **Muda wa row haukuonekana** kwa sababu `lastMessage` ni **message**, si
+   `{ at }`: sasa inasoma `createdAt` (saa ya leo, `d/m` kwa siku zilizopita).
+4. **`avatar()` ilikuwa na herufi pekee**; personas zenye `avatarUrl` sasa
+   zinaonyesha picha kwenye orodha na kwenye thread.
+
+## M. Kuanzisha upya preview (2026-10-31)
+
+Faida: sandbox huhifadhi `/home/user` pekee. /tmp (driver ya Playwright) na
+maktaba za mfumo (libnss3, libnspr4) huondolewa kati ya vipindi, kwa hiyo
+suites zote zilishindwa kwa `ReferenceError: AuthFlow is not defined` — ishara
+ya kwamba ukurasa haukupakia, si hitilafu ya app.
+
+| Zana | Kazi |
+|---|---|
+| `bash tools/setup_tests.sh` | inaweka/kurekebisha driver + chromium + maktaba; ni no-op ya ~50 ms ikiwa kila kitu kipo |
+| `bash tools/setup_tests.sh --check` | inajibu "tayari / haitayari" bila kubadilisha chochote |
+| `bash tools/preview.sh [port]` | inafuta listener wa zamani, inaanzisha `serve.py`, inasubiri 200 |
+| `bash tools/run_tests.sh [port]` | preflight: kama hakuna 200 → inaanzisha preview; kisha harness; kisha suites |
+
+Uthibitisho baada ya kurekebisha: `verify_app.py` 12/12, suites 13/510 zote
+zimepita, `index.html` 200, hakuna hitilafu ya console kwenye Home, Chat,
+Shield na Health. 404 moja kwenye log (`assets/img/does-not-exist.jpg`) ni ya
+`tests/hero.spec.js` — ni jaribio la fallback ya picha, si kiungo kilichovunjika.

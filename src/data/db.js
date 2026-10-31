@@ -12,7 +12,10 @@
  */
 
 export const DB_NAME = 'guardhai';
-export const DB_VERSION = 2;
+/* v5 adds the Storage Center stores. The upgrade is additive: no existing store
+   is re-created, no existing row is rewritten, and an older build that opens
+   v4 again simply ignores the new stores. */
+export const DB_VERSION = 5;
 
 export const STORES = {
   posts:      { keyPath: 'id', indexes: [['createdAt'], ['status'], ['topic']] },
@@ -23,7 +26,37 @@ export const STORES = {
   reports:    { keyPath: 'id', indexes: [['postId'], ['createdAt']] },
   meta:       { keyPath: 'key', indexes: [] },
   profiles:   { keyPath: 'id', indexes: [['primaryRole']] },
-  follows:    { keyPath: 'key', indexes: [['profileId']] }
+  follows:    { keyPath: 'key', indexes: [['profileId']] },
+
+  /* ---- Communication & Support Network (v3) ---------------------------- */
+  conversations:    { keyPath: 'id', indexes: [['updatedAt'], ['type']] },
+  messages:         { keyPath: 'id', indexes: [['conversationId'], ['createdAt']] },
+  outbox:           { keyPath: 'id', indexes: [['createdAt']] },
+  guardianships:    { keyPath: 'id', indexes: [['ownerId'], ['guardianId'], ['status']] },
+  supportProviders: { keyPath: 'id', indexes: [['category'], ['kind']] },
+  supportRequests:  { keyPath: 'id', indexes: [['status'], ['category'], ['createdAt']] },
+  communities:      { keyPath: 'id', indexes: [['type'], ['status']] },
+  memberships:      { keyPath: 'id', indexes: [['communityId'], ['profileId'], ['status']] },
+  communityPosts:   { keyPath: 'id', indexes: [['communityId'], ['createdAt'], ['kind']] },
+  communityComments:{ keyPath: 'id', indexes: [['postId'], ['createdAt']] },
+  communityEvents:  { keyPath: 'id', indexes: [['communityId'], ['startsAt']] },
+  blocks:           { keyPath: 'id', indexes: [['byId'], ['targetId']] },
+  appeals:          { keyPath: 'id', indexes: [['subjectId'], ['status']] },
+  auditLog:         { keyPath: 'id', indexes: [['at'], ['actorId']] },
+  alerts:           { keyPath: 'id', indexes: [['createdAt'], ['read']] },
+
+  /* ---- Personal Safety (v4) -------------------------------------------- */
+  safetyJourneys:   { keyPath: 'id', indexes: [['ownerId'], ['startedAt'], ['status']] },
+  safetyCheckins:   { keyPath: 'id', indexes: [['ownerId'], ['at']] },
+  safetyPlans:      { keyPath: 'id', indexes: [['ownerId'], ['createdAt']] },
+  safetyPrefs:      { keyPath: 'id', indexes: [] },
+  sosAttempts:      { keyPath: 'id', indexes: [['ownerId'], ['at'], ['mode']] },
+
+  /* ---- Universal Secure Storage Center (v5, additive) ------------------- */
+  storageItems:  { keyPath: 'id', indexes: [['category'], ['subcategory'], ['kind'], ['ownerId'], ['privacy'], ['verification'], ['version'], ['uploadedAt']] },
+  storageCustody:{ keyPath: 'id', indexes: [['itemId'], ['at'], ['action']] },
+  storageCases:  { keyPath: 'id', indexes: [['status'], ['openedAt']] },
+  storageShares: { keyPath: 'id', indexes: [['itemId'], ['targetId'], ['status']] }
 };
 
 /* ------------------------------------------------------------------ memory */

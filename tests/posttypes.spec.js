@@ -211,11 +211,11 @@ const state = (page) => page.evaluate(() => ({
       badge: first?.querySelector('.gh-type-badge')?.textContent.trim() || '',
       badgeClass: first?.querySelector('.gh-type-badge')?.className || '',
       account: first?.querySelector('.gh-post-audience')?.innerText.trim() || '',
-      topicChip: first?.querySelector('.gh-post-topic')?.innerText.trim() || ''
+      topicChip: first?.querySelector('.gh-post-topic')?.textContent.trim() || ''
     };
   });
   rec('C5', 'A card shows the topic badge derived from the topic field',
-      /Taasisi/.test(card.badge) && /gh-type-org/.test(card.badgeClass) && card.topicChip === 'Taasisi',
+      /Taasisi/i.test(card.badge) && /gh-type-org/.test(card.badgeClass) && card.topicChip.toLowerCase() === 'taasisi',
       `badge="${card.badge}" · ${card.badgeClass} · chip=${card.topicChip}`);
 
   /* ============================================ D. backward compatibility */

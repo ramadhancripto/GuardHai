@@ -1,0 +1,1354 @@
+/* ==========================================================================
+   GuardHai · assets/css/16-network.css
+   Communication & Support Network — page shell, tab strip, cards, rows,
+   forms, chat thread, community and moderation layouts.
+
+   Built only from the tokens in 00-tokens.css so the section matches the rest
+   of the app: white surfaces, green primary, blue information, red reserved for
+   emergencies and destructive actions.
+   ========================================================================== */
+
+/* The HTML `hidden` attribute must always win over a display rule below. */
+.gh-net [hidden] { display: none !important; }
+
+/* ------------------------------------------------------------------ shell */
+.gh-net {
+    background: var(--gh-canvas);
+    min-height: 100%;
+}
+
+.gh-net-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 14px 14px 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.gh-net-head {
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-lg);
+    padding: 12px 14px 10px;
+    box-shadow: 0 2px 10px rgba(11, 31, 42, .04);
+}
+
+.gh-net-headrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gh-net-mark {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--gh-green-soft);
+    color: var(--gh-green-ink);
+    flex: none;
+}
+
+.gh-net-mark .ic { width: 19px; height: 19px; }
+
+.gh-net-headcopy { min-width: 0; flex: 1; }
+
+.gh-net-title {
+    margin: 0;
+    font-size: var(--gh-fs-title);
+    font-weight: 800;
+    color: var(--gh-ink);
+    letter-spacing: -.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gh-net-sub {
+    margin: 2px 0 0;
+    font-size: var(--gh-fs-small);
+    color: var(--gh-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gh-net-headactions { display: flex; gap: 6px; align-items: center; }
+
+.gh-net-back,
+.gh-net-iconbtn {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: var(--gh-r-pill);
+    border: 1px solid var(--gh-line);
+    background: var(--gh-surface);
+    color: var(--gh-text);
+    cursor: pointer;
+}
+
+.gh-net-back .ic,
+.gh-net-iconbtn .ic { width: 17px; height: 17px; }
+
+.gh-net-iconbtn:hover,
+.gh-net-back:hover { background: var(--gh-green-soft); border-color: var(--gh-line-strong); }
+
+.gh-net-bellDot {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-red);
+    color: #fff;
+    font-size: var(--gh-fs-micro);
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+}
+
+.gh-net-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.gh-net-strip-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: var(--gh-fs-micro);
+    font-weight: 600;
+    color: var(--gh-muted);
+    background: var(--gh-canvas);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-pill);
+    padding: 4px 9px;
+}
+
+.gh-net-strip-chip .ic { width: 12px; height: 12px; }
+.gh-net-strip-chip.is-ok { color: var(--gh-green-ink); background: var(--gh-green-soft); border-color: transparent; }
+.gh-net-strip-chip.is-muted { color: var(--gh-faint); }
+
+/* ------------------------------------------------------------------- tabs */
+.gh-net-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 2px;
+    scroll-behavior: smooth;
+    scroll-padding-inline: 14px;
+}
+
+.gh-net-tabs::-webkit-scrollbar { display: none; }
+
+.gh-net-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+    border: 1px solid var(--gh-line);
+    background: var(--gh-surface);
+    color: var(--gh-muted);
+    border-radius: var(--gh-r-pill);
+    padding: 9px 13px;
+    font-family: var(--gh-font);
+    font-size: var(--gh-fs-small);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.gh-net-tab .ic { width: 14px; height: 14px; }
+
+.gh-net-tab.is-active {
+    background: var(--gh-green);
+    border-color: var(--gh-green);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(24, 169, 130, .22);
+}
+
+/* ----------------------------------------------------------------- stage */
+.gh-net-stage { display: block; }
+.gh-net-stage[aria-busy="true"] { opacity: .55; }
+
+.gh-net-screen { display: flex; flex-direction: column; gap: 12px; }
+
+/* ----------------------------------------------------------------- cards */
+.gh-net-card {
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-lg);
+    box-shadow: 0 1px 3px rgba(11, 31, 42, .04);
+}
+
+.gh-net-card.is-padded { padding: 14px; }
+.gh-net-card.is-list { overflow: hidden; }
+
+.gh-net-section { display: flex; flex-direction: column; gap: 8px; }
+
+.gh-net-section-head h3 {
+    margin: 0;
+    font-size: var(--gh-fs-lead);
+    font-weight: 700;
+    color: var(--gh-ink);
+}
+
+.gh-net-section-head p {
+    margin: 3px 0 0;
+    font-size: var(--gh-fs-small);
+    color: var(--gh-muted);
+}
+
+.gh-net-h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--gh-ink);
+    letter-spacing: -.2px;
+}
+
+.gh-net-h3 { margin: 0 0 6px; font-size: var(--gh-fs-lead); font-weight: 700; color: var(--gh-ink); }
+
+.gh-net-p {
+    margin: 0;
+    font-size: var(--gh-fs-body);
+    line-height: 1.55;
+    color: var(--gh-text);
+}
+
+.gh-net-p.is-pre { white-space: pre-wrap; }
+
+.gh-net-meta { margin: 3px 0 0; font-size: var(--gh-fs-small); color: var(--gh-muted); }
+.gh-net-hint { font-size: var(--gh-fs-small); color: var(--gh-muted); }
+.gh-net-muted { font-size: var(--gh-fs-small); color: var(--gh-faint); }
+.gh-net-footnote { margin: 0; font-size: var(--gh-fs-small); color: var(--gh-faint); }
+.gh-net-results-line { margin: 0; font-size: var(--gh-fs-small); color: var(--gh-muted); }
+
+.gh-net-listlabel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 10px 14px 4px;
+    font-size: var(--gh-fs-caption);
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--gh-faint);
+}
+
+.gh-net-listlabel .ic { width: 12px; height: 12px; }
+
+/* ------------------------------------------------------------------ rows */
+.gh-net-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 11px 14px;
+    border: 0;
+    border-bottom: 1px solid var(--gh-line);
+    background: transparent;
+    text-align: left;
+    font-family: var(--gh-font);
+    cursor: pointer;
+}
+
+.gh-net-row:last-child { border-bottom: 0; }
+.gh-net-row:hover { background: var(--gh-green-soft); }
+.gh-net-row.is-tall { align-items: flex-start; }
+
+.gh-net-rowcopy { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.gh-net-rowcopy b { font-size: var(--gh-fs-body); font-weight: 700; color: var(--gh-ink); }
+.gh-net-rowcopy small { font-size: var(--gh-fs-small); color: var(--gh-muted); line-height: 1.4; }
+
+/* The honesty tag stays a word; guardian priority is a compact shield so the
+   conversation name keeps one line at 390 px. */
+.gh-net-rowname { display: flex; align-items: center; gap: 5px; min-width: 0; flex-wrap: nowrap; }
+.gh-net-rowflag { display: inline-grid; place-items: center; width: 15px; height: 15px; flex: none; color: var(--gh-green-ink); }
+.gh-net-rowflag .ic { width: 14px; height: 14px; }
+.gh-net-rowname b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 0 1 auto; }
+.gh-net-rowname .gh-net-chip { flex: none; font-size: 9px; padding: 2px 6px; }
+.gh-net-row.is-chat .gh-net-rowright { max-width: none; flex-direction: column; gap: 3px; }
+
+.gh-net-rowright { display: flex; align-items: center; gap: 6px; flex: none; max-width: 52%; }
+
+/* compact icon-only action used inside rows so the name keeps its line */
+.gh-net-btn.is-compact {
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    padding: 0;
+    border-radius: 50%;
+    flex: none;
+}
+
+.gh-net-btn.is-compact span { display: none; }
+.gh-net-btn.is-compact .ic { width: 15px; height: 15px; }
+.gh-net-rowtags { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+
+.gh-net-unread {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-green);
+    color: #fff;
+    font-size: var(--gh-fs-micro);
+    font-style: normal;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+}
+
+/* ---------------------------------------------------------------- avatar */
+.gh-net-avatar {
+    width: 38px;
+    height: 38px;
+    flex: none;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--gh-blue-soft);
+    color: var(--gh-blue);
+    font-size: var(--gh-fs-small);
+    font-weight: 800;
+    letter-spacing: .02em;
+}
+
+.gh-net-avatar .ic { width: 17px; height: 17px; }
+.gh-net-avatar.is-group { background: var(--gh-green-soft); color: var(--gh-green-ink); }
+.gh-net-avatar.is-community { border-radius: 12px; background: var(--gh-purple-soft); color: var(--gh-purple); }
+.gh-net-avatar.is-lg { width: 46px; height: 46px; border-radius: 14px; }
+
+/* ----------------------------------------------------------------- chips */
+.gh-net-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: var(--gh-r-pill);
+    font-size: var(--gh-fs-micro);
+    font-weight: 700;
+    letter-spacing: .01em;
+    background: var(--gh-canvas);
+    color: var(--gh-muted);
+    border: 1px solid var(--gh-line);
+    white-space: nowrap;
+}
+
+.gh-net-chip.is-ok { background: var(--gh-green-soft); color: var(--gh-green-ink); border-color: transparent; }
+.gh-net-chip.is-info { background: var(--gh-blue-soft); color: var(--gh-blue); border-color: transparent; }
+.gh-net-chip.is-warn { background: var(--gh-amber-soft); color: var(--gh-amber); border-color: transparent; }
+.gh-net-chip.is-danger { background: var(--gh-red-soft); color: var(--gh-red); border-color: transparent; }
+.gh-net-chip.is-muted { background: var(--gh-canvas); color: var(--gh-faint); }
+.gh-net-chip.is-neutral { background: var(--gh-canvas); color: var(--gh-muted); }
+
+.gh-net-tagrow { display: flex; flex-wrap: wrap; gap: 5px; }
+.gh-net-perms { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+
+/* ---------------------------------------------------------------- buttons */
+.gh-net-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 38px;
+    padding: 9px 14px;
+    border-radius: var(--gh-r-pill);
+    border: 1px solid var(--gh-line-strong);
+    background: var(--gh-surface);
+    color: var(--gh-text);
+    font-family: var(--gh-font);
+    font-size: var(--gh-fs-small);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.gh-net-btn .ic { width: 15px; height: 15px; }
+.gh-net-btn:hover { background: var(--gh-canvas); }
+
+.gh-net-btn.is-primary {
+    background: var(--gh-green);
+    border-color: var(--gh-green);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(24, 169, 130, .2);
+}
+
+.gh-net-btn.is-primary:hover { background: var(--gh-green-deep); }
+
+.gh-net-btn.is-outline { background: var(--gh-surface); color: var(--gh-green-ink); border-color: var(--gh-green); }
+.gh-net-btn.is-ghost { background: transparent; border-color: transparent; color: var(--gh-muted); }
+.gh-net-btn.is-ghost:hover { background: var(--gh-canvas); color: var(--gh-text); }
+.gh-net-btn.is-danger { background: var(--gh-red); border-color: var(--gh-red); color: #fff; }
+.gh-net-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.gh-net-linkbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 0;
+    background: transparent;
+    color: var(--gh-green-ink);
+    font-family: var(--gh-font);
+    font-size: var(--gh-fs-small);
+    font-weight: 700;
+    cursor: pointer;
+    padding: 4px 2px;
+}
+
+.gh-net-linkbtn .ic { width: 13px; height: 13px; }
+
+.gh-net-btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.gh-net-btnrow.is-end { justify-content: flex-end; }
+.gh-net-toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+.gh-net-toolbar-link {
+    border: 0;
+    background: transparent;
+    color: var(--gh-muted);
+    font-family: var(--gh-font);
+    font-size: var(--gh-fs-small);
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 6px 2px;
+}
+
+/* ------------------------------------------------------------- statements */
+.gh-net-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    margin: 0;
+    padding: 9px 11px;
+    border-radius: var(--gh-r-md);
+    background: var(--gh-canvas);
+    border: 1px solid var(--gh-line);
+    font-size: var(--gh-fs-small);
+    line-height: 1.5;
+    color: var(--gh-muted);
+}
+
+.gh-net-note .ic { width: 14px; height: 14px; flex: none; margin-top: 1px; }
+.gh-net-note.is-warn { background: var(--gh-amber-soft); border-color: transparent; color: #7A5A08; }
+.gh-net-note.is-danger { background: var(--gh-red-soft); border-color: transparent; color: #8E1D13; }
+.gh-net-note.is-info { background: var(--gh-blue-soft); border-color: transparent; color: #1D4ED8; }
+
+.gh-net-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: var(--gh-r-md);
+    font-size: var(--gh-fs-small);
+    font-weight: 600;
+    line-height: 1.45;
+    background: var(--gh-blue-soft);
+    color: #1D4ED8;
+}
+
+.gh-net-banner .ic { width: 15px; height: 15px; flex: none; }
+.gh-net-banner.is-warn { background: var(--gh-amber-soft); color: #7A5A08; }
+.gh-net-banner.is-danger { background: var(--gh-red-soft); color: #8E1D13; }
+.gh-net-banner.is-ok { background: var(--gh-green-soft); color: var(--gh-green-ink); }
+.gh-net-banner.is-info { background: var(--gh-blue-soft); color: #1D4ED8; }
+
+.gh-net-honest { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+
+.gh-net-honest li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: var(--gh-fs-small);
+    line-height: 1.5;
+    color: var(--gh-text);
+}
+
+.gh-net-honest .ic { width: 15px; height: 15px; flex: none; margin-top: 1px; color: var(--gh-muted); }
+.gh-net-honest .ic.is-ok { color: var(--gh-green); }
+.gh-net-honest .ic.is-muted { color: var(--gh-faint); }
+
+/* ----------------------------------------------------------------- empty */
+.gh-net-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    padding: 26px 18px;
+    background: var(--gh-surface);
+    border: 1px dashed var(--gh-line-strong);
+    border-radius: var(--gh-r-lg);
+}
+
+.gh-net-empty-icon {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--gh-canvas);
+    color: var(--gh-muted);
+    margin-bottom: 2px;
+}
+
+.gh-net-empty-icon .ic { width: 20px; height: 20px; }
+.gh-net-empty b { font-size: var(--gh-fs-body); color: var(--gh-ink); }
+.gh-net-empty p { margin: 0; font-size: var(--gh-fs-small); color: var(--gh-muted); max-width: 46ch; line-height: 1.5; }
+.gh-net-empty-actions { margin-top: 6px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+
+/* ----------------------------------------------------------------- forms */
+.gh-net-form { display: flex; flex-direction: column; gap: 10px; }
+.gh-net-field { display: flex; flex-direction: column; gap: 5px; }
+.gh-net-label { font-size: var(--gh-fs-small); font-weight: 700; color: var(--gh-ink); }
+.gh-net-label em { color: var(--gh-red); font-style: normal; }
+
+.gh-net-input {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid var(--gh-line-strong);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface);
+    font-family: var(--gh-font);
+    font-size: var(--gh-fs-body);
+    color: var(--gh-text);
+    outline: none;
+}
+
+.gh-net-input:focus { border-color: var(--gh-green); box-shadow: 0 0 0 3px rgba(24, 169, 130, .16); }
+.gh-net-input[aria-invalid="true"] { border-color: var(--gh-red); }
+textarea.gh-net-input { resize: vertical; min-height: 76px; }
+.gh-net-field-hint { font-size: var(--gh-fs-caption); color: var(--gh-faint); }
+.gh-net-field-error { font-size: var(--gh-fs-caption); color: var(--gh-red); font-weight: 600; }
+
+.gh-net-check { display: flex; align-items: flex-start; gap: 9px; padding: 8px 0; cursor: pointer; }
+.gh-net-check input { width: 18px; height: 18px; margin-top: 1px; accent-color: var(--gh-green); flex: none; }
+.gh-net-check span { display: flex; flex-direction: column; gap: 2px; }
+.gh-net-check b { font-size: var(--gh-fs-small); font-weight: 600; color: var(--gh-text); }
+.gh-net-check small { font-size: var(--gh-fs-caption); color: var(--gh-muted); line-height: 1.4; }
+.gh-net-check.is-disabled { opacity: .55; cursor: not-allowed; }
+
+.gh-net-checkset { border: 1px solid var(--gh-line); border-radius: var(--gh-r-md); padding: 10px 12px; margin: 0; }
+.gh-net-checkset legend { font-size: var(--gh-fs-small); font-weight: 700; color: var(--gh-ink); padding: 0 4px; }
+.gh-net-form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+
+.gh-net-filebtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 38px;
+    padding: 9px 14px;
+    border: 1px dashed var(--gh-line-strong);
+    border-radius: var(--gh-r-pill);
+    font-size: var(--gh-fs-small);
+    font-weight: 700;
+    color: var(--gh-muted);
+    cursor: pointer;
+}
+
+.gh-net-filebtn .ic { width: 15px; height: 15px; }
+.gh-net-composerrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.gh-net-pending { display: inline-flex; align-items: center; gap: 4px; font-size: var(--gh-fs-caption); color: var(--gh-green-ink); font-weight: 700; }
+.gh-net-pending .ic { width: 12px; height: 12px; }
+
+/* --------------------------------------------------------------- chat view */
+.gh-net-convohead { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.gh-net-convohead-copy { display: flex; flex-direction: column; gap: 2px; }
+.gh-net-convohead-copy b { font-size: 15px; color: var(--gh-ink); }
+.gh-net-convohead-copy span { font-size: var(--gh-fs-small); color: var(--gh-muted); }
+.gh-net-convohead-actions { display: flex; gap: 6px; flex: none; }
+
+.gh-net-thread {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-lg);
+    max-height: 58vh;
+    overflow-y: auto;
+}
+
+.gh-net-thread.is-flat { background: transparent; border: 0; padding: 0; max-height: none; }
+
+.gh-net-msg { display: flex; flex-direction: column; gap: 3px; align-items: flex-start; max-width: 86%; }
+.gh-net-msg.is-mine { align-self: flex-end; align-items: flex-end; }
+.gh-net-msgwho { font-size: var(--gh-fs-caption); font-weight: 700; color: var(--gh-muted); }
+
+.gh-net-bubble {
+    background: var(--gh-canvas);
+    border: 1px solid var(--gh-line);
+    border-radius: 14px 14px 14px 4px;
+    padding: 9px 12px;
+    max-width: 100%;
+}
+
+.gh-net-msg.is-mine .gh-net-bubble {
+    background: var(--gh-green-soft);
+    border-color: transparent;
+    border-radius: 14px 14px 4px 14px;
+}
+
+.gh-net-bubble p { margin: 0; font-size: var(--gh-fs-body); line-height: 1.5; color: var(--gh-text); word-break: break-word; }
+.gh-net-msgmeta { display: inline-flex; align-items: center; gap: 5px; font-size: var(--gh-fs-micro); color: var(--gh-faint); }
+
+.gh-net-attach {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-line);
+}
+
+.gh-net-attach .ic { width: 14px; height: 14px; color: var(--gh-muted); }
+.gh-net-attach b { font-size: var(--gh-fs-small); color: var(--gh-ink); }
+.gh-net-attach small { font-size: var(--gh-fs-micro); color: var(--gh-faint); }
+
+/* ------------------------------------------------------------- guardians */
+.gh-net-guardrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--gh-line);
+}
+
+.gh-net-guardrow:last-child { border-bottom: 0; }
+.gh-net-guardmain { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.gh-net-guardcopy { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.gh-net-guardcopy b { font-size: var(--gh-fs-body); color: var(--gh-ink); }
+.gh-net-guardcopy > span { display: inline-flex; align-items: center; gap: 5px; font-size: var(--gh-fs-small); color: var(--gh-muted); flex-wrap: wrap; }
+.gh-net-guardactions { display: flex; gap: 6px; flex: none; align-items: center; }
+
+.gh-net-invite { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.gh-net-invite-copy { display: flex; flex-direction: column; gap: 3px; }
+.gh-net-invite-copy b { font-size: var(--gh-fs-body); color: var(--gh-ink); }
+.gh-net-invite-copy span { font-size: var(--gh-fs-small); color: var(--gh-muted); }
+
+.gh-net-settingrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--gh-line);
+    font-size: var(--gh-fs-body);
+    color: var(--gh-text);
+}
+
+.gh-net-settingrow:last-child { border-bottom: 0; }
+
+.gh-net-switch {
+    width: 46px;
+    height: 26px;
+    flex: none;
+    border-radius: var(--gh-r-pill);
+    border: 1px solid var(--gh-line-strong);
+    background: var(--gh-canvas);
+    padding: 2px;
+    cursor: pointer;
+    transition: background .15s ease;
+}
+
+.gh-net-switch span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(11, 31, 42, .2);
+    transition: transform .15s ease;
+}
+
+.gh-net-switch.is-on { background: var(--gh-green); border-color: var(--gh-green); }
+.gh-net-switch.is-on span { transform: translateX(20px); }
+
+/* --------------------------------------------------------------- support */
+.gh-net-catgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+}
+
+.gh-net-catcard {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    padding: 12px;
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--gh-font);
+    position: relative;
+}
+
+.gh-net-catcard:hover { border-color: var(--gh-green); }
+.gh-net-catcard.is-active { border-color: var(--gh-green); box-shadow: 0 0 0 2px rgba(24, 169, 130, .14); }
+.gh-net-catcard b { font-size: var(--gh-fs-small); color: var(--gh-ink); font-weight: 700; }
+.gh-net-catcard small { font-size: var(--gh-fs-micro); color: var(--gh-faint); }
+.gh-net-catcard em {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    min-width: 17px;
+    height: 17px;
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-green);
+    color: #fff;
+    font-size: var(--gh-fs-micro);
+    font-style: normal;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+}
+
+.gh-net-caticon {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: var(--gh-green-soft);
+    color: var(--gh-green-ink);
+    margin-bottom: 2px;
+}
+
+.gh-net-caticon .ic { width: 16px; height: 16px; }
+.gh-net-caticon.is-safety { background: var(--gh-red-soft); color: var(--gh-red); }
+.gh-net-caticon.is-health { background: var(--gh-blue-soft); color: var(--gh-blue); }
+.gh-net-caticon.is-calm { background: var(--gh-purple-soft); color: var(--gh-purple); }
+.gh-net-caticon.is-family { background: var(--gh-amber-soft); color: var(--gh-amber); }
+.gh-net-caticon.is-legal { background: var(--gh-canvas); color: var(--gh-text); }
+.gh-net-caticon.is-community { background: var(--gh-green-soft); color: var(--gh-green-ink); }
+.gh-net-caticon.is-tech { background: var(--gh-blue-soft); color: var(--gh-blue); }
+
+.gh-net-inlinehead { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.gh-net-inlinehead b { display: block; font-size: var(--gh-fs-body); color: var(--gh-ink); }
+.gh-net-inlinehead small { font-size: var(--gh-fs-small); color: var(--gh-muted); }
+
+.gh-net-requesthead { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+
+/* ------------------------------------------------------------ communities */
+.gh-net-communityhead { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+.gh-net-communitycopy { flex: 1 1 150px; min-width: 0; }
+.gh-net-communitycopy .gh-net-h2 { overflow: hidden; text-overflow: ellipsis; }
+.gh-net-communityhead .gh-net-rowtags { flex: 1 1 100%; justify-content: flex-start; }
+.gh-net-requesthead .gh-net-h2 { overflow-wrap: anywhere; }
+
+.gh-net-subtabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px 0; }
+.gh-net-subtabs::-webkit-scrollbar { display: none; }
+
+.gh-net-subtab {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex: none;
+    padding: 8px 12px;
+    border-radius: var(--gh-r-pill);
+    border: 1px solid var(--gh-line);
+    background: var(--gh-surface);
+    color: var(--gh-muted);
+    font-family: var(--gh-font);
+    font-size: var(--gh-fs-small);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.gh-net-subtab .ic { width: 13px; height: 13px; }
+.gh-net-subtab.is-active { background: var(--gh-green-soft); border-color: transparent; color: var(--gh-green-ink); }
+.gh-net-subtab em { font-style: normal; font-size: var(--gh-fs-micro); background: var(--gh-canvas); border-radius: var(--gh-r-pill); padding: 1px 5px; }
+
+.gh-net-eventrow { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--gh-line); }
+.gh-net-eventrow:last-child { border-bottom: 0; }
+.gh-net-eventwhen { display: flex; flex-direction: column; align-items: center; min-width: 52px; padding: 5px 8px; border-radius: 10px; background: var(--gh-green-soft); color: var(--gh-green-ink); }
+.gh-net-eventwhen b { font-size: var(--gh-fs-caption); }
+.gh-net-eventwhen small { font-size: var(--gh-fs-micro); }
+
+.gh-net-memberrow { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--gh-line); }
+.gh-net-memberrow:last-child { border-bottom: 0; }
+
+.gh-net-comment { display: flex; gap: 9px; padding: 11px 14px; border-bottom: 1px solid var(--gh-line); }
+.gh-net-comment:last-child { border-bottom: 0; }
+.gh-net-comment b { font-size: var(--gh-fs-small); color: var(--gh-ink); }
+.gh-net-comment small { font-size: var(--gh-fs-micro); color: var(--gh-faint); margin-left: 6px; }
+.gh-net-comment p { margin: 3px 0 0; font-size: var(--gh-fs-body); color: var(--gh-text); line-height: 1.5; }
+
+.gh-net-reportrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--gh-line); flex-wrap: wrap; }
+.gh-net-reportrow:last-child { border-bottom: 0; }
+
+.gh-net-timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.gh-net-timeline li { display: flex; flex-direction: column; gap: 1px; font-size: var(--gh-fs-small); border-left: 2px solid var(--gh-line); padding-left: 9px; }
+.gh-net-timeline b { color: var(--gh-ink); font-weight: 700; }
+.gh-net-timeline span { color: var(--gh-muted); font-size: var(--gh-fs-caption); }
+
+/* ----------------------------------------------------------------- stats */
+.gh-net-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; }
+
+.gh-net-stat {
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.gh-net-stat b { font-size: 18px; font-weight: 800; color: var(--gh-ink); letter-spacing: -.3px; }
+.gh-net-stat small { font-size: var(--gh-fs-micro); color: var(--gh-muted); line-height: 1.3; }
+.gh-net-stat.is-ok b { color: var(--gh-green-ink); }
+.gh-net-stat.is-warn b { color: var(--gh-amber); }
+.gh-net-stat.is-info b { color: var(--gh-blue); }
+.gh-net-stat.is-danger b { color: var(--gh-red); }
+.gh-net-stat.is-muted b { color: var(--gh-faint); }
+
+.gh-net-meter { height: 6px; border-radius: var(--gh-r-pill); background: var(--gh-canvas); overflow: hidden; }
+.gh-net-meter span { display: block; height: 100%; background: var(--gh-green); }
+
+/* ------------------------------------------------------------ responsive */
+@media (max-width: 420px) {
+    .gh-net-inner { padding: 10px 10px 110px; }
+    .gh-net-title { font-size: 14.5px; }
+    .gh-net-msg { max-width: 94%; }
+    .gh-net-catgrid { grid-template-columns: repeat(auto-fill, minmax(122px, 1fr)); }
+    .gh-net-stats { grid-template-columns: repeat(2, 1fr); }
+    .gh-net-thread { max-height: 52vh; }
+}
+
+@media (min-width: 900px) {
+    .gh-net-inner { padding: 20px 24px 130px; }
+    .gh-net-catgrid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .gh-net-thread { max-height: 62vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gh-net-switch span { transition: none; }
+}
+
+
+/* ---------------------------------------------- notification sheet rows */
+.gh-notif-list { display: flex; flex-direction: column; gap: 6px; margin: 6px 0 10px; }
+
+.gh-notif-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 9px 11px;
+    border-radius: var(--gh-r-md);
+    border: 1px solid var(--gh-line);
+    background: var(--gh-surface);
+}
+
+.gh-notif-row.is-unread { background: var(--gh-green-soft); border-color: transparent; }
+.gh-notif-row b { font-size: var(--gh-fs-small); color: var(--gh-ink); }
+.gh-notif-row span { font-size: var(--gh-fs-small); color: var(--gh-muted); }
+.gh-notif-row small { font-size: var(--gh-fs-micro); color: var(--gh-faint); }
+
+
+/* ============================================================================
+   Chat — inbox and thread (R2)
+   One inbox row: avatar · name + flags · a single-line preview · time over the
+   unread badge. The thread is a bounded transcript with a sticky composer so
+   the send button never scrolls away.
+   ========================================================================= */
+
+/* ------------------------------------------------------------ inbox rows */
+.gh-net-row.is-chat {
+    align-items: center;
+    gap: 11px;
+    min-height: 66px;
+    padding: 10px 14px;
+}
+
+.gh-net-row.is-chat .gh-net-avatar { width: 44px; height: 44px; font-size: 13px; }
+.gh-net-row.is-chat .gh-net-avatar .ic { width: 19px; height: 19px; }
+
+.gh-net-row.is-chat .gh-net-rowcopy { gap: 3px; }
+
+/* the preview owns its line; it is clipped with an ellipsis, never wrapped
+   into the right-hand column */
+.gh-net-rowsub { display: flex; align-items: center; gap: 5px; min-width: 0; }
+
+.gh-net-rowprev {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: var(--gh-fs-small);
+    line-height: 1.35;
+    color: var(--gh-muted);
+}
+
+.gh-net-rowprev em { font-style: normal; font-weight: 700; color: var(--gh-faint); }
+
+/* the honesty tag is a word, never a colour-only hint */
+.gh-net-rowtag {
+    flex: none;
+    padding: 1px 5px;
+    border-radius: 6px;
+    background: var(--gh-blue-soft);
+    color: #1D4ED8;
+    font-style: normal;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: .02em;
+    white-space: nowrap;
+}
+
+.gh-net-rowname .gh-net-rowtag {
+    padding: 0;
+    background: none;
+    color: var(--gh-blue);
+    opacity: .85;
+}
+.gh-net-row.is-unread .gh-net-rowprev { color: var(--gh-ink); font-weight: 600; }
+.gh-net-row.is-unread .gh-net-rowname b { font-weight: 800; }
+
+/* fixed right column: time sits over the badge, so every row lines up */
+.gh-net-row.is-chat .gh-net-rowright {
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 5px;
+    min-width: 42px;
+    flex: none;
+}
+
+.gh-net-rowtime {
+    font-size: 10.5px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--gh-faint);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.gh-net-row.is-unread .gh-net-rowtime { color: var(--gh-green-ink); }
+.gh-net-rowflag.is-pin { color: var(--gh-blue); }
+
+/* ------------------------------------------------------- status strip */
+.gh-net-chatstate {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 0 2px;
+    font-size: var(--gh-fs-caption);
+    line-height: 1.4;
+}
+
+.gh-net-chatstate-ic { display: inline-flex; flex: none; margin-top: 1px; }
+.gh-net-chatstate-ic .ic { width: 13px; height: 13px; }
+.gh-net-chatstate.is-warn .gh-net-chatstate-ic { color: var(--gh-amber); }
+.gh-net-chatstate.is-ok .gh-net-chatstate-ic { color: var(--gh-green-ink); }
+
+.gh-net-chatstate-copy { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 4px; min-width: 0; flex: 1; }
+.gh-net-chatstate-copy b { font-size: var(--gh-fs-caption); font-weight: 800; color: var(--gh-ink); }
+.gh-net-chatstate.is-warn .gh-net-chatstate-copy b { color: #7A5A08; }
+.gh-net-chatstate-copy small { font-size: var(--gh-fs-caption); color: var(--gh-muted); }
+.gh-net-chatstate-sep { color: var(--gh-faint); }
+
+.gh-net-chatstate-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex: none;
+    padding: 2px 8px;
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-amber-soft);
+    color: #7A5A08;
+    font-size: var(--gh-fs-micro);
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.gh-net-chatstate-chip .ic { width: 11px; height: 11px; }
+
+/* --------------------------------------------------------- inbox actions */
+.gh-net-chatops { display: flex; align-items: center; gap: 8px; }
+
+.gh-net-searchbar {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface);
+    color: var(--gh-muted);
+    font-family: var(--gh-font);
+    font-size: var(--gh-fs-small);
+    text-align: left;
+    cursor: pointer;
+}
+
+.gh-net-searchbar .ic { width: 16px; height: 16px; flex: none; }
+.gh-net-searchbar span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.gh-net-searchbar:hover { border-color: var(--gh-green); color: var(--gh-green-ink); }
+.gh-net-chatops .gh-net-btn.is-compact { width: 40px; height: 40px; min-height: 40px; }
+
+/* --------------------------------------------------------- quick filters */
+.gh-net-filters {
+    display: flex;
+    gap: 6px;
+    margin: 0 -2px;
+    padding: 1px 2px 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.gh-net-filters::-webkit-scrollbar { display: none; }
+
+.gh-net-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex: none;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface);
+    color: var(--gh-muted);
+    font-family: var(--gh-font);
+    font-size: var(--gh-fs-caption);
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.gh-net-filter em {
+    display: grid;
+    place-items: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 8px;
+    background: var(--gh-canvas);
+    color: var(--gh-muted);
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.gh-net-filter:hover { border-color: var(--gh-green); color: var(--gh-green-ink); }
+.gh-net-filter.is-active { background: var(--gh-green); border-color: var(--gh-green); color: #fff; }
+.gh-net-filter.is-active em { background: rgba(255, 255, 255, .26); color: #fff; }
+
+.gh-net-chatfoot {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 0;
+    font-size: var(--gh-fs-micro);
+    line-height: 1.45;
+    color: var(--gh-faint);
+}
+
+.gh-net-chatfoot .ic { width: 13px; height: 13px; flex: none; margin-top: 1px; }
+
+/* -------------------------------------------------------------- thread */
+.gh-net-chat { display: flex; flex-direction: column; gap: 10px; }
+
+.gh-net-chatbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 11px;
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-lg);
+    background: var(--gh-surface);
+    box-shadow: var(--gh-shadow-1);
+}
+
+.gh-net-chatbar .gh-net-avatar { width: 42px; height: 42px; font-size: 13px; }
+.gh-net-chatbar-copy { display: flex; flex-direction: column; min-width: 0; flex: 1; gap: 1px; }
+.gh-net-chatbar-copy b { font-size: 15px; color: var(--gh-ink); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.gh-net-chatbar-copy small { font-size: var(--gh-fs-caption); color: var(--gh-muted); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+.gh-net-day { display: flex; align-self: center; margin: 2px 0; }
+
+.gh-net-day span {
+    padding: 2px 10px;
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-canvas);
+    font-size: var(--gh-fs-micro);
+    font-weight: 700;
+    color: var(--gh-faint);
+}
+
+.gh-net-chat.is-fitted { overflow: hidden; }
+
+.gh-net-chat.is-fitted .gh-net-thread {
+    flex: 1 1 auto;
+    min-height: 110px;
+    max-height: none;
+    overflow-y: auto;
+}
+
+.gh-net-chat.is-fitted .gh-net-composer { position: static; box-shadow: none; }
+
+/* a short conversation sits on the composer, like every messenger; margin-top
+   (not justify-content) keeps the scroll position correct when it overflows */
+.gh-net-chat.is-fitted .gh-net-thread > :first-child { margin-top: auto; }
+
+/* with the page scrolling, the transcript is one column and the composer is
+   pinned above the raised SOS button */
+.gh-net-chat:not(.is-fitted) .gh-net-thread { max-height: none; overflow: visible; }
+
+.gh-net-msg.is-follow { margin-top: -5px; }
+
+.gh-net-img {
+    display: block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    border-radius: 10px;
+}
+
+.gh-net-audio { display: block; width: 210px; max-width: 100%; height: 34px; margin-bottom: 5px; }
+
+.gh-net-msgdel {
+    display: inline-grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--gh-faint);
+    cursor: pointer;
+    opacity: .5;
+}
+
+.gh-net-msgdel .ic { width: 12px; height: 12px; }
+.gh-net-msgdel:hover { opacity: 1; color: var(--gh-red); background: var(--gh-red-soft); }
+.gh-net-msg:hover .gh-net-msgdel, .gh-net-msgdel:focus-visible { opacity: 1; }
+
+/* ---------------------------------------------------------- composer */
+.gh-net-composer {
+    position: sticky;
+    bottom: calc(94px + env(safe-area-inset-bottom, 0px));
+    z-index: 3;
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 7px 8px;
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-lg);
+    background: var(--gh-surface);
+    box-shadow: var(--gh-shadow-2);
+}
+
+.gh-net-cbtn {
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    flex: none;
+    border: 0;
+    border-radius: 50%;
+    background: var(--gh-canvas);
+    color: var(--gh-muted);
+    cursor: pointer;
+}
+
+.gh-net-cbtn .ic { width: 18px; height: 18px; }
+.gh-net-cbtn:hover { background: var(--gh-green-soft); color: var(--gh-green-ink); }
+
+.gh-net-cinput {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    border-radius: 16px;
+    background: var(--gh-canvas);
+}
+
+.gh-net-ctext {
+    width: 100%;
+    min-height: 36px;
+    max-height: 120px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 16px;
+    background: transparent;
+    color: var(--gh-ink);
+    font-family: var(--gh-font);
+    font-size: 15px;
+    line-height: 1.35;
+    resize: none;
+    field-sizing: content;
+    outline: none;
+}
+
+.gh-net-ctext::placeholder { color: var(--gh-faint); }
+
+.gh-net-send {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border: 0;
+    border-radius: 50%;
+    background: var(--gh-green);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(24, 169, 130, .24);
+}
+
+.gh-net-send .ic { width: 18px; height: 18px; }
+.gh-net-send:hover { background: var(--gh-green-deep); }
+.gh-net-send:disabled { opacity: .5; box-shadow: none; }
+
+.gh-net-pendingcard {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border: 1px dashed var(--gh-line-strong);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-canvas);
+}
+
+.gh-net-pendingthumb { width: 38px; height: 38px; flex: none; border-radius: 9px; object-fit: cover; }
+
+.gh-net-pendingicon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex: none;
+    border-radius: 9px;
+    background: var(--gh-surface);
+    color: var(--gh-muted);
+}
+
+.gh-net-pendingicon .ic { width: 17px; height: 17px; }
+.gh-net-pendingcopy { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.gh-net-pendingcopy b { font-size: var(--gh-fs-small); color: var(--gh-ink); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.gh-net-pendingcopy small { font-size: var(--gh-fs-micro); color: var(--gh-faint); }
+
+.gh-net-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* the chat tab carries its own unread count */
+#tab-chat { position: relative; }
+
+.nav-chat-badge {
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    transform: translateX(6px);
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 8px;
+    background: var(--gh-red);
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 800;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+}
+
+@media (max-width: 420px) {
+    .gh-net-row.is-chat { padding: 9px 12px; gap: 10px; }
+    .gh-net-row.is-chat .gh-net-avatar { width: 40px; height: 40px; }
+    .gh-net-chatops .gh-net-btn.is-compact { width: 38px; height: 38px; min-height: 38px; }
+    .gh-net-composer { padding: 6px; gap: 5px; }
+    .gh-net-cbtn { width: 34px; height: 34px; }
+    .gh-net-send { width: 38px; height: 38px; }
+}
+
+/* a conversation reads as a column on a wide screen, not a 1000 px canvas */
+@media (min-width: 900px) {
+    .gh-net-chat { width: 100%; max-width: 780px; margin: 0 auto; }
+}
+
+/* member list inside conversation settings */
+.gh-net-members {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    margin: 0 0 10px;
+    padding: 8px 10px;
+    border-radius: var(--gh-r-md);
+    background: var(--gh-canvas);
+    font-size: var(--gh-fs-small);
+    line-height: 1.45;
+    color: var(--gh-muted);
+}
+
+.gh-net-members .ic { width: 14px; height: 14px; flex: none; margin-top: 1px; }
+.gh-net-members b { color: var(--gh-ink); font-weight: 700; }
+
+/* focusStage() parks the caret on the first heading so screen readers start at
+   the top of a new screen; that heading is not a control, so it draws no ring */
+.gh-net-h3:focus,
+.gh-net-section-head h3:focus,
+.gh-net-card h3:focus { outline: none; }
+
+/* ---------------------------------------------- a conversation takes the screen */
+#commPage.is-focus .gh-net-head { display: none; }
+
+#commPage.is-focus .gh-net-inner { padding-top: 8px; }
+
+.gh-net-chatback {
+    width: 34px;
+    height: 34px;
+    flex: none;
+    border: 1px solid var(--gh-line);
+    background: var(--gh-surface);
+    color: var(--gh-ink);
+}
+
+.gh-net-chatback .ic { width: 16px; height: 16px; }
+.gh-net-chatback:hover { background: var(--gh-green-soft); border-color: var(--gh-green); color: var(--gh-green-ink); }
+
+/* in focus mode the panel is the whole screen: no outer padding, and the
+   conversation keeps a readable column on a wide display */
+#commPage.is-focus .gh-net-chat { max-width: none; margin: 0; }
+
+/* wide screens: the panel keeps the shell's column so tabs and chat line up,
+   while a bubble stops growing at a readable width */
+@media (min-width: 900px) {
+    .gh-net-msg { max-width: min(86%, 640px); }
+}
+#commPage.is-focus .gh-net-chat .gh-net-thread { border-radius: var(--gh-r-lg) var(--gh-r-lg) 0 0; }

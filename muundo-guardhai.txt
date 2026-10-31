@@ -1,0 +1,200 @@
+Folder PATH listing
+Volume serial number is C498-AABE
+C:.
+¦   .gitignore
+¦   index.html
+¦   muundo-guardhai.txt
+¦   README.md
+¦   START-HERE.md
+¦   
++---assets
+¦   +---css
+¦           01-core.css
+¦           02-shield.css
+¦           03-ui-kit.css
+¦           04-home.css
+¦           05-navigation.css
+¦           06-overlays.css
+¦           07-responsive.css
+¦           08-composer.css
+¦           09-profile.css
+¦           
++---backup
+¦   +---docs-archive
+¦   ¦       AUDIT-REPORT.md
+¦   ¦       BACKUP-AND-VERSIONING.md
+¦   ¦       BUGFIX-REPORT.md
+¦   ¦       COMPOSER-AUDIT.md
+¦   ¦       COMPOSER-UPGRADE.md
+¦   ¦       HOME-AUDIT.md
+¦   ¦       HOME-REDESIGN.md
+¦   ¦       INTEGRATION-OPTIONS.md
+¦   ¦       README.md
+¦   ¦       
+¦   +---single-file-app-2026-10-27
+¦   ¦       guardhai-app.js
+¦   ¦       guardhai-home.js
+¦   ¦       guardhai.css
+¦   ¦       index.html
+¦   ¦       
+¦   +---tools-archive
+¦           composer_upgrade_html.py
+¦           composer_upgrade_js.py
+¦           diff_against_backup.py
+¦           home_redesign_html.py
+¦           home_scope_check.py
+¦           README.md
+¦           split_css.py
+¦           split_js.py
+¦           split_protect_engine.py
+¦           split_prototype.py
+¦           verify_prototype.py
+¦           
++---docs
+¦   ¦   after-home-en.png
+¦   ¦   after-home.png
+¦   ¦   after-shield.png
+¦   ¦   ARCHITECTURE.md
+¦   ¦   REDESIGN-PLAN.md
+¦   ¦   REFACTOR-NOTES.md
+¦   ¦   TEST-LOG.md
+¦   ¦   
+¦   +---screens
+¦           01-feed-390.png
+¦           02-composer-390.png
+¦           03-preview-390.png
+¦           04-feed-posted-390.png
+¦           05-feed-1440.png
+¦           06-feed-rail-390.png
+¦           07-profile-health-390.png
+¦           08-profile-verification-390.png
+¦           09-profile-safety-390.png
+¦           
++---src
+¦   ¦   config.js
+¦   ¦   main.js
+¦   ¦   
+¦   +---core
+¦   ¦       bus.js
+¦   ¦       capacitor-plugin.js
+¦   ¦       dom.js
+¦   ¦       format.js
+¦   ¦       id.js
+¦   ¦       logger.js
+¦   ¦       store.js
+¦   ¦       
+¦   +---data
+¦   ¦       db.js
+¦   ¦       drafts.repo.js
+¦   ¦       engagement.repo.js
+¦   ¦       follows.repo.js
+¦   ¦       media.repo.js
+¦   ¦       posts.repo.js
+¦   ¦       profiles.js
+¦   ¦       profiles.repo.js
+¦   ¦       seed-posts.js
+¦   ¦       
+¦   +---domain
+¦   ¦       comment.js
+¦   ¦       engagement.js
+¦   ¦       media.js
+¦   ¦       post.js
+¦   ¦       profile.js
+¦   ¦       
+¦   +---engines
+¦   ¦   ¦   boot.js
+¦   ¦   ¦   index.js
+¦   ¦   ¦   
+¦   ¦   +---auth
+¦   ¦   ¦       auth-actions.js
+¦   ¦   ¦       auth-flow.js
+¦   ¦   ¦       session.js
+¦   ¦   ¦       
+¦   ¦   +---navigation
+¦   ¦   ¦       tabs.js
+¦   ¦   ¦       
+¦   ¦   +---shield
+¦   ¦           audio-engine.js
+¦   ¦           communication-module.js
+¦   ¦           pillar-nav.js
+¦   ¦           protect-analyzers.js
+¦   ¦           protect-dashboard.js
+¦   ¦           protect-diagnostics.js
+¦   ¦           protect-engine.js
+¦   ¦           protect-response.js
+¦   ¦           protect-signals.js
+¦   ¦           protect-state-machine.js
+¦   ¦           protect-triggers.js
+¦   ¦           protect-wizard.js
+¦   ¦           protection-modals.js
+¦   ¦           recovery-roc.js
+¦   ¦           remote-shield.js
+¦   ¦           travel-protection.js
+¦   ¦           usb-cable.js
+¦   ¦           
+¦   +---features
+¦   ¦   +---composer
+¦   ¦   ¦       composer-media.js
+¦   ¦   ¦       composer-view.js
+¦   ¦   ¦       
+¦   ¦   +---emergency
+¦   ¦   ¦       sos.js
+¦   ¦   ¦       
+¦   ¦   +---engagement
+¦   ¦   ¦       comment-thread.js
+¦   ¦   ¦       engagement-actions.js
+¦   ¦   ¦       
+¦   ¦   +---feed
+¦   ¦   ¦       feed-view.js
+¦   ¦   ¦       post-card.js
+¦   ¦   ¦       
+¦   ¦   +---home
+¦   ¦   ¦       home-controller.js
+¦   ¦   ¦       home-sheets.js
+¦   ¦   ¦       
+¦   ¦   +---map
+¦   ¦   ¦       map-view.js
+¦   ¦   ¦       
+¦   ¦   +---profile
+¦   ¦           profile-edit.js
+¦   ¦           profile-view.js
+¦   ¦           
+¦   +---i18n
+¦   ¦       i18n.js
+¦   ¦       
+¦   +---mocks
+¦   ¦       ble.js
+¦   ¦       guardians.js
+¦   ¦       index.js
+¦   ¦       push.js
+¦   ¦       README.md
+¦   ¦       sos.js
+¦   ¦       transport.js
+¦   ¦       
+¦   +---services
+¦   ¦       drafts.service.js
+¦   ¦       engagement.service.js
+¦   ¦       firebase.service.js
+¦   ¦       media.service.js
+¦   ¦       posts.service.js
+¦   ¦       profile.service.js
+¦   ¦       session.service.js
+¦   ¦       
+¦   +---ui
+¦           i18n.js
+¦           icons.js
+¦           sheet.js
+¦           sidebar.js
+¦           toast.js
+¦           
++---tests
+¦       bugfix.spec.js
+¦       composer.spec.js
+¦       home.spec.js
+¦       profile.spec.js
+¦       
++---tools
+        pkg_redact.py
+        run_tests.sh
+        verify_app.py
+        

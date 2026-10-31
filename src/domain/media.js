@@ -24,7 +24,17 @@ export const MEDIA_RULES = Object.freeze({
     maxCount: 1,
     label: 'Sauti'
   }),
-  link: Object.freeze({ accept: Object.freeze(['http:', 'https:']), maxCount: 3, label: 'Kiungo' })
+  link: Object.freeze({ accept: Object.freeze(['http:', 'https:']), maxCount: 3, label: 'Kiungo' }),
+  /* documents were added for the Communication & Support Network (v3) */
+  document: Object.freeze({
+    accept: Object.freeze([
+      'application/pdf', 'text/plain', 'text/csv',
+      'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ]),
+    maxBytes: 10 * 1024 * 1024,
+    maxCount: 3,
+    label: 'Hati'
+  })
 });
 
 export const MAX_ATTACHMENTS = 6;

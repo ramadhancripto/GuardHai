@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:8123/index.html",
-  "at": "2026-10-27T18:49:46.883Z",
+  "at": "2026-10-31T15:44:12.302Z",
   "pass": 72,
   "total": 72,
   "checks": [
@@ -8,7 +8,7 @@
       "id": "A0",
       "name": "Browser can produce a real WEBM via MediaRecorder",
       "ok": true,
-      "detail": "23844 B"
+      "detail": "29162 B"
     },
     {
       "id": "A1",
@@ -158,7 +158,7 @@
       "id": "D5",
       "name": "Recorded audio becomes a playable attachment on the device",
       "ok": true,
-      "detail": "rekodi-1793126967063.webm playable=true "
+      "detail": "rekodi-1793461432260.webm playable=true "
     },
     {
       "id": "D6",
@@ -368,7 +368,7 @@
       "id": "J2b",
       "name": "Selected engagement state is visually distinct (filled or tinted)",
       "ok": true,
-      "detail": "fill=rgb(37, 99, 235)"
+      "detail": "fill=rgb(29, 78, 216)"
     },
     {
       "id": "J2",
@@ -380,7 +380,7 @@
       "id": "J3",
       "name": "Icons are size-consistent",
       "ok": true,
-      "detail": "16x16"
+      "detail": "20x20"
     },
     {
       "id": "J4",

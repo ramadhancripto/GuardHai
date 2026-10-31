@@ -17,7 +17,11 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
 
 async function boot(page) {
   await page.goto(URL, { waitUntil: 'load' });
-  await page.waitForTimeout(1200);
+  // wait for the globals this suite drives instead of a fixed guess: on a busy
+  // machine the modules can still be evaluating after 1.2s
+  await page.waitForFunction(() => typeof AuthActions !== 'undefined' && typeof AuthFlow !== 'undefined',
+    { timeout: 25000 });
+  await page.waitForTimeout(300);
   await page.evaluate(() => AuthFlow.goTo('landing'));
   await page.waitForTimeout(250);
   await page.evaluate(() => AuthFlow.goTo('register'));
@@ -35,6 +39,9 @@ async function boot(page) {
   page.on('pageerror', (e) => pageErrors.push(e.message));
   page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
   page.on('request', (r) => requests.push(r.url()));
+  // Search must not talk to a server. Re-decoded local images/assets are not data traffic.
+  const ASSET = /\.(png|jpe?g|webp|gif|svg|css|js|mjs|woff2?|ttf|ico)(\?|$)/i;
+  const dataRequests = () => requests.filter((u) => !ASSET.test(u) && !u.startsWith('data:'));
 
   await boot(page);
 
@@ -156,7 +163,7 @@ async function boot(page) {
       feed.some((f) => f.photo), `${feed.filter((f) => f.photo).length} of ${feed.length} cards`);
 
   /* ------------------------------------------------------------- F. search */
-  const before = requests.length;
+  const before = dataRequests().length;
   await page.click('#ghSearchBarOpen');
   await page.waitForTimeout(400);
   await page.fill('#ghSearchInput', 'mafuriko');
@@ -169,8 +176,8 @@ async function boot(page) {
   rec('S11', 'Search filters the feed in-device and reports an honest count',
       search.hits >= 1 && /imepatikana/i.test(search.note)
         && /kwenye kifaa hiki pekee/i.test(search.sheet)
-        && requests.length === before,
-      `${search.hits} hit · ${search.note}`);
+        && dataRequests().length === before,
+      `${search.hits} hit · ${search.note} · ${dataRequests().length - before} server calls`);
   await page.keyboard.press('Escape');
   await page.evaluate(() => HomeUI.searchFeed(''));
   await page.waitForTimeout(400);
@@ -251,12 +258,21 @@ async function boot(page) {
   });
 
   await page.reload({ waitUntil: 'load' });
-  await page.waitForTimeout(1500);
+  await page.waitForFunction(() => typeof AuthActions !== 'undefined',
+    { timeout: 25000 });
+  await page.waitForTimeout(400);
   await page.evaluate(() => AuthActions.handleRegister({ preventDefault() {} }));
   await page.waitForTimeout(1200);
-  await page.evaluate(() => HomeUI.openMyProfile());
-  await page.waitForSelector('#ghProfile.open');
-  await page.waitForTimeout(500);
+  // the sheet renders async off storage; retry briefly instead of a single
+  // fixed sleep (a reload on a busy machine can take a moment to settle)
+  await page.waitForFunction(() => typeof HomeUI !== 'undefined', { timeout: 25000 });
+  let opened = false;
+  for (let i = 0; i < 20 && !opened; i++) {
+    await page.evaluate(() => HomeUI.openMyProfile());
+    await page.waitForTimeout(300);
+    opened = await page.evaluate(() => !!document.querySelector('#ghProfile.open'));
+  }
+  rec('S-OPEN', 'Own profile reopens after a reload', opened, opened ? 'open' : 'did not open');
   const afterReload = await page.evaluate(() => ({
     has: !!document.querySelector('.gh-profile-avatar img'),
     name: document.querySelector('.gh-profile-name')?.innerText.trim()

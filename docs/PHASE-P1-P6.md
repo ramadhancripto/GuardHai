@@ -160,3 +160,14 @@ Modified:
 5. **Composer media is still local-only** (IndexedDB blobs). Multiple images,
    video and audio preview/removal already work; nothing is uploaded, and the UI
    says so.
+
+---
+
+## After P6 — Home v2 (2026-10-31)
+
+The visual pass that came after these phases (premium post cards, one surface
+ladder, topic hues, a real two-column board from 1024 px) lives in
+**`docs/HOME-V2.md`**, with its verification rows in `docs/TEST-LOG.md` §K.
+`assets/css/19-home-v2.css` is loaded last and overrides `04/10/11/12/13`; no
+markup contract was removed, only extended (`.gh-media-frame`, `.gh-linkcard*`,
+`.gh-welcome-copy`, `.gh-welcome-badge`, `.gh-welcome-meta`).

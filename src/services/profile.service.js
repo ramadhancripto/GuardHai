@@ -7,8 +7,9 @@
  *   2. sample personas     (data/profiles.js)      — always `sample: true`
  *   3. a stub built from whatever the post carried — never verified
  *
- * Messaging does not exist yet, so `message()` reports that instead of opening
- * a fake chat.
+ * Messaging is provided by the Communication & Support Network (chat.service).
+ * `message()` opens or returns a real local conversation; whether it can reach
+ * the person is reported separately and honestly by the chat layer.
  */
 import { ROLES, normalizeProfile, validateProfile, badgesFor, verificationOf, primaryRoleOf, roleOf } from '../domain/profile.js';
 import { createProfileRepository } from '../data/profiles.repo.js';
@@ -17,6 +18,7 @@ import { SAMPLE_PROFILES, sampleProfileFor } from '../data/profiles.js';
 import { SAMPLE_POSTS } from '../data/seed-posts.js';
 import { currentUser } from './session.service.js';
 import { listPosts } from './posts.service.js';
+import { openDirect } from './chat.service.js';
 import { bus, EVENTS } from '../core/bus.js';
 import { nowIso } from '../core/id.js';
 
@@ -164,12 +166,17 @@ export function presentationOf(profile) {
  * of opening a composer that would silently drop the message.
  */
 export async function message(profileId) {
+  if (!profileId) return { ok: false, reason: 'no-profile', detail: 'Wasifu haujulikani.' };
+  const result = await openDirect(profileId);
+  if (!result.ok) {
+    return { ok: false, reason: result.reason, profileId, detail: 'Mazungumzo hayakufunguka.' };
+  }
   return {
-    ok: false,
-    simulated: true,
-    reason: 'not-connected',
+    ok: true,
     profileId,
-    detail: 'Hakuna seva ya ujumbe. GuardHai haijaunganishwa na huduma ya mawasiliano.'
+    conversationId: result.conversation.id,
+    created: result.created,
+    detail: 'Mazungumzo yamefunguliwa kwenye Chat. Hakuna seva ya kuwasilisha ujumbe.'
   };
 }
 

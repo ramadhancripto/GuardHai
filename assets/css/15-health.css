@@ -1,0 +1,2558 @@
+/* ==========================================================================
+   GuardHai · assets/css/15-health.css
+   Health section — premium UI (P1 shell + full feature prototype).
+
+   Written only with tokens from 00-tokens.css. The rules of the sheet:
+     • white / off-white surfaces, emerald as the only primary colour;
+     • blue = information and professional services, red = emergency only;
+     • gradients appear on the hero and the Medical ID card, nowhere else;
+     • one radius ladder, one shadow ladder, one type scale (--gh-fs-h1…h3);
+     • mobile layouts are designed, not shrunk: 8pt rhythm, 44px touch targets.
+   ========================================================================== */
+
+/* ============================================================ 1. PAGE SHELL */
+.page-container.gh-health {
+    background: var(--gh-canvas);
+    padding: 0 0 calc(132px + env(safe-area-inset-bottom, 0px));
+    color: var(--gh-text);
+}
+
+.gh-health-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 var(--gh-s6) var(--gh-s6);
+}
+
+/* ================================================================= 2. HEADER */
+.gh-health-head { padding: var(--gh-s5) 0 var(--gh-s3); }
+
+.gh-health-headrow { display: flex; align-items: center; gap: var(--gh-s4); }
+
+.gh-health-mark {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: var(--gh-grad-band);
+    border: 1px solid var(--gh-grad-band-line);
+    color: var(--gh-green-ink);
+    box-shadow: var(--gh-shadow-1);
+}
+
+.gh-health-mark .ic { width: var(--gh-icon-lg); height: var(--gh-icon-lg); }
+.gh-health-headcopy { flex: 1 1 auto; min-width: 0; }
+
+.gh-health-title {
+    margin: 0;
+    font-size: var(--gh-fs-h1);
+    line-height: var(--gh-lh-tight);
+    font-weight: var(--gh-fw-black);
+    letter-spacing: -0.4px;
+    color: var(--gh-ink);
+}
+
+.gh-health-sub {
+    margin: 2px 0 0;
+    font-size: var(--gh-fs-caption);
+    font-weight: var(--gh-fw-medium);
+    color: var(--gh-muted);
+}
+
+.gh-health-head-actions { display: flex; align-items: center; gap: var(--gh-s2); flex: 0 0 auto; }
+
+.gh-health-notif,
+.gh-health-avatar {
+    width: var(--gh-tap);
+    height: var(--gh-tap);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gh-line);
+    border-radius: 13px;
+    background: var(--gh-surface);
+    color: var(--gh-ink);
+    cursor: pointer;
+}
+
+.gh-health-notif .ic { width: var(--gh-icon-md); height: var(--gh-icon-md); }
+.gh-health-notif:hover,
+.gh-health-avatar:hover { border-color: var(--gh-line-strong); box-shadow: var(--gh-shadow-1); }
+.gh-health-notif:focus-visible,
+.gh-health-avatar:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+
+.gh-health-avatar {
+    background: var(--gh-green-soft);
+    border-color: #CFE9DF;
+    color: var(--gh-green-ink);
+    font-size: var(--gh-fs-small);
+    font-weight: var(--gh-fw-black);
+}
+
+/* ---------------------------------------------- profile context (self/kin) */
+.gh-health-context {
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s2);
+    margin-top: var(--gh-s3);
+    flex-wrap: wrap;
+}
+
+.gh-health-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: var(--gh-tap-sm);
+    padding: 0 var(--gh-s3) 0 var(--gh-s2);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface);
+    color: var(--gh-ink);
+    font: inherit;
+    font-size: var(--gh-fs-caption);
+    font-weight: var(--gh-fw-bold);
+    cursor: pointer;
+}
+
+.gh-health-profile:hover { border-color: var(--gh-line-strong); }
+.gh-health-profile:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+.gh-health-profile .ic { width: var(--gh-icon-sm); height: var(--gh-icon-sm); color: var(--gh-muted); }
+.gh-health-profile-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gh-green); flex: 0 0 auto; }
+
+.gh-health-sync {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface-alt);
+    color: var(--gh-muted);
+    font-size: var(--gh-fs-micro);
+    font-weight: var(--gh-fw-bold);
+}
+
+.gh-health-sync .ic { width: var(--gh-icon-xs); height: var(--gh-icon-xs); color: var(--gh-green-ink); }
+
+/* demo-data banner: permanent, impossible to miss, never dismissible */
+.gh-health-demo {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gh-s2);
+    margin-top: var(--gh-s3);
+    padding: var(--gh-s3) var(--gh-s4);
+    border: 1px solid #EEDCB3;
+    border-radius: var(--gh-r-md);
+    background: var(--gh-amber-soft);
+    color: var(--gh-type-ink-org);
+    font-size: var(--gh-fs-micro);
+    font-weight: var(--gh-fw-bold);
+    line-height: 1.45;
+}
+
+.gh-health-demo .ic { width: var(--gh-icon-sm); height: var(--gh-icon-sm); flex: 0 0 auto; color: var(--gh-type-ink-org); }
+
+/* ================================================================ 3. HERO */
+/* The only identity gradient on the page: compact on mobile, split on desktop. */
+.gh-health-intro {
+    position: relative;
+    margin-top: var(--gh-s4);
+    padding: var(--gh-s6);
+    border: 1px solid var(--gh-grad-band-line);
+    border-radius: var(--gh-r-2xl);
+    background: var(--gh-grad-band);
+    box-shadow: var(--gh-shadow-card);
+    overflow: hidden;
+}
+
+.gh-health-intro::after {
+    content: "";
+    position: absolute;
+    right: -46px;
+    top: -46px;
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(37, 99, 235, .16), rgba(24, 169, 130, .10) 55%, transparent 72%);
+    pointer-events: none;
+}
+
+.gh-health-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 var(--gh-s2);
+    font-size: var(--gh-fs-micro);
+    font-weight: var(--gh-fw-black);
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    color: var(--gh-green-ink);
+}
+
+.gh-health-eyebrow .ic { width: var(--gh-icon-xs); height: var(--gh-icon-xs); }
+
+.gh-health-intro-title {
+    position: relative;
+    margin: 0;
+    max-width: 24ch;
+    font-size: var(--gh-fs-h1);
+    line-height: 1.2;
+    font-weight: var(--gh-fw-black);
+    letter-spacing: -0.5px;
+    color: var(--gh-ink);
+}
+
+.gh-health-intro-text {
+    position: relative;
+    margin: var(--gh-s2) 0 0;
+    max-width: 46ch;
+    font-size: var(--gh-fs-body);
+    line-height: var(--gh-lh-body);
+    color: var(--gh-text);
+}
+
+.gh-health-intro-actions {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gh-s3);
+    margin-top: var(--gh-s5);
+}
+
+.gh-health-introchips {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gh-s2);
+    list-style: none;
+    margin: var(--gh-s4) 0 0;
+    padding: 0;
+}
+
+.gh-health-introchips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    border: 1px solid rgba(255, 255, 255, .9);
+    border-radius: var(--gh-r-pill);
+    background: rgba(255, 255, 255, .8);
+    color: var(--gh-green-ink);
+    font-size: var(--gh-fs-micro);
+    font-weight: var(--gh-fw-bold);
+}
+
+/* ====================================================== 4. TOP PARTITIONS */
+.gh-health-tabs {
+    display: flex;
+    gap: var(--gh-s2);
+    margin: var(--gh-s5) 0 var(--gh-s5);
+    padding: 3px;
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    box-shadow: var(--gh-shadow-1);
+}
+
+.gh-health-tabs::-webkit-scrollbar { display: none; }
+
+.gh-health-tab {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gh-s2);
+    min-height: var(--gh-tap-sm);
+    padding: 0 var(--gh-s4);
+    border: 0;
+    border-radius: var(--gh-r-pill);
+    background: transparent;
+    color: var(--gh-muted);
+    font: inherit;
+    font-size: var(--gh-fs-small);
+    font-weight: var(--gh-fw-bold);
+    white-space: nowrap;
+    cursor: pointer;
+    scroll-snap-align: start;
+    transition: background .16s ease, color .16s ease;
+}
+
+.gh-health-tab .ic { width: var(--gh-icon-sm); height: var(--gh-icon-sm); }
+.gh-health-tab:hover { background: var(--gh-surface-alt); color: var(--gh-green-ink); }
+
+.gh-health-tab.is-active {
+    /* #0B7A5F with white text = 5.3:1. The brighter #18A982 stays the brand
+       accent (mark, meter, icons) but is too light for 14px white labels. */
+    background: var(--gh-green-ink);
+    color: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(11, 122, 95, .28);
+}
+
+.gh-health-tab:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+
+/* ============================================================== 5. PANELS */
+.gh-health-panel { outline: none; }
+.gh-health-panel[hidden] { display: none; }
+.gh-health-panel:focus-visible { outline: 2px solid var(--gh-green); outline-offset: 4px; border-radius: var(--gh-r-md); }
+
+/* ------------------------------------------------------------ section head */
+.gh-health-section { margin-bottom: var(--gh-s6); }
+
+.gh-health-section-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--gh-s2);
+    margin: 0 0 var(--gh-s3);
+}
+
+.gh-health-section-title {
+    margin: 0;
+    font-size: var(--gh-fs-h3);
+    font-weight: var(--gh-fw-black);
+    letter-spacing: -0.2px;
+    color: var(--gh-ink);
+}
+
+.gh-health-section-sub { margin: 0; font-size: var(--gh-fs-caption); color: var(--gh-muted); }
+.gh-health-section-link {
+    margin-left: auto;
+    border: 0;
+    background: transparent;
+    padding: 4px 2px;
+    color: var(--gh-green-ink);
+    font: inherit;
+    font-size: var(--gh-fs-caption);
+    font-weight: var(--gh-fw-black);
+    cursor: pointer;
+}
+.gh-health-section-link:hover { text-decoration: underline; }
+
+/* ------------------------------------------------------------------- cards */
+.gh-health-block {
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-lg);
+    padding: var(--gh-s5);
+    box-shadow: var(--gh-shadow-card);
+}
+
+.gh-health-block + .gh-health-block { margin-top: var(--gh-s3); }
+
+.gh-health-block-head { display: flex; align-items: center; gap: var(--gh-s2); margin-bottom: var(--gh-s3); }
+
+.gh-health-block-title {
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: var(--gh-fs-lead);
+    font-weight: var(--gh-fw-black);
+    color: var(--gh-ink);
+}
+
+.gh-health-block-note {
+    margin: var(--gh-s3) 0 0;
+    font-size: var(--gh-fs-caption);
+    line-height: var(--gh-lh-body);
+    color: var(--gh-muted);
+}
+
+/* ------------------------------------------------------------- stat tiles */
+.gh-health-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gh-s3);
+}
+
+.gh-health-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--gh-s4);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface);
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.gh-health-stat:hover { border-color: var(--gh-line-strong); box-shadow: var(--gh-shadow-1); }
+.gh-health-stat:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+
+.gh-health-stat-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: var(--gh-fs-micro);
+    font-weight: var(--gh-fw-black);
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    color: var(--gh-muted);
+}
+
+.gh-health-stat-label .ic { width: var(--gh-icon-xs); height: var(--gh-icon-xs); color: var(--gh-green-ink); }
+.gh-health-stat-value {
+    font-size: var(--gh-fs-h2);
+    font-weight: var(--gh-fw-black);
+    letter-spacing: -0.3px;
+    color: var(--gh-ink);
+    line-height: 1.15;
+}
+.gh-health-stat-value.is-empty { color: var(--gh-faint); }
+.gh-health-stat-sub { font-size: var(--gh-fs-micro); color: var(--gh-muted); line-height: 1.4; }
+
+/* ------------------------------------------------------------ completion bar */
+.gh-health-meter {
+    position: relative;
+    height: 7px;
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-line);
+    overflow: hidden;
+}
+
+.gh-health-meter > span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--gh-green) 0%, var(--gh-green-deep) 100%);
+    transition: width .35s ease;
+}
+
+.gh-health-meter.is-blue > span { background: linear-gradient(90deg, var(--gh-blue) 0%, #1D4ED8 100%); }
+
+/* ------------------------------------------------------------- medical card */
+.gh-health-mid {
+    position: relative;
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-2xl);
+    background: var(--gh-surface);
+    box-shadow: var(--gh-shadow-card);
+    overflow: hidden;
+}
+
+.gh-health-mid-top {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gh-s3);
+    padding: var(--gh-s5) var(--gh-s5) var(--gh-s4);
+    background: var(--gh-grad-band);
+    border-bottom: 1px solid var(--gh-grad-band-line);
+}
+
+.gh-health-mid-top .gh-health-mid-badge {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    background: var(--gh-surface);
+    border: 1px solid var(--gh-grad-band-line);
+    color: var(--gh-green-ink);
+}
+
+.gh-health-mid-badge .ic { width: var(--gh-icon-lg); height: var(--gh-icon-lg); }
+.gh-health-mid-titles { flex: 1 1 auto; min-width: 0; }
+
+.gh-health-mid-title {
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s2);
+    flex-wrap: wrap;
+    margin: 0;
+    font-size: var(--gh-fs-lead);
+    font-weight: var(--gh-fw-black);
+    color: var(--gh-ink);
+}
+
+.gh-health-mid-sub { margin: 1px 0 0; font-size: var(--gh-fs-micro); color: var(--gh-muted); }
+
+.gh-health-mid-body { padding: var(--gh-s5); }
+.gh-health-mid-actions { display: flex; flex-wrap: wrap; gap: var(--gh-s3); margin-top: var(--gh-s4); }
+
+.gh-health-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+    gap: var(--gh-s2);
+    margin-top: var(--gh-s4);
+}
+
+.gh-health-fact {
+    padding: var(--gh-s3);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-sm);
+    background: var(--gh-surface-alt);
+}
+
+.gh-health-fact dt {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 0 2px;
+    font-size: var(--gh-fs-micro);
+    font-weight: var(--gh-fw-black);
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    color: var(--gh-muted);
+}
+
+.gh-health-fact dt .ic { width: var(--gh-icon-xs); height: var(--gh-icon-xs); }
+.gh-health-fact dd { margin: 0; font-size: var(--gh-fs-small); font-weight: var(--gh-fw-bold); color: var(--gh-ink); }
+.gh-health-fact dd.is-empty { color: var(--gh-faint); font-weight: var(--gh-fw-regular); }
+
+/* --------------------------------------------------------- feature entries */
+.gh-health-group + .gh-health-group { margin-top: var(--gh-s4); }
+
+.gh-health-group-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 var(--gh-s2);
+    font-size: var(--gh-fs-micro);
+    font-weight: var(--gh-fw-black);
+    letter-spacing: .7px;
+    text-transform: uppercase;
+    color: var(--gh-muted);
+}
+
+.gh-health-group-head .ic { width: var(--gh-icon-xs); height: var(--gh-icon-xs); color: var(--gh-green-ink); }
+
+.gh-health-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gh-s3);
+}
+
+.gh-health-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gh-s2);
+    padding: var(--gh-s4);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface);
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+}
+
+.gh-health-card:hover { border-color: var(--gh-line-strong); box-shadow: var(--gh-shadow-1); }
+.gh-health-card:active { transform: scale(.995); }
+.gh-health-card:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+
+.gh-health-card-ico {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: var(--gh-green-soft);
+    color: var(--gh-green-ink);
+}
+
+.gh-health-card-ico.is-blue { background: var(--gh-blue-soft); color: var(--gh-type-ink-health); }
+.gh-health-card-ico.is-red { background: var(--gh-red-soft); color: var(--gh-type-ink-disaster); }
+.gh-health-card-ico.is-amber { background: var(--gh-amber-soft); color: var(--gh-type-ink-org); }
+.gh-health-card-ico .ic { width: var(--gh-icon-md); height: var(--gh-icon-md); }
+
+.gh-health-card b { font-size: var(--gh-fs-small); font-weight: var(--gh-fw-black); color: var(--gh-ink); line-height: 1.3; }
+.gh-health-card small { font-size: var(--gh-fs-micro); line-height: 1.45; color: var(--gh-muted); }
+.gh-health-card-foot { display: flex; align-items: center; gap: var(--gh-s1); margin-top: auto; padding-top: var(--gh-s1); }
+
+/* ---------------------------------------------------------- wide entry rows */
+.gh-health-entry {
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s3);
+    width: 100%;
+    padding: var(--gh-s3);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface);
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+}
+
+.gh-health-entry + .gh-health-entry { margin-top: var(--gh-s2); }
+.gh-health-entry:hover { border-color: var(--gh-line-strong); background: var(--gh-surface-alt); }
+.gh-health-entry:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+.gh-health-entry .gh-health-card-ico { width: 34px; height: 34px; }
+.gh-health-entry-copy { flex: 1 1 auto; min-width: 0; }
+.gh-health-entry-copy b { display: block; font-size: var(--gh-fs-small); font-weight: var(--gh-fw-black); color: var(--gh-ink); }
+.gh-health-entry-copy small { display: block; font-size: var(--gh-fs-micro); line-height: 1.45; color: var(--gh-muted); }
+.gh-health-entry > .ic { width: var(--gh-icon-sm); height: var(--gh-icon-sm); color: var(--gh-faint); flex: 0 0 auto; }
+
+/* ------------------------------------------------------------------- rows */
+.gh-health-rows { display: flex; flex-direction: column; gap: var(--gh-s2); }
+
+.gh-health-row {
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s3);
+    padding: var(--gh-s3);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface-alt);
+}
+
+.gh-health-row .ic { width: var(--gh-icon-sm); height: var(--gh-icon-sm); color: var(--gh-green-ink); flex: 0 0 auto; }
+.gh-health-rowcopy { flex: 1 1 auto; min-width: 0; }
+.gh-health-rowcopy b { display: block; font-size: var(--gh-fs-small); font-weight: var(--gh-fw-bold); color: var(--gh-ink); }
+.gh-health-rowcopy small { display: block; font-size: var(--gh-fs-micro); line-height: 1.45; color: var(--gh-muted); }
+.gh-health-row .gh-health-chip { flex: 0 0 auto; max-width: 45%; overflow: hidden; text-overflow: ellipsis; }
+
+/* ------------------------------------------------------------- status chips */
+.gh-health-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border: 1px solid var(--gh-line-strong);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface);
+    color: var(--gh-muted);
+    font-size: var(--gh-fs-micro);
+    font-weight: var(--gh-fw-black);
+    letter-spacing: .2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.gh-health-chip .ic { width: var(--gh-icon-xs); height: var(--gh-icon-xs); }
+.gh-health-chip.is-ok { background: var(--gh-green-soft); border-color: #BEE5D8; color: var(--gh-green-ink); }
+.gh-health-chip.is-info { background: var(--gh-blue-soft); border-color: #C9DAFB; color: var(--gh-type-ink-health); }
+.gh-health-chip.is-warn { background: var(--gh-amber-soft); border-color: #EEDCB3; color: var(--gh-type-ink-org); }
+.gh-health-chip.is-danger { background: var(--gh-red-soft); border-color: #F6C9C5; color: var(--gh-type-ink-disaster); }
+.gh-health-chip.is-neutral { background: var(--gh-surface-alt); color: var(--gh-muted); }
+.gh-health-chip.is-plain { background: transparent; border-color: var(--gh-line); color: var(--gh-muted); text-transform: none; letter-spacing: 0; }
+
+/* ------------------------------------------------------------ empty state */
+.gh-health-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gh-s3);
+    padding: var(--gh-s6) var(--gh-s5);
+    border: 1px dashed var(--gh-line-strong);
+    border-radius: var(--gh-r-lg);
+    background: var(--gh-surface);
+}
+
+.gh-health-empty-ico {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--gh-r-md);
+    background: var(--gh-grad-band);
+    border: 1px solid var(--gh-grad-band-line);
+    color: var(--gh-green-ink);
+}
+
+.gh-health-empty-ico .ic { width: var(--gh-icon-lg); height: var(--gh-icon-lg); }
+.gh-health-empty b { font-size: var(--gh-fs-lead); font-weight: var(--gh-fw-black); color: var(--gh-ink); }
+.gh-health-empty p { margin: 0; font-size: var(--gh-fs-body); line-height: var(--gh-lh-body); color: var(--gh-muted); }
+
+.gh-health-empty.is-error { border-style: solid; border-color: #F6C9C5; background: var(--gh-red-soft); }
+.gh-health-empty.is-error .gh-health-empty-ico { background: #FFFFFF; border-color: #F6C9C5; color: var(--gh-type-ink-disaster); }
+.gh-health-empty.is-error b { color: var(--gh-type-ink-disaster); }
+
+.gh-health-skeleton {
+    height: 92px;
+    border-radius: var(--gh-r-lg);
+    background: linear-gradient(90deg, var(--gh-surface-alt) 25%, var(--gh-line) 37%, var(--gh-surface-alt) 63%);
+    background-size: 400% 100%;
+    animation: ghHealthShimmer 1.4s ease-in-out infinite;
+    margin-bottom: var(--gh-s3);
+}
+
+@keyframes ghHealthShimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .gh-health-skeleton { animation: none; }
+    .gh-health-meter > span { transition: none; }
+}
+
+/* ------------------------------------------------------------------ lists */
+.gh-health-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gh-s2);
+}
+
+.gh-health-list li {
+    position: relative;
+    padding-left: 20px;
+    font-size: var(--gh-fs-body);
+    line-height: 1.5;
+    color: var(--gh-text);
+}
+
+.gh-health-list li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gh-green);
+}
+
+.gh-health-list.is-muted li { color: var(--gh-muted); }
+.gh-health-list.is-muted li::before { background: var(--gh-line-strong); }
+.gh-health-list.is-tight li { font-size: var(--gh-fs-small); }
+
+/* --------------------------------------------------------------- actions */
+.gh-health-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gh-s3);
+    margin-top: var(--gh-s4);
+}
+
+.gh-health-actions .gh-health-chip { align-self: center; height: 22px; line-height: 20px; }
+
+.gh-health-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gh-s2);
+    min-height: var(--gh-tap);
+    padding: 0 var(--gh-s5);
+    border: 1px solid var(--gh-line-strong);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface);
+    color: var(--gh-ink);
+    font: inherit;
+    font-size: var(--gh-fs-small);
+    font-weight: var(--gh-fw-bold);
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.gh-health-btn .ic { width: var(--gh-icon-sm); height: var(--gh-icon-sm); }
+.gh-health-btn:hover { border-color: var(--gh-green); color: var(--gh-green-ink); }
+.gh-health-btn:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+
+.gh-health-btn.is-primary {
+    background: var(--gh-green-ink);
+    border-color: var(--gh-green-ink);
+    color: #FFFFFF;
+    box-shadow: 0 6px 14px -8px rgba(11, 122, 95, .75);
+}
+.gh-health-btn.is-primary:hover { background: #096B53; border-color: #096B53; color: #FFFFFF; }
+
+.gh-health-btn.is-blue { background: #0040AA; border-color: #0040AA; color: #FFFFFF; }
+.gh-health-btn.is-blue:hover { background: #1D4ED8; border-color: #1D4ED8; color: #FFFFFF; }
+
+.gh-health-btn.is-danger { background: var(--gh-surface); border-color: #F6C9C5; color: var(--gh-type-ink-disaster); }
+.gh-health-btn.is-danger:hover { background: var(--gh-red-soft); border-color: #E9A9A2; color: #8C1414; }
+
+.gh-health-btn.is-quiet { border-color: transparent; background: transparent; color: var(--gh-green-ink); padding: 0 var(--gh-s3); }
+.gh-health-btn.is-quiet:hover { background: var(--gh-green-soft); }
+
+.gh-health-btn[disabled],
+.gh-health-btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+
+/* ---------------------------------------------------------------- legends */
+.gh-health-legend { display: flex; flex-wrap: wrap; gap: var(--gh-s2); margin-top: var(--gh-s3); }
+
+/* ================================================ 6. SCREEN (sub-view) HEAD */
+.gh-health-screen-head {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gh-s3);
+    margin: 0 0 var(--gh-s4);
+}
+
+.gh-health-back {
+    flex: 0 0 auto;
+    width: var(--gh-tap);
+    height: var(--gh-tap);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gh-line);
+    border-radius: 13px;
+    background: var(--gh-surface);
+    color: var(--gh-ink);
+    cursor: pointer;
+}
+
+.gh-health-back .ic { width: var(--gh-icon-md); height: var(--gh-icon-md); }
+.gh-health-back:hover { border-color: var(--gh-line-strong); }
+.gh-health-back:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+
+.gh-health-screen-titles { flex: 1 1 auto; min-width: 0; padding-top: 2px; }
+.gh-health-screen-title {
+    margin: 0;
+    font-size: var(--gh-fs-h2);
+    font-weight: var(--gh-fw-black);
+    letter-spacing: -0.3px;
+    color: var(--gh-ink);
+    line-height: 1.25;
+}
+.gh-health-screen-sub { margin: 2px 0 0; font-size: var(--gh-fs-caption); color: var(--gh-muted); }
+
+/* ------------------------------------------------------------- detail rows */
+.gh-health-dl { display: flex; flex-direction: column; gap: 0; margin: 0; }
+
+.gh-health-dl-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--gh-s3);
+    padding: var(--gh-s3) 0;
+    border-bottom: 1px solid var(--gh-line);
+}
+.gh-health-dl-row:last-child { border-bottom: 0; }
+.gh-health-dl-row dt {
+    flex: 0 0 42%;
+    margin: 0;
+    font-size: var(--gh-fs-caption);
+    font-weight: var(--gh-fw-bold);
+    color: var(--gh-muted);
+}
+.gh-health-dl-row dd { flex: 1 1 auto; margin: 0; font-size: var(--gh-fs-small); font-weight: var(--gh-fw-medium); color: var(--gh-ink); word-break: break-word; }
+.gh-health-dl-row dd.is-empty { color: var(--gh-faint); font-weight: var(--gh-fw-regular); }
+
+/* ---------------------------------------------------------------- timeline */
+.gh-health-timeline { list-style: none; margin: 0; padding: 0 0 0 var(--gh-s4); border-left: 2px solid var(--gh-line); }
+
+.gh-health-timeline li { position: relative; padding: 0 0 var(--gh-s4) var(--gh-s4); }
+.gh-health-timeline li:last-child { padding-bottom: 0; }
+.gh-health-timeline li::before {
+    content: "";
+    position: absolute;
+    left: -21px;
+    top: 3px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--gh-surface);
+    border: 2px solid var(--gh-green);
+}
+.gh-health-timeline li.is-muted::before { border-color: var(--gh-line-strong); }
+.gh-health-timeline b { display: block; font-size: var(--gh-fs-small); font-weight: var(--gh-fw-bold); color: var(--gh-ink); }
+.gh-health-timeline small { display: block; font-size: var(--gh-fs-micro); color: var(--gh-muted); line-height: 1.45; }
+
+/* ------------------------------------------------------------------- forms */
+.gh-health-form { display: flex; flex-direction: column; gap: var(--gh-s4); }
+
+.gh-health-field { display: flex; flex-direction: column; gap: 5px; }
+
+.gh-health-field > label,
+.gh-health-label {
+    font-size: var(--gh-fs-small);
+    font-weight: var(--gh-fw-bold);
+    color: var(--gh-ink);
+}
+
+.gh-health-label .req { color: var(--gh-red); margin-left: 2px; }
+
+.gh-health-input,
+.gh-health-select,
+.gh-health-textarea {
+    width: 100%;
+    min-height: var(--gh-tap);
+    padding: 10px var(--gh-s4);
+    border: 1px solid var(--gh-line-strong);
+    border-radius: var(--gh-r-sm);
+    background: var(--gh-surface);
+    color: var(--gh-ink);
+    font: inherit;
+    font-size: var(--gh-fs-body);
+}
+
+.gh-health-textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+
+.gh-health-input:focus,
+.gh-health-select:focus,
+.gh-health-textarea:focus {
+    outline: none;
+    border-color: var(--gh-green);
+    box-shadow: var(--gh-ring);
+}
+
+.gh-health-input[aria-invalid="true"],
+.gh-health-select[aria-invalid="true"],
+.gh-health-textarea[aria-invalid="true"] { border-color: var(--gh-red); background: #FFFBFB; }
+
+.gh-health-hint { font-size: var(--gh-fs-micro); color: var(--gh-muted); line-height: 1.45; }
+.gh-health-error { display: flex; align-items: center; gap: 5px; font-size: var(--gh-fs-micro); font-weight: var(--gh-fw-bold); color: var(--gh-type-ink-disaster); }
+.gh-health-error .ic { width: var(--gh-icon-xs); height: var(--gh-icon-xs); }
+
+.gh-health-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gh-s3); }
+
+.gh-health-check {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gh-s3);
+    padding: var(--gh-s3);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-sm);
+    background: var(--gh-surface);
+    font-size: var(--gh-fs-small);
+    color: var(--gh-text);
+    line-height: 1.45;
+    cursor: pointer;
+}
+
+.gh-health-check input { width: 20px; height: 20px; margin: 0; accent-color: var(--gh-green); flex: 0 0 auto; }
+.gh-health-check b { color: var(--gh-ink); }
+
+/* -------------------------------------------------------------- qr display */
+.gh-health-qr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gh-s3);
+    padding: var(--gh-s5);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-lg);
+    background: var(--gh-surface);
+    text-align: center;
+}
+
+.gh-health-qr-code {
+    display: grid;
+    place-items: center;
+    padding: var(--gh-s4);
+    border-radius: var(--gh-r-md);
+    background: #FFFFFF;
+    border: 1px solid var(--gh-line);
+}
+
+.gh-health-qr-code svg { display: block; width: 168px; height: 168px; }
+.gh-health-qr-note { max-width: 34ch; font-size: var(--gh-fs-micro); line-height: 1.5; color: var(--gh-muted); }
+
+/* -------------------------------------------------------------- schedule */
+.gh-health-dose {
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s3);
+    padding: var(--gh-s3);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface);
+}
+
+.gh-health-dose + .gh-health-dose { margin-top: var(--gh-s2); }
+.gh-health-dose.is-taken { background: var(--gh-green-tint); border-color: #CFE9DF; }
+.gh-health-dose.is-missed { background: #FFFBF8; border-color: #F3D9C6; }
+.gh-health-dose.is-skipped { background: var(--gh-surface-alt); }
+.gh-health-dose.is-later { background: var(--gh-surface); }
+
+.gh-health-dose-time {
+    flex: 0 0 auto;
+    min-width: 46px;
+    font-size: var(--gh-fs-small);
+    font-weight: var(--gh-fw-black);
+    color: var(--gh-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.gh-health-dose-copy { flex: 1 1 auto; min-width: 0; }
+.gh-health-dose-copy b { display: block; font-size: var(--gh-fs-small); font-weight: var(--gh-fw-bold); color: var(--gh-ink); }
+.gh-health-dose-copy small { display: block; font-size: var(--gh-fs-micro); color: var(--gh-muted); line-height: 1.4; }
+.gh-health-dose-actions { display: flex; gap: var(--gh-s1); flex: 0 0 auto; }
+
+/* ------------------------------------------------------------ professional */
+.gh-health-pro {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gh-s3);
+    padding: var(--gh-s4);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    width: 100%;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.gh-health-pro + .gh-health-pro { margin-top: var(--gh-s2); }
+.gh-health-pro:hover { border-color: var(--gh-line-strong); box-shadow: var(--gh-shadow-1); }
+.gh-health-pro:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+
+.gh-health-pro-avatar {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gh-blue-soft);
+    color: var(--gh-type-ink-health);
+    font-size: var(--gh-fs-small);
+    font-weight: var(--gh-fw-black);
+}
+
+.gh-health-pro-copy { flex: 1 1 auto; min-width: 0; }
+.gh-health-pro-copy b { display: block; font-size: var(--gh-fs-small); font-weight: var(--gh-fw-black); color: var(--gh-ink); }
+.gh-health-pro-copy small { display: block; font-size: var(--gh-fs-micro); color: var(--gh-muted); line-height: 1.45; }
+.gh-health-pro-meta { display: flex; flex-wrap: wrap; gap: var(--gh-s1); margin-top: 5px; }
+
+/* -------------------------------------------------------------- case room */
+.gh-health-post {
+    padding: var(--gh-s4);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface);
+}
+.gh-health-post + .gh-health-post { margin-top: var(--gh-s3); }
+.gh-health-post.is-author { background: var(--gh-blue-tint); border-color: #D6E4FC; }
+
+.gh-health-post-head { display: flex; align-items: center; gap: var(--gh-s2); margin-bottom: var(--gh-s2); }
+.gh-health-post-ava {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--gh-surface-alt); color: var(--gh-green-ink);
+    font-size: var(--gh-fs-micro); font-weight: var(--gh-fw-black); flex: 0 0 auto;
+}
+.gh-health-post-head b { font-size: var(--gh-fs-small); font-weight: var(--gh-fw-black); color: var(--gh-ink); }
+.gh-health-post-head small { display: block; font-size: var(--gh-fs-micro); color: var(--gh-muted); }
+.gh-health-post-body { font-size: var(--gh-fs-body); line-height: 1.55; color: var(--gh-text); }
+.gh-health-post-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--gh-s2); margin-top: var(--gh-s2); }
+
+/* -------------------------------------------------------------- segmented */
+.gh-health-seg {
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface-alt);
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.gh-health-seg::-webkit-scrollbar { display: none; }
+
+.gh-health-seg button {
+    border: 0;
+    background: transparent;
+    border-radius: var(--gh-r-pill);
+    min-height: 30px;
+    padding: 0 var(--gh-s3);
+    font: inherit;
+    font-size: var(--gh-fs-micro);
+    font-weight: var(--gh-fw-black);
+    color: var(--gh-muted);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.gh-health-seg button.is-active { background: var(--gh-surface); color: var(--gh-green-ink); box-shadow: var(--gh-shadow-1); }
+.gh-health-seg button:focus-visible { outline: 2px solid var(--gh-green); outline-offset: 1px; }
+
+/* --------------------------------------------------------------- education */
+.gh-health-article {
+    display: flex;
+    gap: var(--gh-s3);
+    width: 100%;
+    padding: var(--gh-s3);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface);
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+}
+.gh-health-article + .gh-health-article { margin-top: var(--gh-s2); }
+.gh-health-article:hover { border-color: var(--gh-line-strong); }
+.gh-health-article:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+.gh-health-article-thumb {
+    flex: 0 0 auto;
+    width: 62px;
+    height: 62px;
+    border-radius: var(--gh-r-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gh-grad-band);
+    border: 1px solid var(--gh-grad-band-line);
+    color: var(--gh-green-ink);
+}
+.gh-health-article-thumb .ic { width: var(--gh-icon-lg); height: var(--gh-icon-lg); }
+.gh-health-article b { display: block; font-size: var(--gh-fs-small); font-weight: var(--gh-fw-black); color: var(--gh-ink); line-height: 1.35; }
+.gh-health-article small { display: block; margin-top: 2px; font-size: var(--gh-fs-micro); color: var(--gh-muted); line-height: 1.4; }
+
+/* -------------------------------------------------------------- emergency */
+.gh-health-emg {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gh-s3);
+    padding: var(--gh-s4);
+    border: 1px solid #F6C9C5;
+    border-radius: var(--gh-r-lg);
+    background: linear-gradient(180deg, #FEF4F3 0%, #FFFFFF 100%);
+}
+
+.gh-health-emg .ic { width: var(--gh-icon-lg); height: var(--gh-icon-lg); color: var(--gh-type-ink-disaster); flex: 0 0 auto; }
+.gh-health-emg b { display: block; font-size: var(--gh-fs-small); font-weight: var(--gh-fw-black); color: var(--gh-type-ink-disaster); }
+.gh-health-emg p { margin: 2px 0 0; font-size: var(--gh-fs-caption); line-height: 1.5; color: var(--gh-text); }
+
+/* =========================================================== 7. RESPONSIVE */
+@media (max-width: 619px) {
+    .gh-health-tabs {
+        border: 0;
+        background: transparent;
+        padding: 2px 22px 2px 0;
+        box-shadow: none;
+        -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 22px), transparent 100%);
+        mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 22px), transparent 100%);
+    }
+    .gh-health-tab { background: var(--gh-surface); border: 1px solid var(--gh-line); min-height: var(--gh-tap); padding: 0 var(--gh-s4); }
+    .gh-health-tab.is-active { border-color: var(--gh-green); }
+    .gh-health-inner { padding: 0 var(--gh-s5) var(--gh-s5); }
+    .gh-health-title { font-size: 19px; }
+    .gh-health-intro { padding: var(--gh-s5); border-radius: var(--gh-r-lg); }
+    .gh-health-intro-title { font-size: 19px; }
+    .gh-health-intro-actions .gh-health-btn { flex: 1 1 100%; }
+    .gh-health-stats { gap: var(--gh-s2); }
+    .gh-health-stat { padding: var(--gh-s3); }
+    .gh-health-grid { gap: var(--gh-s2); }
+}
+
+@media (min-width: 720px) {
+    .gh-health-inner { padding: 0 var(--gh-s7) var(--gh-s7); }
+    .gh-health-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .gh-health-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .gh-health-intro { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; column-gap: var(--gh-s7); }
+    .gh-health-intro-actions { margin-top: 0; justify-content: flex-end; }
+    .gh-health-introchips { grid-column: 1 / -1; }
+}
+
+@media (min-width: 1024px) {
+    .gh-health-inner { max-width: 1040px; padding: 0 var(--gh-s8) var(--gh-s8); }
+    .gh-health-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* ================================================ 8. ADDITIONS (P2 build) */
+
+.gh-health-notif { position: relative; }
+.gh-health-notifdot {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-red);
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: var(--gh-fw-black);
+    line-height: 17px;
+    text-align: center;
+    border: 2px solid var(--gh-surface);
+}
+
+.gh-health-profile span#ghHealthProfileName { max-width: 22ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.gh-health-intro-copy { position: relative; min-width: 0; }
+
+.gh-health-demo[hidden] { display: none; }
+
+/* opt-in accessibility preferences from Settings */
+#healthPage.is-large-text { --gh-fs-body: 17px; --gh-fs-small: 15px; --gh-fs-caption: 14px; --gh-fs-micro: 13px; --gh-fs-lead: 18px; }
+.gh-health-no-motion *,
+.gh-health-no-motion *::before,
+.gh-health-no-motion *::after { animation: none !important; transition: none !important; }
+
+.gh-health-pro-meta .gh-health-chip { text-transform: none; letter-spacing: 0; }
+
+/* the entry/row buttons must never inherit a text underline from list styles */
+.gh-health-entry:hover b,
+.gh-health-card:hover b,
+.gh-health-pro:hover b,
+.gh-health-article:hover b { text-decoration: none; }
+
+/* 48px tap targets inside dense rows without inflating the visual rhythm */
+.gh-health-dose-actions .gh-health-btn { min-height: 40px; padding: 0 var(--gh-s3); font-size: var(--gh-fs-micro); }
+
+@media (max-width: 400px) {
+    .gh-health-dose { flex-wrap: wrap; }
+    .gh-health-dose-actions { width: 100%; justify-content: flex-end; }
+    .gh-health-dl-row { flex-direction: column; gap: 2px; }
+    .gh-health-dl-row dt { flex: none; }
+}
+
+/* A three-item group reads as a list, not as a grid with a hole: the third
+   card spans the row on two-column layouts (mobile / small tablet). */
+@media (max-width: 719px) {
+    .gh-health-grid > .gh-health-card:nth-child(3):last-child {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        gap: var(--gh-s3);
+    }
+    .gh-health-grid > .gh-health-card:nth-child(3):last-child b { font-size: var(--gh-fs-small); }
+    .gh-health-grid > .gh-health-card:nth-child(3):last-child small { display: block; }
+    .gh-health-grid > .gh-health-card:nth-child(3):last-child .gh-health-card-ico { flex: 0 0 auto; }
+}
+.gh-health-avatar .ic { width: var(--gh-icon-md); height: var(--gh-icon-md); }
+
+/* Sub-screens keep the tab strip (persistent internal navigation) but drop the
+   hero so the task starts at the top of the viewport. */
+.gh-health-tabs[hidden], .gh-health-intro[hidden] { display: none; }
+
+/* ==========================================================================
+   22. P2 SCREEN KIT — the components the interactive screens render.
+   Same ladder as above: 8pt rhythm, one radius per role, emerald = primary,
+   blue = information, red = emergency. No new colours are introduced.
+   ========================================================================== */
+
+/* ------------------------------------------------------- icon-only button */
+.gh-health-iconbtn {
+    flex: 0 0 auto;
+    width: var(--gh-tap-sm);
+    height: var(--gh-tap-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface);
+    color: var(--gh-muted);
+    cursor: pointer;
+    transition: color .15s ease, border-color .15s ease, background .15s ease;
+}
+.gh-health-iconbtn:hover { color: var(--gh-red); border-color: #F0CFCB; background: var(--gh-red-soft); }
+.gh-health-iconbtn:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+.gh-health-iconbtn .ic { width: var(--gh-icon-sm); height: var(--gh-icon-sm); }
+
+/* --------------------------------------------------------------- search UI */
+.gh-health-searchrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gh-s3);
+    align-items: center;
+    margin-bottom: var(--gh-s3);
+}
+.gh-health-search {
+    flex: 1 1 220px;
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s2);
+    min-height: var(--gh-tap);
+    padding: 0 var(--gh-s4);
+    border: 1px solid var(--gh-line-strong);
+    border-radius: var(--gh-r-pill);
+    background: var(--gh-surface);
+}
+.gh-health-search:focus-within { border-color: var(--gh-green); box-shadow: 0 0 0 3px var(--gh-ring); }
+.gh-health-search .ic { width: var(--gh-icon-sm); height: var(--gh-icon-sm); color: var(--gh-muted); flex: 0 0 auto; }
+.gh-health-search input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: inherit;
+    font-size: var(--gh-fs-body);
+    color: var(--gh-ink);
+    padding: 10px 0;
+}
+.gh-health-select.is-inline { min-height: var(--gh-tap); width: auto; flex: 0 1 180px; }
+
+/* ------------------------------------------------------------ flash + callout */
+.gh-health-flash {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gh-s3);
+    padding: var(--gh-s3) var(--gh-s4);
+    margin-bottom: var(--gh-s4);
+    border: 1px solid #BEE5D8;
+    border-radius: var(--gh-r-md);
+    background: var(--gh-green-soft);
+    color: var(--gh-green-ink);
+}
+.gh-health-flash.is-info { background: var(--gh-blue-soft); border-color: #CBD9F6; color: var(--gh-blue); }
+.gh-health-flash.is-warn { background: var(--gh-amber-soft); border-color: #EEDCB3; color: #6B4E00; }
+.gh-health-flash.is-danger { background: var(--gh-red-soft); border-color: #F6C9C5; color: #8E1D13; }
+.gh-health-flash .ic { width: var(--gh-icon-md); height: var(--gh-icon-md); flex: 0 0 auto; margin-top: 1px; }
+.gh-health-flash p { margin: 0; font-size: var(--gh-fs-body); line-height: var(--gh-lh-body); font-weight: var(--gh-fw-medium); }
+
+.gh-health-callout {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gh-s3);
+    padding: var(--gh-s3) var(--gh-s4);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface-alt);
+    color: var(--gh-text);
+    margin: var(--gh-s3) 0;
+}
+.gh-health-callout .ic { width: var(--gh-icon-md); height: var(--gh-icon-md); flex: 0 0 auto; margin-top: 1px; color: var(--gh-muted); }
+.gh-health-callout p { margin: 0; font-size: var(--gh-fs-small); line-height: var(--gh-lh-body); }
+.gh-health-callout.is-info { background: var(--gh-blue-soft); border-color: #CBD9F6; }
+.gh-health-callout.is-info .ic { color: var(--gh-blue); }
+.gh-health-callout.is-warn { background: var(--gh-amber-soft); border-color: #EEDCB3; }
+.gh-health-callout.is-warn .ic { color: var(--gh-amber); }
+.gh-health-callout.is-danger { background: var(--gh-red-soft); border-color: #F6C9C5; }
+.gh-health-callout.is-danger .ic { color: var(--gh-red); }
+
+/* ---------------------------------------------------------------- rows + text */
+.gh-health-chiprow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.gh-health-rowmeta { flex: 0 0 auto; font-size: var(--gh-fs-micro); font-weight: var(--gh-fw-black); color: var(--gh-muted); }
+.gh-health-subhead {
+    margin: var(--gh-s5) 0 var(--gh-s2);
+    font-size: var(--gh-fs-small);
+    font-weight: var(--gh-fw-black);
+    letter-spacing: .2px;
+    text-transform: uppercase;
+    color: var(--gh-muted);
+}
+.gh-health-body-text { margin: 0 0 var(--gh-s3); font-size: var(--gh-fs-body); line-height: 1.65; color: var(--gh-text); }
+.gh-health-mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: var(--gh-fs-small); letter-spacing: .3px; }
+.gh-health-textbtn {
+    border: 0;
+    background: transparent;
+    padding: 6px 0;
+    font: inherit;
+    font-size: var(--gh-fs-small);
+    font-weight: var(--gh-fw-black);
+    color: var(--gh-green-ink);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.gh-health-textbtn:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; border-radius: var(--gh-r-sm); }
+
+/* -------------------------------------------------------------- form extras */
+.gh-health-fieldset { border: 0; margin: 0 0 var(--gh-s4); padding: 0; }
+.gh-health-legend-strong {
+    display: block;
+    margin-bottom: var(--gh-s3);
+    font-size: var(--gh-fs-caption);
+    font-weight: var(--gh-fw-black);
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    color: var(--gh-muted);
+}
+.gh-health-input.is-invalid,
+.gh-health-select.is-invalid,
+.gh-health-textarea.is-invalid { border-color: #E4A7A0; background: #FFF8F7; }
+.gh-health-form-actions { display: flex; flex-wrap: wrap; gap: var(--gh-s3); align-items: center; margin-top: var(--gh-s2); }
+.gh-health-hint { display: block; margin: 6px 0 0; font-size: var(--gh-fs-small); line-height: 1.55; color: var(--gh-muted); }
+.gh-health-error { display: block; margin-top: 5px; font-size: var(--gh-fs-small); font-weight: var(--gh-fw-bold); color: #A02718; }
+
+/* ------------------------------------------------------------- choice cards */
+.gh-health-choicegrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--gh-s2); }
+.gh-health-choice {
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s3);
+    padding: var(--gh-s3);
+    border: 1px solid var(--gh-line-strong);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface);
+    cursor: pointer;
+    min-height: var(--gh-tap);
+}
+.gh-health-choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.gh-health-choice-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--gh-r-sm);
+    background: var(--gh-red-soft);
+    color: #A02718;
+    flex: 0 0 auto;
+}
+.gh-health-choice-text { font-size: var(--gh-fs-small); font-weight: var(--gh-fw-bold); color: var(--gh-ink); }
+.gh-health-choice:has(input:checked) { border-color: var(--gh-red); background: var(--gh-red-soft); box-shadow: 0 0 0 3px rgba(180, 35, 24, .12); }
+.gh-health-choice:has(input:focus-visible) { outline: 3px solid var(--gh-red); outline-offset: 2px; }
+
+/* ----------------------------------------------------------------- switches */
+.gh-health-toggle {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gh-s3);
+    padding: var(--gh-s3) 0;
+    border-bottom: 1px solid var(--gh-line);
+}
+.gh-health-toggle:last-of-type { border-bottom: 0; }
+.gh-health-toggle input {
+    appearance: none;
+    flex: 0 0 auto;
+    width: 42px;
+    height: 24px;
+    margin: 2px 0 0;
+    border-radius: var(--gh-r-pill);
+    background: #D8E1E6;
+    position: relative;
+    cursor: pointer;
+    transition: background .15s ease;
+}
+.gh-health-toggle input::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: var(--gh-shadow-1);
+    transition: transform .15s ease;
+}
+.gh-health-toggle input:checked { background: var(--gh-green-ink); }
+.gh-health-toggle input:checked::after { transform: translateX(18px); }
+.gh-health-toggle input:disabled { opacity: .55; cursor: not-allowed; }
+.gh-health-toggle input:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 3px; }
+.gh-health-toggle-copy { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.gh-health-toggle-copy b { font-size: var(--gh-fs-body); font-weight: var(--gh-fw-bold); color: var(--gh-ink); }
+.gh-health-toggle-copy em { font-style: normal; font-size: var(--gh-fs-small); color: var(--gh-muted); line-height: 1.5; }
+.gh-health-toggle-state { flex: 0 0 auto; font-size: var(--gh-fs-micro); font-weight: var(--gh-fw-black); color: var(--gh-muted); text-align: right; max-width: 96px; }
+
+/* ---------------------------------------------------------------- education */
+.gh-health-articlelist { display: grid; gap: var(--gh-s2); }
+.gh-health-article {
+    display: flex;
+    gap: var(--gh-s3);
+    align-items: flex-start;
+    padding: var(--gh-s3);
+    border: 1px solid var(--gh-line);
+    border-radius: var(--gh-r-md);
+    background: var(--gh-surface);
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+}
+.gh-health-article:hover { border-color: var(--gh-line-strong); box-shadow: var(--gh-shadow-1); }
+.gh-health-article:focus-visible { outline: 3px solid var(--gh-green); outline-offset: 2px; }
+.gh-health-article-thumb {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--gh-r-sm);
+    background: var(--gh-green-soft);
+    color: var(--gh-green-ink);
+}
+.gh-health-article-copy { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.gh-health-article-copy b { font-size: var(--gh-fs-body); font-weight: var(--gh-fw-black); color: var(--gh-ink); }
+.gh-health-article-copy span { font-size: var(--gh-fs-small); color: var(--gh-muted); line-height: 1.5; }
+.gh-health-article-meta { font-size: var(--gh-fs-micro); font-weight: var(--gh-fw-black); letter-spacing: .2px; text-transform: uppercase; }
+
+/* --------------------------------------------------------------- QR + cards */
+.gh-health-qr { display: flex; flex-wrap: wrap; gap: var(--gh-s4); align-items: flex-start; }
+.gh-health-qr-code {
+    flex: 0 0 auto;
+    width: 132px;
+    height: 132px;
+    padding: var(--gh-s3);
+    border: 1px solid var(--gh-line-strong);
+    border-radius: var(--gh-r-md);
+    background: #fff;
+    color: var(--gh-ink);
+}
+.gh-health-qr-grid { width: 100%; height: 100%; display: block; }
+.gh-health-qr-copy { flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: var(--gh-s2); }
+.gh-health-qr-note { margin: 0; font-size: var(--gh-fs-micro); line-height: 1.5; color: var(--gh-muted); }
+
+.gh-health-card-title { font-size: var(--gh-fs-body); font-weight: var(--gh-fw-black); color: var(--gh-ink); }
+.gh-health-card-sub { font-size: var(--gh-fs-small); color: var(--gh-muted); line-height: 1.5; }
+
+/* ------------------------------------------------------------- emergency band */
+.gh-health-emg-head { display: flex; align-items: center; gap: var(--gh-s3); margin-bottom: var(--gh-s3); }
+.gh-health-emg-head .ic { width: var(--gh-icon-lg); height: var(--gh-icon-lg); color: #A02718; flex: 0 0 auto; }
+.gh-health-emg-head div { display: flex; flex-direction: column; gap: 2px; }
+.gh-health-emg-head b { font-size: var(--gh-fs-h3); font-weight: var(--gh-fw-black); color: #7F1D14; }
+.gh-health-emg-head span { font-size: var(--gh-fs-small); color: #8E4A42; }
+
+/* -------------------------------------------------------------- profile opts */
+.gh-health-profile-opt { width: 100%; text-align: left; font: inherit; cursor: pointer; }
+.gh-health-profile-opt:hover { border-color: var(--gh-green); }
+
+/* ------------------------------------------------------------------ utility */
+.gh-health-btn.is-full { width: 100%; }
+.gh-health-btn.is-small { min-height: var(--gh-tap-sm); padding: 0 var(--gh-s4); font-size: var(--gh-fs-small); }
+.gh-health-actions { display: flex; flex-wrap: wrap; gap: var(--gh-s2); align-items: center; }
+
+/* Larger text / reduced motion are real settings, applied on the section root. */
+.page-container.gh-health.is-large-text { font-size: 115%; }
+.page-container.gh-health.is-large-text .gh-health-body-text,
+.page-container.gh-health.is-large-text .gh-health-rowcopy b { font-size: 1.06em; }
+.page-container.gh-health.gh-health-no-motion *,
+.page-container.gh-health.gh-health-no-motion *::before { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+
+@media (max-width: 420px) {
+    .gh-health-toggle-state { max-width: 72px; }
+    .gh-health-qr-code { width: 112px; height: 112px; }
+    .gh-health-choicegrid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Narrow phones: the dose row keeps time + copy on one line and drops the
+   actions underneath instead of stacking all three. */
+@media (max-width: 460px) {
+    .gh-health-dose {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-areas: "time copy" "actions actions";
+        align-items: center;
+        row-gap: var(--gh-s2);
+    }
+    .gh-health-dose-time { grid-area: time; }
+    .gh-health-dose-copy { grid-area: copy; }
+    .gh-health-dose-copy b { font-size: var(--gh-fs-small); }
+    .gh-health-dose-copy span { font-size: var(--gh-fs-micro); color: var(--gh-muted); line-height: 1.45; }
+    .gh-health-dose-actions { grid-area: actions; justify-content: flex-start; }
+}
+
+/* --------------------------------------------------- P2 component fixes */
+.gh-health-emg-panel {
+    padding: var(--gh-s4);
+    border: 1px solid #F6C9C5;
+    border-radius: var(--gh-r-lg);
+    background: linear-gradient(180deg, #FEF4F3 0%, #FFFFFF 100%);
+    margin-bottom: var(--gh-s3);
+}
+.gh-health-emg-panel > p {
+    margin: 0 0 var(--gh-s3);
+    font-size: var(--gh-fs-small);
+    line-height: 1.6;
+    color: var(--gh-text);
+}
+.gh-health-emg-panel .gh-health-actions { flex-direction: column; align-items: stretch; }
+.gh-health-emg-panel .gh-health-btn { justify-content: flex-start; }
+
+.gh-health-legend {
+    align-items: flex-start;
+    font-size: var(--gh-fs-small);
+    line-height: 1.5;
+    color: var(--gh-muted);
+    margin: var(--gh-s4) 0 var(--gh-s2);
+}
+.gh-health-legend .ic { width: var(--gh-icon-sm); height: var(--gh-icon-sm); flex: 0 0 auto; margin-top: 1px; }
+.gh-health-legend span { flex: 1 1 auto; min-width: 0; }
+
+.gh-health-check span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.gh-health-check em { font-style: normal; font-size: var(--gh-fs-micro); color: var(--gh-muted); line-height: 1.45; }
+
+.gh-health-btn { max-width: 100%; }
+.gh-health-btn span { min-width: 0; overflow-wrap: anywhere; }
+
+.gh-health-section-head { align-items: flex-start; gap: var(--gh-s3); }
+.gh-health-section-title { margin: 0; }
+.gh-health-section-sub { margin: 2px 0 0; }
+
+/* Row subtitles and dose details carry dates, numbers and phone contacts, so
+   they step up one size from the micro label scale for legibility. */
+.gh-health-rowcopy small { font-size: var(--gh-fs-small); line-height: 1.5; }
+.gh-health-dose-copy span { font-size: var(--gh-fs-small); }
+
+/* ==========================================================================
+   9. CLINICAL SYSTEM (v3) — colour identity, rhythm, and a layout that never
+      crowds. Appended after P2 so it wins on equal specificity.
+
+      Rules of this layer:
+        · colour carries meaning, never decoration (see the tone map below);
+        · every surface is one white card on one soft canvas, one radius, one
+          shadow — nothing floats loose on the background;
+        · no control is allowed to shrink below its label: buttons never wrap
+          a word, rows keep their action at full width;
+        · a phone gets one column, a tablet two, a desktop three. Nothing
+          stretches to look empty.
+   ========================================================================== */
+
+.page-container.gh-health {
+    /* ---- clinical tone map -------------------------------------------------
+       identity · safe · verified   → green
+       vitals · medical ID          → teal
+       appointments · services      → blue
+       records · documents          → violet
+       medication · caution         → amber
+       emergency only               → red
+       utility · device-local       → slate                                 */
+    --hx-green: #0E9B78;
+    --hx-green-soft: #E7F6F0;
+    --hx-green-ink: #0A6E56;
+
+    --hx-teal: #0D8D9E;
+    --hx-teal-soft: #E3F4F7;
+    --hx-teal-ink: #0A6473;
+
+    --hx-blue: #2563EB;
+    --hx-blue-soft: #E9F0FE;
+    --hx-blue-ink: #1D4ED8;
+
+    --hx-violet: #7C53E0;
+    --hx-violet-soft: #F0EBFE;
+    --hx-violet-ink: #5B34B8;
+
+    --hx-amber: #B7791F;
+    --hx-amber-soft: #FCF3E2;
+    --hx-amber-ink: #8A5B00;
+
+    --hx-red: #DC2626;
+    --hx-red-soft: #FDECEC;
+    --hx-red-ink: #A11818;
+
+    --hx-slate: #5B7180;
+    --hx-slate-soft: #EEF3F6;
+    --hx-slate-ink: #3D5260;
+
+    --hx-line: #E6EFEB;
+    --hx-line-soft: #EFF5F2;
+    --hx-card-shadow: 0 1px 2px rgba(9, 30, 46, .04), 0 12px 24px -20px rgba(9, 30, 46, .3);
+    --hx-card-shadow-lift: 0 2px 4px rgba(9, 30, 46, .05), 0 18px 34px -24px rgba(9, 30, 46, .38);
+    --hx-gap: 12px;
+    --hx-canvas: #F5F9F7;
+}
+
+/* ---------------------------------------------------------- tone resolver */
+
+.page-container.gh-health [data-tone="green"]  { --hx-tone: var(--hx-green);  --hx-soft: var(--hx-green-soft);  --hx-ink2: var(--hx-green-ink); }
+.page-container.gh-health [data-tone="teal"]   { --hx-tone: var(--hx-teal);   --hx-soft: var(--hx-teal-soft);   --hx-ink2: var(--hx-teal-ink); }
+.page-container.gh-health [data-tone="blue"]   { --hx-tone: var(--hx-blue);   --hx-soft: var(--hx-blue-soft);   --hx-ink2: var(--hx-blue-ink); }
+.page-container.gh-health [data-tone="violet"] { --hx-tone: var(--hx-violet); --hx-soft: var(--hx-violet-soft); --hx-ink2: var(--hx-violet-ink); }
+.page-container.gh-health [data-tone="amber"]  { --hx-tone: var(--hx-amber);  --hx-soft: var(--hx-amber-soft);  --hx-ink2: var(--hx-amber-ink); }
+.page-container.gh-health [data-tone="red"]    { --hx-tone: var(--hx-red);    --hx-soft: var(--hx-red-soft);    --hx-ink2: var(--hx-red-ink); }
+.page-container.gh-health [data-tone="slate"]  { --hx-tone: var(--hx-slate);  --hx-soft: var(--hx-slate-soft);  --hx-ink2: var(--hx-slate-ink); }
+
+.page-container.gh-health {
+    background:
+        radial-gradient(120% 60% at 50% -10%, #EAF7F1 0%, rgba(234, 247, 241, 0) 62%),
+        var(--hx-canvas);
+}
+
+/* ============================================================ 9.1 THE TABS */
+/* Six partitions in a legible grid: 3×2 on a phone, one row from 720px.
+   Nothing scrolls sideways, so nothing is ever half-cut. */
+
+.gh-health-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 6px;
+    margin: var(--gh-s4) 0 var(--gh-s5);
+    border-radius: 20px;
+    border-color: var(--hx-line);
+    background: #FFFFFF;
+    box-shadow: var(--hx-card-shadow);
+    overflow: visible;
+    scroll-snap-type: none;
+}
+
+.gh-health-tab {
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 6px;
+    border-radius: 15px;
+    font-size: 10.6px;
+    font-weight: 800;
+    letter-spacing: .1px;
+    color: #5B7180;
+    white-space: nowrap;
+}
+
+.gh-health-tab .ic { width: 16px; height: 16px; flex: 0 0 auto; opacity: .9; }
+.gh-health-tab:hover { background: var(--hx-green-soft); color: var(--hx-green-ink); }
+
+.gh-health-tab.is-active {
+    background: linear-gradient(135deg, #0E9B78 0%, #0A6E56 100%);
+    color: #FFFFFF;
+    box-shadow: 0 8px 16px -10px rgba(10, 110, 86, .85);
+}
+
+.gh-health-tab.is-active .ic { opacity: 1; }
+
+@media (min-width: 720px) {
+    .gh-health-tabs { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .gh-health-tab { font-size: var(--gh-fs-small); }
+}
+
+/* ========================================================== 9.2 THE HEADER */
+
+.page-container.gh-health .gh-health-head { padding: var(--gh-s4) 0 var(--gh-s2); }
+
+.page-container.gh-health .gh-health-mark {
+    background: linear-gradient(135deg, #E3F4F7 0%, #E7F6F0 100%);
+    border-color: #CFE7E0;
+    color: var(--hx-green-ink);
+}
+
+.page-container.gh-health .gh-health-context { margin-top: var(--gh-s2); }
+.page-container.gh-health .gh-health-sync { background: #EFF5F2; color: var(--hx-slate); }
+
+/* ============================================================= 9.3 THE HERO */
+
+.page-container.gh-health .gh-health-intro {
+    border-radius: 22px;
+    background: linear-gradient(135deg, #0B7E63 0%, #0E8F7C 46%, #12739B 100%);
+    box-shadow: 0 18px 34px -24px rgba(6, 78, 62, .95);
+    overflow: hidden;
+}
+
+.page-container.gh-health .gh-health-intro::after {
+    content: "";
+    position: absolute;
+    inset: auto -40px -70px auto;
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, .16) 0%, rgba(255, 255, 255, 0) 68%);
+    pointer-events: none;
+}
+
+.page-container.gh-health .gh-health-intro-title { letter-spacing: -0.4px; color: #FFFFFF; }
+.page-container.gh-health .gh-health-intro-text { color: rgba(255, 255, 255, .86); }
+.page-container.gh-health .gh-health-eyebrow,
+.page-container.gh-health .gh-health-eyebrow span { color: rgba(255, 255, 255, .82); }
+.page-container.gh-health .gh-health-eyebrow .ic { color: #FFFFFF; opacity: .9; }
+
+/* the hero's primary action is solid white on the green band */
+.page-container.gh-health .gh-health-intro-actions .gh-health-btn.is-primary {
+    background: #FFFFFF;
+    border-color: #FFFFFF;
+    color: var(--hx-green-ink);
+    box-shadow: 0 10px 20px -14px rgba(0, 0, 0, .55);
+}
+
+.page-container.gh-health .gh-health-intro-actions .gh-health-btn.is-primary:hover {
+    background: #F2FBF7;
+    border-color: #F2FBF7;
+    color: var(--hx-green-ink);
+}
+
+.page-container.gh-health .gh-health-intro-actions .gh-health-btn:not(.is-primary) {
+    background: rgba(255, 255, 255, .16);
+    border-color: rgba(255, 255, 255, .35);
+    color: #FFFFFF;
+}
+
+.page-container.gh-health .gh-health-intro-actions .gh-health-btn:not(.is-primary):hover {
+    background: rgba(255, 255, 255, .24);
+    color: #FFFFFF;
+}
+.page-container.gh-health .gh-health-introchips li {
+    background: rgba(255, 255, 255, .14);
+    border-color: rgba(255, 255, 255, .24);
+    color: #FFFFFF;
+}
+
+/* ========================================================== 9.4 THE STATS */
+/* Label on top, figure under it, one line of context. Four across on desktop.
+   Equal heights so the block reads as one instrument panel. */
+
+.gh-health-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.gh-health-stat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-height: 84px;
+    padding: 11px 12px 12px;
+    border: 1px solid var(--hx-line);
+    border-radius: 16px;
+    background:
+        linear-gradient(180deg, var(--hx-soft, #EFF5F2) 0%, rgba(255, 255, 255, 0) 62%),
+        #FFFFFF;
+    box-shadow: var(--hx-card-shadow);
+    overflow: hidden;
+}
+
+.gh-health-stat::before { display: none; }
+
+.gh-health-stat:hover { border-color: #CDE4DB; box-shadow: var(--hx-card-shadow-lift); }
+
+.gh-health-stat-label {
+    order: 1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .55px;
+    text-transform: uppercase;
+    color: var(--hx-ink2, var(--hx-slate));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gh-health-stat-label::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--hx-tone, var(--hx-green));
+    flex: 0 0 auto;
+}
+
+.gh-health-stat-value {
+    order: 2;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    color: var(--gh-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.gh-health-stat-value.is-empty { color: #9AAAB3; }
+
+.gh-health-stat-sub {
+    order: 3;
+    margin-top: auto;
+    font-size: 9.6px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--gh-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (min-width: 720px) {
+    .gh-health-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* ================================================== 9.5 SECTION + CARD RHYTHM */
+
+.page-container.gh-health .gh-health-section { margin-bottom: var(--gh-s6); }
+
+.page-container.gh-health .gh-health-section-head {
+    display: flex;
+    align-items: center;
+    gap: var(--gh-s3);
+    margin: 0 0 var(--gh-s3);
+    padding-left: 2px;
+}
+
+.page-container.gh-health .gh-health-section-head > div { min-width: 0; flex: 1 1 auto; }
+
+.page-container.gh-health .gh-health-section-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11.4px;
+    font-weight: 800;
+    letter-spacing: .55px;
+    text-transform: uppercase;
+    color: var(--hx-slate-ink);
+}
+
+.page-container.gh-health .gh-health-section-title::before {
+    content: "";
+    width: 3px;
+    height: 13px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #0E9B78, #12739B);
+    flex: 0 0 auto;
+}
+
+.page-container.gh-health .gh-health-section-sub {
+    margin: 2px 0 0 10px;
+    font-size: 10.4px;
+    color: var(--gh-muted);
+    line-height: 1.4;
+}
+
+.page-container.gh-health .gh-health-block {
+    border: 1px solid var(--hx-line);
+    border-radius: 18px;
+    padding: 14px;
+    box-shadow: var(--hx-card-shadow);
+}
+
+.page-container.gh-health .gh-health-block + .gh-health-block { margin-top: 10px; }
+
+.page-container.gh-health .gh-health-block-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--hx-line-soft);
+}
+
+.page-container.gh-health .gh-health-block-title {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 12.6px;
+    font-weight: 800;
+    letter-spacing: -0.1px;
+    word-spacing: .04em;
+    line-height: 1.3;
+    color: var(--gh-ink);
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.page-container.gh-health .gh-health-block-ico {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    flex: 0 0 auto;
+    border-radius: 9px;
+    background: var(--hx-soft, var(--hx-green-soft));
+    color: var(--hx-tone, var(--hx-green));
+}
+
+.page-container.gh-health .gh-health-block-ico .ic { width: 14px; height: 14px; }
+
+.page-container.gh-health .gh-health-block-note {
+    margin: 10px 0 0;
+    padding-top: 9px;
+    border-top: 1px dashed var(--hx-line);
+    font-size: 10.2px;
+    line-height: 1.5;
+    color: var(--gh-muted);
+}
+
+/* ================================================================ 9.6 ROWS */
+/* One row grammar for the whole section: tinted icon chip · copy · count ·
+   action. The action never shrinks and never wraps a word. */
+
+.gh-health-rows { gap: 8px; }
+
+.page-container.gh-health .gh-health-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto minmax(auto, max-content);
+    align-items: center;
+    gap: 10px;
+    min-height: 58px;
+    padding: 9px 10px 9px 9px;
+    border: 1px solid var(--hx-line);
+    border-radius: 14px;
+    background: #FFFFFF;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.page-container.gh-health .gh-health-row:hover {
+    border-color: #CFE4DB;
+    box-shadow: var(--hx-card-shadow);
+}
+
+.page-container.gh-health .gh-health-row > .ic {
+    box-sizing: border-box;
+    width: 36px;
+    height: 36px;
+    padding: 9px;
+    border-radius: 11px;
+    background: var(--hx-soft, var(--hx-green-soft));
+    color: var(--hx-tone, var(--hx-green));
+    flex: 0 0 auto;
+}
+
+.page-container.gh-health .gh-health-rowcopy { min-width: 0; }
+
+.page-container.gh-health .gh-health-rowcopy b {
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.05px;
+    color: var(--gh-ink);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-spacing: .1em;
+}
+
+.page-container.gh-health .gh-health-rowcopy small {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 1px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--gh-muted);
+    word-spacing: .04em;
+}
+
+.page-container.gh-health .gh-health-rowcopy .gh-health-chiprow { margin-top: 5px; }
+
+.page-container.gh-health .gh-health-rowmeta {
+    display: grid;
+    place-items: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--hx-soft, var(--hx-slate-soft));
+    color: var(--hx-ink2, var(--hx-slate-ink));
+    font-size: 10px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.page-container.gh-health .gh-health-row > .gh-health-btn {
+    flex: 0 0 auto;
+    width: auto;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 11px;
+    font-size: 10.6px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.page-container.gh-health .gh-health-row > .gh-health-btn .ic { width: 14px; height: 14px; }
+
+.page-container.gh-health .gh-health-row > .gh-health-iconbtn {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+}
+
+/* ============================================================== 9.7 BUTTONS */
+/* A label is never broken mid-word: `anywhere` was letting "Fungua" split. */
+
+.page-container.gh-health .gh-health-btn { white-space: nowrap; }
+.page-container.gh-health .gh-health-row > .gh-health-btn,
+.page-container.gh-health .gh-health-row > .gh-health-btn span { flex: 0 0 auto; }
+.page-container.gh-health .gh-health-row > .gh-health-btn:not(.is-small) { min-height: 34px; }
+.page-container.gh-health .gh-health-btn span { overflow-wrap: normal; word-break: normal; }
+
+.page-container.gh-health .gh-health-btn:not(.is-small) { min-height: 42px; }
+
+.page-container.gh-health .gh-health-btn.is-primary {
+    background: linear-gradient(135deg, #0E9B78 0%, #0A6E56 100%);
+    border-color: transparent;
+    box-shadow: 0 8px 16px -10px rgba(10, 110, 86, .9);
+}
+
+.page-container.gh-health .gh-health-btn.is-primary:hover {
+    background: linear-gradient(135deg, #0C8A6A 0%, #08604B 100%);
+    color: #FFFFFF;
+}
+
+.page-container.gh-health .gh-health-btn.is-blue {
+    background: linear-gradient(135deg, #2F6BEE 0%, #1D4ED8 100%);
+}
+
+.page-container.gh-health .gh-health-btn.is-danger { border-color: #F3CFCB; color: var(--hx-red-ink); }
+
+/* ============================================================ 9.8 THE INPUTS */
+
+.page-container.gh-health .gh-health-search {
+    border-color: var(--hx-line);
+    box-shadow: 0 1px 2px rgba(9, 30, 46, .03);
+}
+
+.page-container.gh-health .gh-health-search .ic { color: #7E8E98; width: 17px; height: 17px; }
+.page-container.gh-health .gh-health-search:focus-within { border-color: #7FD0B4; }
+
+.page-container.gh-health .gh-health-select,
+.page-container.gh-health .gh-health-input,
+.page-container.gh-health .gh-health-textarea {
+    border-color: var(--hx-line);
+    border-radius: 12px;
+    background: #FFFFFF;
+}
+
+.page-container.gh-health .gh-health-label {
+    font-size: 9.6px;
+    font-weight: 800;
+    letter-spacing: .45px;
+    text-transform: uppercase;
+    color: var(--hx-slate-ink);
+}
+
+/* ============================================================= 9.9 THE CHIPS */
+
+.page-container.gh-health .gh-health-chip {
+    min-height: 20px;
+    padding: 2px 8px;
+    border-radius: 7px;
+    font-size: 8.8px;
+    letter-spacing: .35px;
+}
+
+.page-container.gh-health .gh-health-chip.is-neutral { background: var(--hx-slate-soft); border-color: #DFE9EE; color: var(--hx-slate-ink); }
+
+/* ========================================================== 9.10 EMPTY STATE */
+/* A quiet line, not a monument: one icon chip, one bold line, one short line. */
+
+.page-container.gh-health .gh-health-empty {
+    align-items: flex-start;
+    gap: 9px;
+    padding: 16px 14px;
+    border: 1px dashed #D5E6DF;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #FBFDFC 0%, #FFFFFF 100%);
+}
+
+.page-container.gh-health .gh-health-empty-ico {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    background: var(--hx-soft, var(--hx-slate-soft));
+    border: 0;
+    color: var(--hx-tone, var(--hx-slate));
+}
+
+.page-container.gh-health .gh-health-empty-ico .ic { width: 17px; height: 17px; }
+
+.page-container.gh-health .gh-health-empty b {
+    font-size: 12.4px;
+    font-weight: 800;
+    line-height: 1.3;
+    color: var(--gh-ink);
+}
+
+.page-container.gh-health .gh-health-empty p {
+    font-size: 10.6px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--gh-muted);
+    max-width: 46ch;
+}
+
+.page-container.gh-health .gh-health-empty > .gh-health-btn { margin-top: 2px; }
+
+/* side-by-side variant used inside a card that already explains itself */
+.page-container.gh-health .gh-health-empty.is-inline {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 11px 12px;
+    border-style: solid;
+}
+
+.page-container.gh-health .gh-health-empty.is-inline .gh-health-empty-ico { width: 30px; height: 30px; border-radius: 10px; }
+.page-container.gh-health .gh-health-empty.is-inline b { flex: 1 1 120px; font-size: 11.4px; }
+.page-container.gh-health .gh-health-empty.is-inline p { flex: 1 1 100%; font-size: 10px; max-width: none; }
+.page-container.gh-health .gh-health-empty.is-inline > .gh-health-btn { margin-left: auto; }
+
+/* ============================================================ 9.11 MEDICAL ID */
+
+.page-container.gh-health .gh-health-mid {
+    border: 1px solid var(--hx-line);
+    border-radius: 20px;
+    background: #FFFFFF;
+    box-shadow: var(--hx-card-shadow);
+    overflow: hidden;
+}
+
+.page-container.gh-health .gh-health-mid-top {
+    padding: 13px 14px;
+    background: linear-gradient(135deg, #0D8D9E 0%, #0E9B78 100%);
+    border: 0;
+}
+
+.page-container.gh-health .gh-health-mid-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    background: rgba(255, 255, 255, .18);
+    border-color: rgba(255, 255, 255, .3);
+    color: #FFFFFF;
+}
+
+.page-container.gh-health .gh-health-mid-title { color: #FFFFFF; font-size: 13.4px; }
+.page-container.gh-health .gh-health-mid-sub { color: rgba(255, 255, 255, .82); font-size: 10px; }
+.page-container.gh-health .gh-health-mid-top .gh-health-chip {
+    background: rgba(255, 255, 255, .2);
+    border-color: rgba(255, 255, 255, .34);
+    color: #FFFFFF;
+}
+
+.page-container.gh-health .gh-health-mid-body { padding: 13px 14px; }
+.page-container.gh-health .gh-health-mid-actions {
+    padding: 0 14px 14px;
+    gap: 7px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.page-container.gh-health .gh-health-mid-actions > .gh-health-btn { width: 100%; justify-content: center; }
+.page-container.gh-health .gh-health-mid-actions > .gh-health-btn:first-child { grid-column: 1 / -1; }
+
+/* ============================================================ 9.12 FACT GRID */
+
+.page-container.gh-health .gh-health-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.page-container.gh-health .gh-health-fact {
+    padding: 8px 10px;
+    border: 1px solid var(--hx-line-soft);
+    border-radius: 11px;
+    background: #FBFDFC;
+}
+
+.page-container.gh-health .gh-health-fact dt {
+    font-size: 8.8px;
+    font-weight: 800;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    color: #7E8E98;
+}
+
+.page-container.gh-health .gh-health-fact dd {
+    margin: 2px 0 0;
+    font-size: 11.6px;
+    font-weight: 700;
+    color: var(--gh-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ================================================================ 9.13 LEGEND */
+/* Was a lone icon on its own line: now an icon pinned to the first line. */
+
+.page-container.gh-health .gh-health-legend {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 7px;
+    margin: var(--gh-s3) 0 0;
+    padding: 9px 11px;
+    border: 1px solid var(--hx-line);
+    border-radius: 12px;
+    background: #FBFDFC;
+    font-size: 10.2px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--gh-muted);
+}
+
+.page-container.gh-health .gh-health-legend .ic {
+    width: 14px;
+    height: 14px;
+    margin-top: 1px;
+    color: var(--hx-slate);
+}
+
+/* ============================================================== 9.14 MEDS ROW */
+
+.page-container.gh-health .gh-health-dose-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.page-container.gh-health .gh-health-dose-actions .gh-health-btn {
+    flex: 0 0 auto;
+    min-height: 34px;
+    padding: 0 12px;
+    font-size: 10.4px;
+    border-radius: 11px;
+}
+
+.page-container.gh-health .gh-health-dose {
+    border: 1px solid var(--hx-line);
+    border-left: 3px solid var(--hx-tone, var(--hx-amber));
+    border-radius: 13px;
+    background: #FFFFFF;
+    padding: 9px 10px;
+}
+
+.page-container.gh-health .gh-health-dose-time {
+    min-width: 44px;
+    font-size: 11px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--hx-tone, var(--hx-amber));
+}
+
+.page-container.gh-health .gh-health-dose.is-taken { border-left-color: var(--hx-green); }
+.page-container.gh-health .gh-health-dose.is-taken .gh-health-dose-time { color: var(--hx-green-ink); }
+.page-container.gh-health .gh-health-dose.is-skipped { border-left-color: var(--hx-slate); }
+.page-container.gh-health .gh-health-dose.is-skipped .gh-health-dose-time { color: var(--hx-slate); }
+.page-container.gh-health .gh-health-dose.is-missed { border-left-color: var(--hx-red); }
+.page-container.gh-health .gh-health-dose.is-missed .gh-health-dose-time { color: var(--hx-red-ink); }
+
+/* ========================================================= 9.15 SEG + FILTERS */
+
+.page-container.gh-health .gh-health-seg {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+}
+
+.page-container.gh-health .gh-health-seg > button {
+    min-height: 30px;
+    padding: 0 11px;
+    border: 1px solid var(--hx-line);
+    border-radius: 999px;
+    background: #FFFFFF;
+    color: var(--hx-slate-ink);
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.page-container.gh-health .gh-health-seg > button.is-active {
+    background: var(--hx-green-ink);
+    border-color: var(--hx-green-ink);
+    color: #FFFFFF;
+}
+
+/* ======================================================= 9.16 SCREEN HEADER */
+
+.page-container.gh-health .gh-health-screen-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 0 10px;
+    border-bottom: 1px solid var(--hx-line);
+    margin-bottom: 12px;
+}
+
+.page-container.gh-health .gh-health-back {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    border-color: var(--hx-line);
+    background: #FFFFFF;
+}
+
+.page-container.gh-health .gh-health-screen-title { font-size: 15px; font-weight: 800; letter-spacing: -0.2px; }
+.page-container.gh-health .gh-health-screen-sub { font-size: 10px; color: var(--gh-muted); }
+
+/* ============================================================== 9.17 THE PRO */
+
+.page-container.gh-health .gh-health-pro {
+    border: 1px solid var(--hx-line);
+    border-radius: 14px;
+    padding: 10px;
+    background: #FBFDFC;
+}
+
+.page-container.gh-health .gh-health-pro-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #E3F4F7, #E7F6F0);
+    color: var(--hx-teal-ink);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+/* ========================================================== 9.18 RESPONSIVE */
+
+@media (min-width: 720px) {
+    .page-container.gh-health .gh-health-inner { padding: 0 var(--gh-s7) var(--gh-s8); }
+    .page-container.gh-health .gh-health-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .page-container.gh-health .gh-health-facts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .page-container.gh-health .gh-health-mid-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .page-container.gh-health .gh-health-mid-actions > .gh-health-btn:first-child { grid-column: auto; }
+}
+
+@media (max-width: 400px) {
+    .page-container.gh-health .gh-health-tab { font-size: 9.8px; gap: 4px; padding: 0 4px; }
+    .page-container.gh-health .gh-health-tab .ic { width: 14px; height: 14px; }
+    .page-container.gh-health .gh-health-rowcopy b { font-size: 11.4px; }
+    .page-container.gh-health .gh-health-row > .gh-health-btn { padding: 0 10px; font-size: 10px; }
+}
+
+/* last line of the page always clears the SOS bar */
+.page-container.gh-health .gh-health-inner > *:last-child { margin-bottom: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+    .page-container.gh-health *,
+    .page-container.gh-health *::before { transition: none !important; animation: none !important; }
+}
+
+/* --------------------------------------------- 9.19 PROGRESS ROW (meter + %) */
+.page-container.gh-health .gh-health-progress {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 3px 10px;
+    margin-bottom: 11px;
+}
+
+.page-container.gh-health .gh-health-progress-label {
+    font-size: 9.4px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: var(--hx-slate-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.page-container.gh-health .gh-health-progress-value {
+    font-size: 11px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--hx-tone, var(--hx-green-ink));
+    white-space: nowrap;
+}
+
+.page-container.gh-health .gh-health-progress .gh-health-meter { grid-column: 1 / -1; height: 6px; }
+.page-container.gh-health .gh-health-meter { background: #E7EFEB; }
+
+/* space between words stays visible at small bold sizes */
+.page-container.gh-health .gh-health-empty b,
+.page-container.gh-health .gh-health-seg > button,
+.page-container.gh-health .gh-health-stat-label,
+.page-container.gh-health .gh-health-block-title,
+.page-container.gh-health .gh-health-rowcopy small,
+.page-container.gh-health .gh-health-section-title,
+.page-container.gh-health .gh-health-progress-label { word-spacing: .1em; }
+
+/* =================================================== 9.20 DETAIL DL + SWITCHES */
+/* Label above value, full width, one hairline between rows: a chart reads
+   down the page instead of across a squeezed table. */
+
+.page-container.gh-health .gh-health-dl { display: block; }
+
+.page-container.gh-health .gh-health-dl-row {
+    display: block;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--hx-line-soft);
+}
+
+.page-container.gh-health .gh-health-dl-row:last-child { border-bottom: 0; padding-bottom: 0; }
+
+.page-container.gh-health .gh-health-dl-row dt {
+    font-size: 8.8px;
+    font-weight: 800;
+    letter-spacing: .45px;
+    text-transform: uppercase;
+    color: #7E8E98;
+}
+
+.page-container.gh-health .gh-health-dl-row dd {
+    margin: 2px 0 0;
+    font-size: 11.6px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--gh-ink);
+    word-spacing: .08em;
+}
+
+/* settings: the state word sits under its label, never beside a switch */
+.page-container.gh-health .gh-health-toggle {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 10px;
+    padding: 9px 0;
+}
+
+.page-container.gh-health .gh-health-toggle-state {
+    grid-column: 2;
+    margin-top: 3px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    color: var(--hx-amber-ink);
+    max-width: none;
+    white-space: normal;
+}
+
+.page-container.gh-health .gh-health-toggle-state.is-on { color: var(--hx-green-ink); }
+.page-container.gh-health .gh-health-toggle-state.is-off { color: var(--hx-slate); }
+
+/* ------------------------------------ 9.21 SCREEN-LEVEL TONE (inherited cue)
+   A sub-screen paints all of its cards in one hue, so the section announces
+   itself before a word is read: a record screen is violet, an appointment
+   screen is blue, an emergency screen is red. Blocks that carry their own
+   data-tone still win. */
+
+.page-container.gh-health [data-health-screen="medical-profile"],
+.page-container.gh-health [data-health-screen="medical-edit"],
+.page-container.gh-health [data-health-screen="medical-qr"] { --hx-tone: var(--hx-teal); --hx-soft: var(--hx-teal-soft); --hx-ink2: var(--hx-teal-ink); }
+
+.page-container.gh-health [data-health-screen="medical-contacts"] { --hx-tone: var(--hx-red); --hx-soft: var(--hx-red-soft); --hx-ink2: var(--hx-red-ink); }
+
+.page-container.gh-health [data-health-screen="record-new"],
+.page-container.gh-health [data-health-screen="record-view"] { --hx-tone: var(--hx-violet); --hx-soft: var(--hx-violet-soft); --hx-ink2: var(--hx-violet-ink); }
+
+.page-container.gh-health [data-health-screen="med-new"],
+.page-container.gh-health [data-health-screen="med-view"],
+.page-container.gh-health [data-health-screen="med-history"] { --hx-tone: var(--hx-amber); --hx-soft: var(--hx-amber-soft); --hx-ink2: var(--hx-amber-ink); }
+
+.page-container.gh-health [data-health-screen="doctors"],
+.page-container.gh-health [data-health-screen="doctor-view"] { --hx-tone: var(--hx-green); --hx-soft: var(--hx-green-soft); --hx-ink2: var(--hx-green-ink); }
+
+.page-container.gh-health [data-health-screen="appointments"],
+.page-container.gh-health [data-health-screen="appt-new"],
+.page-container.gh-health [data-health-screen="appt-view"],
+.page-container.gh-health [data-health-screen="appt-reschedule"] { --hx-tone: var(--hx-blue); --hx-soft: var(--hx-blue-soft); --hx-ink2: var(--hx-blue-ink); }
+
+.page-container.gh-health [data-health-screen="cases"],
+.page-container.gh-health [data-health-screen="case-new"],
+.page-container.gh-health [data-health-screen="case-view"],
+.page-container.gh-health [data-health-screen="meetings"],
+.page-container.gh-health [data-health-screen="meeting-new"],
+.page-container.gh-health [data-health-screen="meeting-view"],
+.page-container.gh-health [data-health-screen="communities"],
+.page-container.gh-health [data-health-screen="community-view"] { --hx-tone: var(--hx-teal); --hx-soft: var(--hx-teal-soft); --hx-ink2: var(--hx-teal-ink); }
+
+.page-container.gh-health [data-health-screen="referrals"],
+.page-container.gh-health [data-health-screen="referral-new"],
+.page-container.gh-health [data-health-screen="referral-view"] { --hx-tone: var(--hx-amber); --hx-soft: var(--hx-amber-soft); --hx-ink2: var(--hx-amber-ink); }
+
+.page-container.gh-health [data-health-screen="pro"] { --hx-tone: var(--hx-green); --hx-soft: var(--hx-green-soft); --hx-ink2: var(--hx-green-ink); }
+
+.page-container.gh-health [data-health-screen="blood"] { --hx-tone: var(--hx-violet); --hx-soft: var(--hx-violet-soft); --hx-ink2: var(--hx-violet-ink); }
+
+.page-container.gh-health [data-health-screen="emergency"],
+.page-container.gh-health [data-health-screen="emergency-new"],
+.page-container.gh-health [data-health-screen="emergency-review"],
+.page-container.gh-health [data-health-screen="emergency-view"],
+.page-container.gh-health [data-health-screen="urgent"] { --hx-tone: var(--hx-red); --hx-soft: var(--hx-red-soft); --hx-ink2: var(--hx-red-ink); }
+
+.page-container.gh-health [data-health-screen="education"],
+.page-container.gh-health [data-health-screen="article-view"] { --hx-tone: var(--hx-green); --hx-soft: var(--hx-green-soft); --hx-ink2: var(--hx-green-ink); }
+
+.page-container.gh-health [data-health-screen="notifications"] { --hx-tone: var(--hx-amber); --hx-soft: var(--hx-amber-soft); --hx-ink2: var(--hx-amber-ink); }
+
+.page-container.gh-health [data-health-screen="settings"],
+.page-container.gh-health [data-health-screen="about"],
+.page-container.gh-health [data-health-screen="soon"],
+.page-container.gh-health [data-health-screen="routine"] { --hx-tone: var(--hx-slate); --hx-soft: var(--hx-slate-soft); --hx-ink2: var(--hx-slate-ink); }
+
+/* the screen wrapper gets a tinted edge so the hue is visible, not implied */
+.page-container.gh-health .gh-health-screen > .gh-health-block:first-child,
+.page-container.gh-health .gh-health-screen > .gh-health-stats + .gh-health-block { border-top: 3px solid var(--hx-tone, var(--hx-green)); }

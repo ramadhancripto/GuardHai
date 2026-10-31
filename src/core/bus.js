@@ -50,5 +50,18 @@ export const EVENTS = {
   REPORT_FILED: 'report:filed',
   PROFILE_UPDATED: 'profile:updated',
   PROFILE_FOLLOW_CHANGED: 'profile:follow-changed',
-  TOAST: 'ui:toast'
+  TOAST: 'ui:toast',
+
+  /* Communication & Support Network — added for the network services */
+  CONVERSATION_CHANGED: 'chat:conversation-changed',
+  MESSAGE_SENT: 'chat:message-sent',
+  GUARDIAN_CHANGED: 'guardian:changed',
+  SUPPORT_CHANGED: 'support:changed',
+  COMMUNITY_CHANGED: 'community:changed',
+  SAFETY_CHANGED: 'safety:changed',
+  ALERT_CREATED: 'ui:alert',
+  TRANSPORT_CHANGED: 'transport:changed',
+  OUTBOX_CHANGED: 'transport:outbox',
+  OUTBOX_FLUSHED: 'transport:outbox-flushed',
+  CONNECTIVITY: 'transport:connectivity'
 };

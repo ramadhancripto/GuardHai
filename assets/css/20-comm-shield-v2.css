@@ -1,0 +1,1043 @@
+/* ==========================================================================
+   GuardHai · assets/css/20-comm-shield-v2.css
+   Mazungumzo (Chat) + Ulinzi (Shield Center) — the same pass Home got.
+
+   Additive; loaded last, so every rule is a deliberate override of 14/16/17.
+
+   The rules:
+     · one surface ladder — canvas, white sheet, one border, one shadow;
+     · the page head is a line of text, not a card;
+     · the section strip never scrolls sideways and never clips a word:
+       5 equal columns on a phone, 7 on a wide screen, icon over label;
+     · a conversation is its own place — the partition strip goes away while
+       a thread is open, and the thread header is the page header;
+     · one honesty line per screen instead of a banner block.
+   ========================================================================== */
+
+:is(#commPage, #shieldPage) {
+    --hv-canvas: #F5F8FB;
+    --hv-card: #FFFFFF;
+    --hv-line: #E6EDF3;
+    --hv-line-soft: #EFF4F8;
+    --hv-ink: #0B1B2B;
+    --hv-text: #24384C;
+    --hv-muted: #65788C;
+    --hv-faint: #8FA0B1;
+    --hv-green: #12A67F;
+    --hv-green-ink: #0A6E56;
+    --hv-green-soft: #E6F7F1;
+    --hv-blue: #2563EB;
+    --hv-blue-soft: #E9F0FE;
+    --hv-violet: #7C3AED;
+    --hv-violet-soft: #F1EBFE;
+    --hv-amber: #B7791F;
+    --hv-amber-soft: #FBF3E0;
+    --hv-red: #D92D2D;
+    --hv-red-soft: #FDECEC;
+    --hv-r-sm: 10px;
+    --hv-r-md: 14px;
+    --hv-r-lg: 20px;
+    --hv-r-xl: 24px;
+    --hv-shadow-1: 0 1px 2px rgba(11, 27, 43, .05);
+    --hv-shadow-2: 0 2px 4px rgba(11, 27, 43, .04), 0 12px 24px -18px rgba(11, 27, 43, .34);
+    background:
+        radial-gradient(120% 40% at 50% 0%, #EAF6F2 0%, rgba(234, 246, 242, 0) 62%),
+        var(--hv-canvas);
+    color: var(--hv-text);
+}
+
+/* ============================================================ 1. NET HEAD */
+/* Title + subtitle + the two icons, on the page background. No card: the
+   inbox list is the only card on this screen. */
+
+#commPage .gh-net-inner { padding: 0 16px calc(132px + env(safe-area-inset-bottom, 0px)); }
+
+#commPage .gh-net-head {
+    margin: 0;
+    padding: 12px 0 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+}
+
+#commPage .gh-net-headrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    border: 0;
+    background: none;
+}
+
+#commPage .gh-net-back,
+#commPage .gh-net-iconbtn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    flex: none;
+    padding: 0;
+    border: 1px solid var(--hv-line);
+    border-radius: 12px;
+    background: var(--hv-card);
+    color: var(--hv-ink);
+    box-shadow: var(--hv-shadow-1);
+}
+
+#commPage .gh-net-back[hidden] { display: none; }
+#commPage .gh-net-back .ic,
+#commPage .gh-net-iconbtn .ic { width: 18px; height: 18px; }
+
+#commPage .gh-net-mark {
+    display: none;
+}
+
+#commPage .gh-net-headcopy { min-width: 0; flex: 1 1 auto; }
+
+#commPage .gh-net-title {
+    margin: 0;
+    font-size: 21px;
+    line-height: 1.15;
+    font-weight: 900;
+    letter-spacing: -.5px;
+    color: var(--hv-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#commPage .gh-net-sub {
+    margin: 2px 0 0;
+    font-size: 11.4px;
+    font-weight: 700;
+    letter-spacing: .1px;
+    color: var(--hv-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#commPage .gh-net-headactions { display: flex; align-items: center; gap: 6px; }
+
+#commPage .gh-net-headactions .gh-net-linkbtn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--hv-line);
+    border-radius: 12px;
+    background: var(--hv-card);
+    color: var(--hv-ink);
+    box-shadow: var(--hv-shadow-1);
+}
+
+#commPage .gh-net-headactions .gh-net-linkbtn .ic { width: 18px; height: 18px; }
+#commPage .gh-net-headactions .gh-net-linkbtn span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+#commPage .gh-net-bellDot {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    display: grid;
+    place-items: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: var(--hv-red);
+    color: #FFFFFF;
+    font-size: 9px;
+    font-weight: 900;
+}
+
+/* the honest line under the head: one row, two facts, a dot between them */
+#commPage .gh-net-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 10.6px;
+    font-weight: 700;
+    color: var(--hv-muted);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#commPage .gh-net-strip-fact {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#commPage .gh-net-strip-fact .ic { width: 12px; height: 12px; flex: none; opacity: .75; }
+#commPage .gh-net-strip-fact.is-ok { color: var(--hv-green-ink); }
+#commPage .gh-net-strip-dot {
+    width: 3px;
+    height: 3px;
+    flex: none;
+    border-radius: 50%;
+    background: #C6D4DF;
+}
+
+/* =========================================================== 2. PARTITIONS */
+/* Five sections, five equal columns, icon over label — nothing is cut off and
+   the strip never scrolls. */
+
+#commPage .gh-net-tabs {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 4px;
+    margin: 10px 0 12px;
+    padding: 4px;
+    border: 1px solid var(--hv-line);
+    border-radius: 16px;
+    background: var(--hv-card);
+    box-shadow: var(--hv-shadow-1);
+    overflow: visible;
+}
+
+#commPage .gh-net-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    min-height: 50px;
+    padding: 6px 2px 5px;
+    border: 0;
+    border-radius: 12px;
+    background: none;
+    color: var(--hv-muted);
+    font-size: 7.8px;
+    font-weight: 800;
+    letter-spacing: -.25px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .18s ease, color .18s ease;
+}
+
+#commPage .gh-net-tab .ic { width: 18px; height: 18px; flex: none; }
+#commPage .gh-net-tab span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#commPage .gh-net-tab.is-active {
+    background: var(--hv-green-soft);
+    color: var(--hv-green-ink);
+    box-shadow: inset 0 0 0 1px rgba(18, 166, 127, .22);
+}
+
+/* inside a conversation the strip is gone — this is a different place */
+#commPage.is-sub .gh-net-tabs { display: none; }
+#commPage.is-sub .gh-net-head { padding-top: 10px; }
+
+/* …and so is the global chrome: one place, one set of controls (the
+   conversation's own settings sheet holds mute, report and block). */
+#commPage.is-sub #ghNetBell,
+#commPage.is-sub .gh-net-headrow > .gh-net-iconbtn { display: none; }
+
+#commPage.is-sub .gh-net-title { font-size: 18.5px; letter-spacing: -.4px; }
+
+/* ============================================================ 3. STAGE */
+#commPage .gh-net-stage { padding: 0; background: none; }
+#commPage .gh-net-tabs + * { margin-top: 0; }
+
+#commPage .gh-net-screen { display: flex; flex-direction: column; gap: 12px; }
+
+/* one honesty line, not a banner block */
+#commPage .gh-net-line {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0;
+    padding: 0 2px;
+    font-size: 10.6px;
+    font-weight: 700;
+    color: var(--hv-muted);
+}
+
+#commPage .gh-net-line .ic { width: 13px; height: 13px; flex: none; }
+#commPage .gh-net-line.is-muted { color: var(--hv-muted); }
+#commPage .gh-net-line.is-ok { color: var(--hv-green-ink); }
+
+#commPage .gh-net-banner {
+    border-radius: 14px;
+    padding: 10px 12px;
+    font-size: 11.4px;
+    line-height: 1.45;
+}
+
+/* the actions row: one primary button, three quiet icon buttons */
+#commPage .gh-net-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+}
+
+#commPage .gh-net-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--hv-line);
+    border-radius: 12px;
+    background: var(--hv-card);
+    color: var(--hv-ink);
+    font-size: 12px;
+    font-weight: 800;
+    box-shadow: var(--hv-shadow-1);
+    cursor: pointer;
+}
+
+#commPage .gh-net-btn .ic { width: 16px; height: 16px; flex: none; }
+
+#commPage .gh-net-btn.is-primary {
+    flex: 1 1 auto;
+    white-space: nowrap;
+    border-color: transparent;
+    background: linear-gradient(135deg, #17B78A 0%, #0B7E63 100%);
+    color: #FFFFFF;
+    box-shadow: 0 10px 18px -12px rgba(11, 126, 99, .95);
+}
+
+#commPage .gh-net-btn.is-compact {
+    position: relative;
+    width: 38px;
+    min-width: 38px;
+    padding: 0;
+    color: var(--hv-muted);
+}
+
+#commPage .gh-net-btn.is-compact.is-on { color: var(--hv-green-ink); background: var(--hv-green-soft); border-color: rgba(18, 166, 127, .22); }
+
+#commPage .gh-net-btncount {
+    position: absolute;
+    top: -5px;
+    right: -4px;
+    display: grid;
+    place-items: center;
+    min-width: 15px;
+    height: 15px;
+    padding: 0 3px;
+    border-radius: 999px;
+    background: var(--hv-ink);
+    color: #FFFFFF;
+    font-size: 8.6px;
+    font-weight: 900;
+}
+
+#commPage .gh-net-btn.is-compact span:not(.gh-net-btncount) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* ============================================================= 4. CHAT LIST */
+
+#commPage .gh-net-card {
+    border: 1px solid var(--hv-line);
+    border-radius: var(--hv-r-lg);
+    background: var(--hv-card);
+    box-shadow: var(--hv-shadow-2);
+}
+
+#commPage .gh-net-card.is-list { padding: 0; overflow: hidden; }
+
+#commPage .gh-net-listlabel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 10px 14px 6px;
+    font-size: 9.4px;
+    font-weight: 900;
+    letter-spacing: .9px;
+    text-transform: uppercase;
+    color: var(--hv-faint);
+    background: var(--hv-card);
+}
+
+#commPage .gh-net-listlabel .ic { width: 12px; height: 12px; }
+
+#commPage .gh-net-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 12px;
+    border: 0;
+    border-bottom: 1px solid var(--hv-line-soft);
+    background: var(--hv-card);
+    text-align: left;
+    cursor: pointer;
+}
+
+#commPage .gh-net-row:last-child { border-bottom: 0; }
+#commPage .gh-net-row:active { background: #F7FAFC; }
+
+#commPage .gh-net-avatar {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex: none;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--hv-green-soft);
+    color: var(--hv-green-ink);
+    font-size: 12.6px;
+    font-weight: 900;
+    letter-spacing: .3px;
+}
+
+#commPage .gh-net-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+#commPage .gh-net-avatar.is-sm { width: 26px; height: 26px; font-size: 9.4px; align-self: flex-end; margin-bottom: 18px; }
+#commPage .gh-net-avatar.is-group { background: var(--hv-blue-soft); color: #1D4ED8; }
+
+#commPage .gh-net-rowcopy {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+#commPage .gh-net-rowname {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+}
+
+#commPage .gh-net-rowname b {
+    font-size: 13.6px;
+    font-weight: 900;
+    letter-spacing: -.2px;
+    color: var(--hv-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#commPage .gh-net-rowmeta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+}
+
+#commPage .gh-net-rowcopy small {
+    display: block;
+    min-width: 0;
+    flex: 0 1 auto;
+    font-size: 11.4px;
+    font-weight: 600;
+    color: var(--hv-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#commPage .gh-net-rowright {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 5px;
+    flex: none;
+    min-width: 30px;
+    align-self: stretch;
+}
+
+#commPage .gh-net-rowtime {
+    font-size: 9.6px;
+    font-weight: 800;
+    color: var(--hv-faint);
+    white-space: nowrap;
+}
+
+#commPage .gh-net-unread {
+    display: grid;
+    place-items: center;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--hv-green);
+    color: #FFFFFF;
+    font-size: 9.6px;
+    font-weight: 900;
+    font-style: normal;
+}
+
+#commPage .gh-net-rowflag { display: inline-flex; color: var(--hv-green-ink); opacity: .8; }
+#commPage .gh-net-rowflag .ic { width: 12px; height: 12px; }
+#commPage .gh-net-rowsr { display: none; }
+
+/* small chips inside a row keep the name readable */
+#commPage .gh-net-chip {
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 8.8px;
+    font-weight: 800;
+    letter-spacing: .2px;
+    text-transform: none;
+    white-space: nowrap;
+}
+
+#commPage .gh-net-chip.is-neutral { background: #F1F5F8; color: #65788C; }
+#commPage .gh-net-chip.is-ok { background: var(--hv-green-soft); color: var(--hv-green-ink); }
+#commPage .gh-net-chip.is-info { background: var(--hv-blue-soft); color: #1D4ED8; }
+#commPage .gh-net-chip.is-warn { background: var(--hv-amber-soft); color: #8A5B00; }
+#commPage .gh-net-chip.is-danger { background: var(--hv-red-soft); color: #A11818; }
+#commPage .gh-net-chip.is-muted { background: #F1F5F8; color: #7E93A6; }
+
+/* stat tiles: a number and its label, in one compact row of cells */
+#commPage .gh-net-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+}
+
+#commPage .gh-net-stats .gh-net-stat {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 7px;
+    min-height: 0;
+    padding: 8px 12px;
+    border: 1px solid var(--hv-line);
+    border-radius: var(--hv-r-md);
+    background: var(--hv-card);
+    box-shadow: var(--hv-shadow-1);
+}
+
+#commPage .gh-net-stats .gh-net-stat b {
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: -.4px;
+    color: var(--hv-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+#commPage .gh-net-stats .gh-net-stat small {
+    font-size: 10.4px;
+    font-weight: 700;
+    color: var(--hv-muted);
+    line-height: 1.25;
+}
+
+#commPage .gh-net-stat.is-ok b { color: var(--hv-green-ink); }
+#commPage .gh-net-stat.is-warn b { color: var(--hv-amber); }
+#commPage .gh-net-stat.is-info b { color: var(--hv-blue); }
+#commPage .gh-net-stat.is-muted b { color: var(--hv-muted); }
+
+/* section heads inside the network use one weight */
+#commPage .gh-net-section-head h3 {
+    margin: 0;
+    font-size: 14.4px;
+    font-weight: 900;
+    letter-spacing: -.2px;
+    color: var(--hv-ink);
+}
+
+#commPage .gh-net-section-head p {
+    margin: 2px 0 0;
+    font-size: 10.6px;
+    line-height: 1.45;
+    color: var(--hv-muted);
+}
+
+/* empty state: one quiet card, one action */
+#commPage .gh-net-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 26px 18px;
+    border: 1px dashed #D7E3EC;
+    border-radius: var(--hv-r-lg);
+    background: var(--hv-card);
+    text-align: center;
+}
+
+#commPage .gh-net-empty-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--hv-green-soft);
+    color: var(--hv-green-ink);
+}
+
+#commPage .gh-net-empty-icon .ic { width: 21px; height: 21px; }
+#commPage .gh-net-empty b { font-size: 14px; font-weight: 900; color: var(--hv-ink); }
+#commPage .gh-net-empty p { margin: 0; max-width: 30ch; font-size: 11.6px; line-height: 1.5; color: var(--hv-muted); }
+
+#commPage .gh-net-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    margin: 0;
+    padding: 9px 11px;
+    border-radius: 12px;
+    background: #F4F8FB;
+    font-size: 10.6px;
+    line-height: 1.45;
+    color: var(--hv-muted);
+}
+
+#commPage .gh-net-note .ic { width: 13px; height: 13px; flex: none; margin-top: 1px; opacity: .7; }
+#commPage .gh-net-note.is-warn { background: var(--hv-amber-soft); color: #8A5B00; }
+
+/* ============================================================== 5. THREAD */
+
+#commPage .gh-net-tagrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0 0 2px;
+}
+
+#commPage .gh-net-thread.is-chat {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0;
+    padding: 14px 12px 16px;
+    border: 1px solid var(--hv-line);
+    border-radius: var(--hv-r-lg);
+    background:
+        radial-gradient(90% 60% at 100% 0%, #F3FAF7 0%, rgba(243, 250, 247, 0) 60%),
+        #FBFDFE;
+    box-shadow: var(--hv-shadow-1);
+}
+
+#commPage .gh-net-msgblock {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    max-width: 100%;
+}
+
+#commPage .gh-net-msgblock.is-mine { justify-content: flex-end; }
+
+#commPage .gh-net-msgstack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    max-width: 82%;
+}
+
+#commPage .gh-net-msgblock.is-mine .gh-net-msgstack { align-items: flex-end; }
+
+#commPage .gh-net-msgwho {
+    margin: 0 0 1px 2px;
+    font-size: 9.6px;
+    font-weight: 900;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    color: var(--hv-faint);
+}
+
+#commPage .gh-net-msg {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: flex-start;
+}
+
+#commPage .gh-net-msg.is-mine { align-items: flex-end; }
+
+#commPage .gh-net-bubble {
+    padding: 9px 12px;
+    border: 1px solid var(--hv-line);
+    border-radius: 16px 16px 16px 6px;
+    background: var(--hv-card);
+    box-shadow: 0 1px 2px rgba(11, 27, 43, .04);
+}
+
+#commPage .gh-net-msg.is-mine .gh-net-bubble {
+    border-color: transparent;
+    border-radius: 16px 16px 6px 16px;
+    background: linear-gradient(135deg, #17B78A 0%, #0E8A6B 100%);
+    color: #FFFFFF;
+    box-shadow: 0 8px 16px -14px rgba(11, 126, 99, .9);
+}
+
+#commPage .gh-net-bubble p {
+    margin: 0;
+    font-size: 12.8px;
+    line-height: 1.45;
+    color: inherit;
+}
+
+#commPage .gh-net-msgmeta {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 3px;
+    font-size: 9.2px;
+    font-weight: 700;
+    color: var(--hv-faint);
+}
+
+#commPage .gh-net-msg.is-mine .gh-net-msgmeta { color: #6E8A83; }
+
+#commPage .gh-net-attach {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+    font-size: 11px;
+}
+
+/* the composer: one bordered field with the send button inside it */
+#commPage .gh-net-composer { position: sticky; bottom: 0; padding-top: 2px; }
+
+#commPage .gh-net-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas:
+        "field tools send"
+        "note  note  note";
+    align-items: end;
+    gap: 4px 6px;
+    margin: 0;
+    padding: 8px 8px 8px 12px;
+    border: 1px solid var(--hv-line);
+    border-radius: 18px;
+    background: var(--hv-card);
+    box-shadow: var(--hv-shadow-2);
+}
+
+#commPage .gh-net-form > .gh-net-field { grid-area: field; }
+#commPage .gh-net-form > .gh-net-composerrow { grid-area: tools; }
+#commPage .gh-net-form > .gh-net-form-actions { grid-area: send; }
+#commPage .gh-net-form > .gh-net-note { grid-area: note; }
+
+#commPage .gh-net-form .gh-net-field { min-width: 0; margin: 0; }
+#commPage .gh-net-form .gh-net-label { display: none; }
+
+#commPage .gh-net-form .gh-net-input {
+    width: 100%;
+    min-height: 38px;
+    max-height: 96px;
+    padding: 9px 4px;
+    border: 0;
+    background: none;
+    font-size: 12.6px;
+    line-height: 1.4;
+    color: var(--hv-ink);
+    resize: none;
+}
+
+#commPage .gh-net-form .gh-net-input:focus { outline: none; }
+
+#commPage .gh-net-composerrow {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: none;
+}
+
+#commPage .gh-net-composerrow .gh-net-filebtn,
+#commPage .gh-net-composerrow .gh-net-btn {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    color: var(--hv-muted);
+    box-shadow: none;
+}
+
+#commPage .gh-net-composerrow .ic { width: 18px; height: 18px; }
+#commPage .gh-net-composerrow .gh-net-btn span:not(.gh-net-btncount) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+#commPage .gh-net-form-actions { display: flex; align-items: center; gap: 6px; flex: none; }
+
+#commPage .gh-net-form-actions .gh-net-btn {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #17B78A 0%, #0B7E63 100%);
+    color: #FFFFFF;
+    box-shadow: 0 8px 16px -12px rgba(11, 126, 99, .95);
+}
+
+#commPage .gh-net-form-actions .gh-net-btn .ic { width: 18px; height: 18px; }
+#commPage .gh-net-form-actions .gh-net-btn span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+/* the composer's own honesty line is one small row, not a block */
+#commPage .gh-net-form .gh-net-note {
+    margin: 0;
+    padding: 0 2px 2px;
+    border: 0;
+    background: none;
+    font-size: 9.2px;
+    line-height: 1.3;
+    color: var(--hv-faint);
+}
+
+#commPage .gh-net-form .gh-net-note .ic { width: 10px; height: 10px; }
+
+/* ====================================================== 6. SHIELD HEAD */
+/* The identity band stays (it is what ties Shield to Map and Health), but it
+   is a compact strip now: 10px of padding, no shadow, nothing else in it. */
+#shieldPage > .gds-head#shieldHead {
+    margin: 0 16px 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--gh-grad-band-line);
+    border-radius: var(--hv-r-md);
+    background: var(--gh-grad-band);
+    box-shadow: none;
+}
+
+#shieldPage > .gds-head#shieldHead .gds-head-mark {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #17B78A 0%, #0B7E63 100%);
+    color: #FFFFFF;
+    box-shadow: 0 10px 18px -12px rgba(11, 126, 99, .95);
+}
+
+#shieldPage > .gds-head#shieldHead .gds-head-mark .ic { width: 19px; height: 19px; }
+
+#shieldPage > .gds-head#shieldHead .gds-head-title {
+    margin: 0;
+    font-size: 21px;
+    line-height: 1.15;
+    font-weight: 900;
+    letter-spacing: -.5px;
+    color: var(--hv-ink);
+}
+
+#shieldPage > .gds-head#shieldHead .gds-head-sub {
+    margin: 2px 0 0;
+    font-size: 11.4px;
+    font-weight: 700;
+    color: var(--hv-muted);
+}
+
+#shieldPage .gds-head-actions .gds-btn {
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0;
+    border: 1px solid var(--hv-line);
+    border-radius: 12px;
+    background: var(--hv-card);
+    color: var(--hv-ink);
+    box-shadow: var(--hv-shadow-1);
+}
+
+#shieldPage .gds-head-actions .gds-btn .ic { width: 18px; height: 18px; }
+
+/* ===================================================== 7. SHIELD TABS */
+/* Seven sections. Four columns on a phone (two rows), seven on a wide screen:
+   every label is whole and nothing scrolls sideways. */
+
+#shieldPage .gds-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    margin: 0 16px 12px;
+    padding: 4px;
+    border: 1px solid var(--hv-line);
+    border-radius: 16px;
+    background: var(--hv-card);
+    box-shadow: var(--hv-shadow-1);
+    overflow: visible;
+}
+
+#shieldPage .gds-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    min-height: 50px;
+    padding: 6px 3px 5px;
+    border: 0;
+    border-radius: 12px;
+    background: none;
+    color: var(--hv-muted);
+    font-size: 9.2px;
+    font-weight: 800;
+    letter-spacing: -.1px;
+    line-height: 1.12;
+    text-align: center;
+    cursor: pointer;
+}
+
+#shieldPage .gds-tab .ic { width: 18px; height: 18px; flex: none; }
+#shieldPage .gds-tab span {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+#shieldPage .gds-tab[aria-selected="true"] {
+    background: var(--hv-green-soft);
+    color: var(--hv-green-ink);
+    box-shadow: inset 0 0 0 1px rgba(18, 166, 127, .22);
+}
+
+#shieldPage .shield-view { padding: 0 16px calc(128px + env(safe-area-inset-bottom, 0px)); }
+
+/* ================================================= 8. SHIELD SURFACES */
+#shieldPage .gds-card,
+#shieldPage .shield-view > .gds-card {
+    border: 1px solid var(--hv-line);
+    border-radius: var(--hv-r-lg);
+    background: var(--hv-card);
+    box-shadow: var(--hv-shadow-2);
+}
+
+/* the emergency strip: a thin red line with one action, not a hero card */
+#shieldPage .gds-emergency {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 12px;
+    padding: 10px 10px 10px 12px;
+    border: 1px solid #F6D7D7;
+    border-radius: var(--hv-r-md);
+    background: linear-gradient(120deg, #FFF7F7 0%, #FDECEC 100%);
+    box-shadow: none;
+}
+
+#shieldPage .gds-emergency .gds-tile {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    flex: none;
+    border: 0;
+    border-radius: 9px;
+    background: rgba(217, 45, 45, .12);
+    color: var(--hv-red);
+}
+
+#shieldPage .gds-emergency .gds-tile .ic { width: 16px; height: 16px; }
+#shieldPage .gds-emergency-copy { flex: 1 1 auto; min-width: 0; }
+
+#shieldPage .gds-emergency-title {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: -.1px;
+    color: #A11818;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#shieldPage .gds-emergency-sub {
+    margin: 1px 0 0;
+    font-size: 10px;
+    font-weight: 600;
+    color: #8C4A46;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#shieldPage .gds-emergency .gds-btn {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    min-height: 32px;
+    padding: 0 11px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--hv-red);
+    color: #FFFFFF;
+    font-size: 10.8px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+#shieldPage .gds-emergency .gds-btn .ic { width: 14px; height: 14px; }
+
+/* section heads inside a shield view */
+#shieldPage .gds-sect { margin: 0 0 8px; padding: 0; }
+#shieldPage .gds-sect-title { margin: 0; font-size: 15px; font-weight: 900; letter-spacing: -.2px; color: var(--hv-ink); }
+#shieldPage .gds-sect-sub { margin: 2px 0 0; font-size: 10.6px; color: var(--hv-muted); }
+#shieldPage .gds-sect .gds-eyebrow { font-size: 9.4px; font-weight: 900; letter-spacing: .9px; color: var(--hv-faint); }
+
+/* ==================================================== 9. WIDE SCREENS */
+@media (min-width: 600px) {
+    #shieldPage .gds-tabs { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+}
+
+@media (min-width: 720px) {
+    #commPage .gh-net-inner,
+    #shieldPage .gds-head,
+    #shieldPage .gds-tabs,
+    #shieldPage .shield-view { max-width: 720px; margin-left: auto; margin-right: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #commPage *,
+    #shieldPage * { transition: none !important; animation: none !important; }
+}

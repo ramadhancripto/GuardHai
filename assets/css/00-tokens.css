@@ -94,6 +94,22 @@
     --gh-icon-lg: 22px;          /* bottom navigation                         */
     --gh-icon-xl: 24px;          /* quick actions, topic tiles                */
 
+    /* ------------------------------------------- health section type scale */
+    /* Larger than the base app scale: the Health screens carry long Swahili
+       labels, so headings step down (22 → 18 → 15.5) instead of jumping. */
+    --gh-fs-h1: 22px;
+    --gh-fs-h2: 18px;
+    --gh-fs-h3: 15.5px;
+    --gh-lh-tight: 1.22;
+    --gh-lh-body: 1.55;
+
+    /* health surfaces: white cards on a calm canvas, one tint for "healthy" */
+    --gh-green-tint: #F1FAF6;
+    --gh-blue-tint: #F2F7FF;
+    --gh-r-2xl: 24px;
+    --gh-shadow-card: 0 1px 2px rgba(9, 30, 46, .04), 0 10px 24px -18px rgba(9, 30, 46, .28);
+    --gh-shadow-lift: 0 2px 4px rgba(9, 30, 46, .05), 0 16px 32px -20px rgba(9, 30, 46, .35);
+
     /* ------------------------------------------------------------- controls */
     --gh-tap: 44px;               /* minimum touch target                    */
     --gh-tap-sm: 36px;            /* compact controls inside cards           */

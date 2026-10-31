@@ -109,10 +109,12 @@ export function sourceRow(post) {
  */
 export function verificationRow(post) {
   if (post.sample) {
+    // The "Sampuli" pill already sits at the top of the card; this row adds the
+    // one fact the pill cannot carry — that no source was verified.
     return `
       <div class="gh-pverify is-sample">
         <svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg>
-        <span>Sampuli — hakuna uthibitisho wa chanzo</span>
+        <span>Hakuna uthibitisho wa chanzo</span>
       </div>`;
   }
   if (post.verified === true) {

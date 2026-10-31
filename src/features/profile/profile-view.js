@@ -440,6 +440,12 @@ function wire() {
     if (action === 'message') {
       const result = await message(currentId);
       toast(result.detail);
+      if (result.ok) {
+        // reuse the network shell instead of a second chat surface
+        closeProfile();
+        if (window.HomeUI?.go) window.HomeUI.go('chat');
+        window.GHNetwork?.open('chats.thread', { id: result.conversationId });
+      }
       return;
     }
   });

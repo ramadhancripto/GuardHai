@@ -1,0 +1,1513 @@
+/* ==========================================================================
+   GuardHai · assets/css/19-home-v2.css
+   Home + Uwanja — the "premium post" pass (2026-10-31).
+
+   Additive. Loaded last, so every rule is a deliberate override of 04/10/11/12.
+
+   The rules of this sheet:
+     · one surface ladder — canvas #F5F8FB, card #FFFFFF, one border, one
+       shadow ladder. A card never floats loose on the background;
+     · one rhythm — 16px inside a card, 14px between cards, 24px between
+       sections. Nothing is 9px small sitting next to something 21px;
+     · colour is a label, never decoration: each topic owns a hue and that hue
+       appears only on its badge, its icon chip and its action tint;
+     · every image keeps a fixed aspect ratio, so a video post and a photo
+       post occupy the same amount of page and the feed never jumps;
+     · a tap target is ≥ 40px even when the visual is 22px.
+   ========================================================================== */
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) {
+    --hv-canvas: #F5F8FB;
+    --hv-card: #FFFFFF;
+    --hv-line: #E6EDF3;
+    --hv-line-soft: #EFF4F8;
+    --hv-ink: #0B1B2B;
+    --hv-text: #24384C;
+    --hv-muted: #65788C;
+    --hv-faint: #8FA0B1;
+
+    --hv-green: #12A67F;
+    --hv-green-ink: #0A6E56;
+    --hv-green-soft: #E6F7F1;
+    --hv-blue: #2563EB;
+    --hv-blue-ink: #1D4ED8;
+    --hv-blue-soft: #E9F0FE;
+    --hv-violet: #7C3AED;
+    --hv-violet-ink: #5B21B6;
+    --hv-violet-soft: #F1EBFE;
+    --hv-amber: #B7791F;
+    --hv-amber-ink: #8A5B00;
+    --hv-amber-soft: #FBF3E0;
+    --hv-red: #D92D2D;
+    --hv-red-ink: #A11818;
+    --hv-red-soft: #FDECEC;
+
+    --hv-r-sm: 10px;
+    --hv-r-md: 14px;
+    --hv-r-lg: 20px;
+    --hv-r-xl: 24px;
+
+    --hv-shadow-1: 0 1px 2px rgba(11, 27, 43, .05);
+    --hv-shadow-2: 0 2px 4px rgba(11, 27, 43, .04), 0 12px 24px -18px rgba(11, 27, 43, .34);
+    --hv-shadow-3: 0 3px 6px rgba(11, 27, 43, .05), 0 20px 40px -26px rgba(11, 27, 43, .45);
+
+    background:
+        radial-gradient(120% 44% at 50% 0%, #EAF6F2 0%, rgba(234, 246, 242, 0) 58%),
+        var(--hv-canvas);
+    padding: 0 0 calc(128px + env(safe-area-inset-bottom, 0px));
+    color: var(--hv-text);
+}
+
+/* the whole page breathes on one 16px gutter, whatever the container does.
+   The hero, the SOS strip and the safety card bring their own margins, so they
+   are excluded — otherwise margin + padding double up and the card bleeds. */
+.page-container.gh-home > section:not(.gh-hero):not(.gh-sos):not(.gh-safety),
+.page-container.gh-home > .gh-section { padding-left: 16px; padding-right: 16px; }
+
+/* =========================================================== 1. GREETING */
+/* A real header: mark, greeting, date, identity. Not three loose lines. */
+
+.gh-welcome {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    padding-top: 16px;
+    padding-bottom: 14px;
+}
+
+.gh-welcome-copy { min-width: 0; }
+
+.gh-welcome-title {
+    font-size: 25px;
+    line-height: 1.12;
+    font-weight: 900;
+    letter-spacing: -0.7px;
+    color: var(--hv-ink);
+}
+
+.gh-welcome-sub {
+    margin-top: 5px;
+    font-size: 12.6px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--hv-muted);
+}
+
+.gh-welcome-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 4px 10px 4px 8px;
+    border-radius: 999px;
+    background: var(--hv-green-soft);
+    color: var(--hv-green-ink);
+    font-size: 9.4px;
+    font-weight: 900;
+    letter-spacing: .65px;
+    text-transform: uppercase;
+}
+
+.gh-welcome-brand::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--hv-green);
+}
+
+.gh-welcome-badge {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    flex: none;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #17B78A 0%, #0B7E63 100%);
+    color: #FFFFFF;
+    box-shadow: 0 12px 22px -14px rgba(11, 126, 99, .95);
+}
+
+.gh-welcome-badge .ic { width: 26px; height: 26px; }
+.gh-welcome-meta {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--hv-muted);
+}
+
+.gh-welcome-meta .ic { width: 13px; height: 13px; color: var(--hv-green); }
+
+/* =============================================================== 2. HERO */
+/* One promise, one photo, one readable scrim. 4:5 on a phone so it has
+   presence; 21:9 on a desktop so it does not eat the fold. */
+
+.page-container.gh-home .gh-hero {
+    margin: 0 12px 16px;
+    height: 306px;
+    border-radius: var(--hv-r-xl);
+    overflow: hidden;
+    box-shadow: var(--hv-shadow-3);
+}
+
+.page-container.gh-home .gh-hero-media,
+.page-container.gh-home .gh-hero-slide { border-radius: inherit; }
+
+.page-container.gh-home .gh-hero::after {
+    /* green → blue identity grade: the left/bottom stays dark enough for white
+       copy, the top-right keeps the photo readable */
+    background:
+        linear-gradient(96deg, rgba(6, 40, 32, .9) 0%, rgba(8, 46, 62, .7) 46%, rgba(16, 58, 96, .3) 100%),
+        linear-gradient(0deg, rgba(3, 22, 24, .56) 0%, rgba(3, 22, 24, .04) 66%);
+}
+
+.page-container.gh-home .gh-hero-inner { padding: 18px 16px 16px; gap: 10px; }
+
+.page-container.gh-home .gh-hero-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    background: rgba(255, 255, 255, .18);
+    border: 1px solid rgba(255, 255, 255, .34);
+    backdrop-filter: blur(6px);
+}
+
+.page-container.gh-home .gh-hero-mark .ic { width: 17px; height: 17px; color: #fff; }
+
+.page-container.gh-home .gh-hero-title {
+    font-size: 27px;
+    line-height: 1.1;
+    font-weight: 900;
+    letter-spacing: -0.75px;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, .34);
+}
+
+.page-container.gh-home .gh-hero-sub {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.1px;
+    color: #FFFFFF;
+}
+
+.page-container.gh-home .gh-hero-desc {
+    max-width: 34ch;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, .88);
+}
+
+.page-container.gh-home .gh-hero-meta {
+    font-size: 9.4px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .72);
+}
+
+.page-container.gh-home .gh-hero-chip {
+    align-self: flex-start;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, .16);
+    border-color: rgba(255, 255, 255, .3);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .35px;
+    backdrop-filter: blur(6px);
+}
+
+.page-container.gh-home .gh-hero-controls { inset: auto 12px 12px auto; }
+.page-container.gh-home .gh-hero-toggle {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .18);
+    border-color: rgba(255, 255, 255, .3);
+    backdrop-filter: blur(6px);
+}
+
+.page-container.gh-home .gh-hero-dots { gap: 4px; }
+.page-container.gh-home .gh-hero-dots button {
+    width: 6px;
+    height: 6px;
+    background: rgba(255, 255, 255, .42);
+}
+.page-container.gh-home .gh-hero-dots button[aria-current="true"],
+.page-container.gh-home .gh-hero-dots .is-active {
+    width: 16px;
+    border-radius: 3px;
+    background: #FFFFFF;
+}
+
+/* ================================================================ 3. SOS */
+
+.page-container.gh-home .gh-sos { margin: 0 0 16px; }
+
+.page-container.gh-home .gh-sos-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px 12px 12px;
+    border-radius: var(--hv-r-lg);
+    border: 1px solid #F6D6D6;
+    background:
+        radial-gradient(120% 140% at 0% 0%, #FDECEC 0%, rgba(255, 255, 255, 0) 62%),
+        #FFFFFF;
+    box-shadow: 0 10px 26px -22px rgba(169, 24, 24, .8);
+}
+
+.page-container.gh-home .gh-sos-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: radial-gradient(120% 120% at 30% 24%, #F04444 0%, #D62B2B 46%, #B01C1C 100%);
+    box-shadow:
+        0 12px 22px -12px rgba(176, 28, 28, .95),
+        0 0 0 6px rgba(217, 45, 45, .1);
+}
+
+.page-container.gh-home .gh-sos-ico .ic { width: 26px; height: 26px; }
+.page-container.gh-home .gh-sos-txt b { font-size: 15px; letter-spacing: .6px; }
+.page-container.gh-home .gh-sos-copy b { font-size: 14px; letter-spacing: -0.2px; }
+
+.page-container.gh-home .gh-sos-copy p {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 3px;
+    font-size: 10.6px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--hv-muted);
+}
+
+.page-container.gh-home .gh-demo-chip {
+    padding: 1px 6px;
+    border-radius: 5px;
+    background: var(--hv-amber-soft);
+    color: var(--hv-amber-ink);
+    font-size: 8.4px;
+    font-weight: 900;
+    letter-spacing: .5px;
+}
+
+.page-container.gh-home .gh-sos-go {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    background: #FFFFFF;
+    border: 1px solid #F3D3D3;
+    color: var(--hv-red-ink);
+}
+
+.page-container.gh-home .gh-sos-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 8px 4px 0;
+    font-size: 9.8px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--hv-faint);
+}
+
+.page-container.gh-home .gh-sos-note .ic { width: 13px; height: 13px; flex: none; margin-top: 1px; }
+
+/* ====================================================== 4. SECTION HEADS */
+/* Same kicker grammar as Health and Storage: bar · uppercase label · sub. */
+
+.page-container.gh-home .gh-section { margin-bottom: 22px; }
+
+.page-container.gh-home .gh-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .62px;
+    text-transform: uppercase;
+    color: #40556A;
+}
+
+.page-container.gh-home .gh-section-title::before {
+    content: "";
+    width: 3px;
+    height: 14px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #17B78A, #2563EB);
+    flex: none;
+}
+
+.page-container.gh-home .gh-section-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.page-container.gh-home .gh-section-head > div:first-child { min-width: 0; flex: 1 1 auto; }
+
+.page-container.gh-home .gh-section-sub {
+    margin: 4px 0 0 11px;
+    font-size: 11.4px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--hv-muted);
+}
+
+.page-container.gh-home .gh-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 8px;
+    border-radius: 9px;
+    font-size: 11.4px;
+    font-weight: 800;
+    color: var(--hv-green-ink);
+}
+
+.page-container.gh-home .gh-link .ic { width: 14px; height: 14px; }
+.page-container.gh-home .gh-link:hover { background: var(--hv-green-soft); }
+
+.page-container.gh-home .gh-compose-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #17B78A 0%, #0B7E63 100%);
+    box-shadow: 0 10px 18px -12px rgba(11, 126, 99, .95);
+}
+
+/* ========================================================= 5. QUICK ACTIONS */
+/* Six coloured tiles, one flat tile per destination. The icon square keeps a
+   52px visual but the whole tile is the tap target. */
+
+.page-container.gh-home .gh-qa-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.page-container.gh-home .gh-qa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 92px;
+    padding: 12px 6px 10px;
+    border: 1px solid var(--hv-line);
+    border-radius: var(--hv-r-lg);
+    background: var(--hv-card);
+    box-shadow: var(--hv-shadow-1);
+    transition: transform .14s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.page-container.gh-home .gh-qa:hover {
+    transform: translateY(-2px);
+    border-color: #CFE4DB;
+    box-shadow: var(--hv-shadow-2);
+}
+
+.page-container.gh-home .gh-qa:active { transform: translateY(0); }
+
+.page-container.gh-home .gh-qa-ico {
+    width: 46px;
+    height: 46px;
+    border-radius: 16px;
+    background: var(--hv-green-soft);
+    color: var(--hv-green-ink);
+    box-shadow: inset 0 0 0 1px rgba(18, 166, 127, .1);
+}
+
+.page-container.gh-home .gh-qa-ico .ic { width: 22px; height: 22px; stroke-width: 1.9; }
+
+.page-container.gh-home .gh-qa-label {
+    font-size: 10.4px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.05px;
+    color: #2E455C;
+}
+
+.page-container.gh-home .gh-qa-teal   { background: #E3F5F4; color: #0B6E63; box-shadow: inset 0 0 0 1px rgba(11, 110, 99, .1); }
+.page-container.gh-home .gh-qa-green  { background: #E6F7F1; color: #0A6E56; box-shadow: inset 0 0 0 1px rgba(10, 110, 86, .1); }
+.page-container.gh-home .gh-qa-blue   { background: #E9F0FE; color: #1D4ED8; box-shadow: inset 0 0 0 1px rgba(29, 78, 216, .1); }
+.page-container.gh-home .gh-qa-purple { background: #F1EBFE; color: #5B21B6; box-shadow: inset 0 0 0 1px rgba(91, 33, 182, .1); }
+.page-container.gh-home .gh-qa-gold   { background: #FBF3E0; color: #8A5B00; box-shadow: inset 0 0 0 1px rgba(138, 91, 0, .1); }
+
+@media (min-width: 620px) {
+    .page-container.gh-home .gh-qa-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+/* ========================================================= 6. SAFETY CARD */
+
+.page-container.gh-home .gh-safety {
+    margin: 0 16px 22px;
+    padding: 14px;
+    border-radius: var(--hv-r-lg);
+    border: 1px solid var(--hv-line);
+    background:
+        linear-gradient(180deg, #F4FBF8 0%, rgba(255, 255, 255, 0) 44%),
+        var(--hv-card);
+    box-shadow: var(--hv-shadow-2);
+}
+
+.page-container.gh-home .gh-safety-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px 12px;
+    align-items: start;
+}
+
+.page-container.gh-home .gh-safety-ico {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+    background: var(--hv-green-soft);
+    color: var(--hv-green-ink);
+}
+
+.page-container.gh-home .gh-safety-ico .ic { width: 20px; height: 20px; }
+
+.page-container.gh-home .gh-safety-label {
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: .55px;
+    text-transform: uppercase;
+    color: var(--hv-faint);
+}
+
+.page-container.gh-home .gh-safety-state {
+    margin-top: 2px;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: -0.3px;
+    color: var(--hv-ink);
+}
+
+.page-container.gh-home .gh-safety-desc {
+    margin-top: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--hv-muted);
+}
+
+.page-container.gh-home .gh-safety-row > .gh-btn {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-content: center;
+    min-height: 40px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.page-container.gh-home .gh-safety-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+/* a KPI tile reads top-down: label, then figure — never squeezed side by side */
+.page-container.gh-home .gh-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 9px 10px;
+    border: 1px solid var(--hv-line-soft);
+    border-radius: 12px;
+    background: #FBFDFE;
+}
+
+.page-container.gh-home .gh-chip > * { min-width: 0; }
+
+.page-container.gh-home .gh-chip-k {
+    max-width: 100%;
+    font-size: 8.6px;
+    font-weight: 900;
+    letter-spacing: .45px;
+    text-transform: uppercase;
+    color: var(--hv-faint);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.page-container.gh-home .gh-chip b {
+    font-size: 14px;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: var(--hv-ink);
+}
+
+.page-container.gh-home .gh-safety-fine {
+    margin-top: 10px;
+    font-size: 9.4px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--hv-faint);
+}
+
+/* ========================================================= 7. TOPIC TILES */
+/* Same grid contract as before (≥3 columns, ≥64px) with a hue per topic so
+   the Uwanja reads like a set of channels, not six identical buttons. */
+
+.page-container.gh-home .gh-topics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 0;
+    margin-bottom: 14px;
+}
+
+.page-container.gh-home .gh-topic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 76px;
+    padding: 10px 6px;
+    border: 1px solid var(--hv-line);
+    border-radius: var(--hv-r-md);
+    background: var(--hv-card);
+    box-shadow: var(--hv-shadow-1);
+    white-space: normal;
+    transition: transform .12s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.page-container.gh-home .gh-topic:hover { transform: translateY(-2px); box-shadow: var(--hv-shadow-2); }
+
+.page-container.gh-home .gh-topic-ico {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 11px;
+    background: #EEF4F8;
+    color: #51697F;
+}
+
+.page-container.gh-home .gh-topic-ico .ic { width: 17px; height: 17px; }
+
+.page-container.gh-home .gh-topic-label {
+    font-size: 10.2px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #2E455C;
+}
+
+/* per-topic hue: the same hue the cards use for that topic */
+.page-container.gh-home .gh-topic[data-topic="afya"] .gh-topic-ico { background: var(--hv-blue-soft); color: var(--hv-blue-ink); }
+.page-container.gh-home .gh-topic[data-topic="usalama"] .gh-topic-ico { background: var(--hv-green-soft); color: var(--hv-green-ink); }
+.page-container.gh-home .gh-topic[data-topic="taasisi"] .gh-topic-ico { background: var(--hv-amber-soft); color: var(--hv-amber-ink); }
+.page-container.gh-home .gh-topic[data-topic="kusaidiana"] .gh-topic-ico { background: #E3F5F4; color: #0B6E63; }
+.page-container.gh-home .gh-topic[data-topic="majanga"] .gh-topic-ico { background: var(--hv-red-soft); color: var(--hv-red-ink); }
+.page-container.gh-home .gh-topic[data-topic="all"] .gh-topic-ico { background: #EEF4F8; color: #51697F; }
+
+.page-container.gh-home .gh-topic.is-active {
+    border-color: transparent;
+    background: linear-gradient(135deg, #12A67F 0%, #0B7E63 100%);
+    box-shadow: 0 12px 22px -16px rgba(11, 126, 99, .95);
+}
+
+.page-container.gh-home .gh-topic.is-active .gh-topic-ico { background: rgba(255, 255, 255, .2); color: #FFFFFF; }
+.page-container.gh-home .gh-topic.is-active .gh-topic-label { color: #FFFFFF; }
+
+@media (min-width: 620px) {
+    .page-container.gh-home .gh-topics { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+/* =============================================================== 8. FEED */
+
+.page-container.gh-home .gh-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.page-container.gh-home .gh-feed-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 14px 2px 0;
+    font-size: 9.6px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--hv-faint);
+}
+
+.page-container.gh-home .gh-feed-note .ic { width: 13px; height: 13px; flex: none; margin-top: 1px; }
+
+/* ========================================================== 9. POST CARD */
+/* The card is the product. One white sheet, one radius, one shadow ladder,
+   one 16px inner rhythm, and a footer rail that never collapses. */
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post,
+.page-container.gh-profile .gh-post {
+    position: relative;
+    container-type: inline-size;
+    margin: 0;
+    padding: 14px 14px 6px;
+    border: 1px solid var(--hv-line);
+    border-radius: var(--hv-r-xl);
+    background: var(--hv-card);
+    box-shadow: var(--hv-shadow-2);
+    transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post:hover,
+.page-container.gh-profile .gh-post:hover {
+    border-color: #D5E5EE;
+    box-shadow: var(--hv-shadow-3);
+}
+
+/* --- head ---------------------------------------------------------------- */
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-avatar {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #E6F7F1, #E9F0FE);
+    color: var(--gh-role-ink, #0A6E56);
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: .3px;
+    box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px color-mix(in srgb, var(--gh-role, #12A67F) 26%, #FFFFFF);
+    overflow: visible;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-avatar img,
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-avatar-photo {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-avatar-role {
+    position: absolute;
+    right: -3px;
+    bottom: -3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--gh-role, #12A67F);
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 2px 4px rgba(11, 27, 43, .18);
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-avatar-role .ic { width: 9px; height: 9px; stroke: #FFFFFF; stroke-width: 2.4; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-who {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-name {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13.6px;
+    font-weight: 900;
+    letter-spacing: -0.2px;
+    color: var(--hv-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-verified {
+    width: 14px;
+    height: 14px;
+    flex: none;
+    color: var(--hv-blue);
+    fill: currentColor;
+    fill-opacity: .16;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-role {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    padding: 1px 7px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--gh-role-soft, #E6F7F1) 80%, #FFFFFF);
+    color: var(--gh-role-ink, #0A6E56);
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: .28px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-time {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10.2px;
+    font-weight: 600;
+    color: var(--hv-faint);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-time::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    flex: none;
+    border-radius: 50%;
+    background: #C6D3DE;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-headend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-follow {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 0 12px;
+    border: 1px solid #CFE4DB;
+    border-radius: 999px;
+    background: #F4FBF8;
+    color: var(--gh-role-ink, #0A6E56);
+    font-size: 10.6px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-follow.is-on {
+    background: var(--gh-role-soft, #E6F7F1);
+    border-color: #BFE0D3;
+    color: #35665A;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-more {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--hv-line);
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: #6C8195;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-more .ic { width: 17px; height: 17px; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-more:hover { background: #F4FBF8; border-color: #CFE7DD; color: var(--hv-green-ink); }
+
+/* --- topline: one coloured topic icon, one sample pill, one context line -- */
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-topline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 12px 0 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;      /* a long audience line drops instead of bleeding */
+    row-gap: 6px;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-type-badge {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    flex: none;
+    padding: 0;
+    border-radius: 999px;
+    border: 1px solid #BEE5D8;
+    background: var(--gh-type-soft-safety);
+    color: var(--gh-type-ink-safety);
+    font-size: 8.6px;
+    font-weight: 900;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-type-badge .ic { width: 13px; height: 13px; stroke-width: 2.1; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-type-health { background: var(--gh-type-soft-health); color: var(--gh-type-ink-health); border-color: #C9DAFB; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-type-disaster { background: var(--gh-type-soft-disaster); color: var(--gh-type-ink-disaster); border-color: #F6C9C5; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-type-org { background: var(--gh-type-soft-org); color: var(--gh-type-ink-org); border-color: #EEDCB3; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-type-aid { background: #E3F5F4; color: #0B6E63; border-color: #C3E5E2; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-type-learn { background: var(--gh-type-soft-learn); color: var(--gh-type-ink-learn); border-color: #DCCEFB; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-topic {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 0 9px;
+    border: 1px solid var(--gh-line, #E4E9F0);
+    border-radius: 999px;
+    background: #F7FAFC;
+    color: #3D5568;
+    font-size: 9.4px;
+    font-weight: 900;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex: none;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post:has(.gh-type-health) .gh-post-topic { background: var(--hv-blue-soft); border-color: #C9DAFB; color: var(--hv-blue-ink); }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post:has(.gh-type-disaster) .gh-post-topic { background: var(--hv-red-soft); border-color: #F6C9C5; color: var(--hv-red-ink); }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post:has(.gh-type-org) .gh-post-topic { background: var(--hv-amber-soft); border-color: #EEDCB3; color: var(--hv-amber-ink); }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post:has(.gh-type-aid) .gh-post-topic { background: #E3F5F4; border-color: #C3E5E2; color: #0B6E63; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post:has(.gh-type-safety) .gh-post-topic { background: var(--hv-green-soft); border-color: #BEE5D8; color: var(--hv-green-ink); }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-badge-sample {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 0 8px;
+    border: 1px solid #EEDCB3;
+    border-radius: 999px;
+    background: var(--gh-type-soft-org, #FBF1DA);
+    color: var(--gh-type-ink-org, #8A5B00);
+    font-size: 8.8px;
+    font-weight: 900;
+    letter-spacing: .35px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex: none;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-badge-mine {
+    border-color: #C9DAFB;
+    background: var(--gh-type-soft-health, #EAF1FE);
+    color: var(--gh-type-ink-health, #1D4ED8);
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-audience {
+    min-width: 0;
+    flex: 1 1 auto;
+    text-align: right;
+    font-size: 9.8px;
+    font-weight: 800;
+    letter-spacing: .1px;
+    color: #7E93A6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- body ---------------------------------------------------------------- */
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-title {
+    margin: 10px 0 0;
+    font-size: 17px;
+    line-height: 1.26;
+    font-weight: 900;
+    letter-spacing: -0.45px;
+    color: var(--hv-ink);
+    word-spacing: .05em;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-text {
+    margin: 7px 0 0;
+    font-size: 13.2px;
+    line-height: 1.62;
+    font-weight: 500;
+    color: var(--hv-text);
+    word-spacing: .04em;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post .gh-moretext {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 6px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--hv-green-ink);
+    font-size: 11.4px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-reposted {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--hv-green-ink);
+}
+
+/* --- media --------------------------------------------------------------- */
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-media-wrap { margin: 12px -14px 0; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--hv-r-lg);
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-media-wrap > .gh-media-frame { border-radius: 0; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-gal {
+    display: grid;
+    gap: 3px;
+    margin: 0;
+    border-radius: 0;
+    overflow: hidden;
+    background: #EAF0F5;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-gal-item {
+    position: relative;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: #EAF0F5;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    cursor: zoom-in;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-gal-1 .gh-gal-item { aspect-ratio: 4 / 3; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-gal-2 .gh-gal-item { aspect-ratio: 1 / 1; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-gal-3 .gh-gal-item { aspect-ratio: 1 / 1; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-gal-3 .gh-gal-item:first-child { aspect-ratio: auto; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-gal-4 .gh-gal-item { aspect-ratio: 1 / 1; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-gal-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .35s ease;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-gal-item:hover img { transform: scale(1.03); }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-count,
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-kind {
+    position: absolute;
+    z-index: 2;
+    top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 24px;
+    padding: 0 9px;
+    border-radius: 999px;
+    background: rgba(8, 24, 36, .62);
+    color: #FFFFFF;
+    font-size: 9.6px;
+    font-weight: 900;
+    letter-spacing: .3px;
+    backdrop-filter: blur(6px);
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-count { right: 10px; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-kind { left: 10px; text-transform: uppercase; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-count .ic { width: 13px; height: 13px; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-video-wrap {
+    position: relative;
+    margin: 0;
+    border-radius: 0;
+    overflow: hidden;
+    background: #0A1420;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: #0A1420;
+}
+
+/* the placeholder video is the poster: play glyph, label, ratio-locked */
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-ph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 0;
+    background:
+        radial-gradient(120% 90% at 50% 0%, #1B3B4E 0%, #0C2030 62%, #091822 100%);
+    color: rgba(255, 255, 255, .82);
+    font-size: 10.6px;
+    font-weight: 800;
+    letter-spacing: .3px;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-ph .ic { width: 17px; height: 17px; opacity: .55; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-play {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .16);
+    border: 1px solid rgba(255, 255, 255, .34);
+    color: #FFFFFF;
+    box-shadow: 0 10px 22px -12px rgba(0, 0, 0, .8);
+    backdrop-filter: blur(4px);
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-play .ic {
+    width: 20px;
+    height: 20px;
+    margin-left: 2px;
+    opacity: 1;
+    fill: currentColor;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-ph-wide { height: auto; }
+
+/* the honest one-liner under the play mark in a sample video */
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-cap {
+    margin-top: 10px;
+    font-size: 10.6px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    color: rgba(255, 255, 255, .72);
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-audio-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 12px 14px;
+    border: 1px solid var(--hv-line);
+    border-radius: var(--hv-r-md);
+    background: #F7FAFC;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-audio-wrap > .ic { width: 20px; height: 20px; color: var(--hv-green-ink); flex: none; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-audio-meta { flex: 1 1 auto; min-width: 0; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-audio-meta b { display: block; font-size: 11.6px; font-weight: 800; color: var(--hv-ink); }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-audio-meta audio { width: 100%; margin-top: 4px; height: 32px; }
+
+/* the warning band sits inside the frame, above the photo */
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-alert {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    gap: 8px;
+    padding: 9px 11px;
+    border-radius: 12px;
+    background: rgba(185, 28, 28, .94);
+    box-shadow: 0 12px 24px -14px rgba(0, 0, 0, .7);
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-alert .ic { width: 16px; height: 16px; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-alert span { font-size: 11.4px; font-weight: 800; line-height: 1.35; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-media-alert small { margin-top: 2px; font-size: 9.2px; font-weight: 600; }
+
+/* --- link card ----------------------------------------------------------- */
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-linkcard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--hv-line);
+    border-radius: var(--hv-r-md);
+    background: #F8FAFD;
+    text-decoration: none;
+    color: var(--hv-ink);
+    transition: border-color .16s ease, background .16s ease;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-linkcard:hover { border-color: #BFE0D3; background: #F3FBF7; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-linkcard-ico {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex: none;
+    border-radius: 11px;
+    background: #FFFFFF;
+    border: 1px solid var(--hv-line);
+    color: var(--hv-green-ink);
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-linkcard-ico .ic { width: 16px; height: 16px; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-linkcard-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-linkcard-t {
+    font-size: 11.8px;
+    font-weight: 800;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-linkcard-d {
+    font-size: 9.6px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    color: var(--hv-faint);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-linkcard-go { width: 15px; height: 15px; flex: none; color: #9FB0BF; }
+
+/* --- blocks (Jilinde / maelekezo / chanzo) -------------------------------- */
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-pblocks { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-pblock {
+    padding: 11px 12px;
+    border: 1px solid var(--hv-line-soft);
+    border-radius: var(--hv-r-md);
+    background: #F9FBFD;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-pblock-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 7px;
+    font-size: 9.6px;
+    font-weight: 900;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: #5B7288;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-pblock-title .ic { width: 13px; height: 13px; color: var(--hv-green); }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-pblock-items { display: flex; flex-direction: column; gap: 5px; margin: 0; padding: 0; list-style: none; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-pblock-items li {
+    position: relative;
+    padding-left: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #33495E;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-pblock-items li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 7px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--hv-green);
+}
+
+/* --- report CTA: an inline action, not a full-width banner ---------------- */
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-preport {
+    display: flex;
+    flex-direction: row;      /* 12-posttypes sets column — a row reads as one action */
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    width: auto;
+    min-height: 38px;
+    padding: 0 14px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #12A67F 0%, #0A6E56 100%);
+    color: #FFFFFF;
+    font-size: 11.6px;
+    font-weight: 900;
+    box-shadow: 0 10px 18px -14px rgba(10, 110, 86, .95);
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-cta .ic { width: 15px; height: 15px; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-cta:hover { background: linear-gradient(135deg, #0E9673 0%, #085A46 100%); }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-preport-note {
+    flex: 1 1 0;
+    min-width: 0;
+    margin: 0;
+    font-size: 9.4px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: left;
+    color: var(--hv-faint);
+}
+
+/* --- action rail --------------------------------------------------------- */
+/* Five actions, equal width, icon over label, one tinted pill when active. */
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-actions {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
+    align-items: center;
+    gap: 2px;
+    margin: 12px -14px 0;
+    padding: 8px 12px calc(8px);
+    border-top: 1px solid var(--hv-line-soft);
+    background: #FCFEFF;
+    border-radius: 0 0 var(--hv-r-xl) var(--hv-r-xl);
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    min-height: 46px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: 11px;
+    background: transparent;
+    color: #5A7086;
+    font-size: 10.2px;
+    font-weight: 800;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .14s ease, color .14s ease;
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act .ic { width: 20px; height: 20px; flex: none; stroke-width: 1.9; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act:hover { background: #F0F5F9; color: #24384C; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act:focus-visible { outline: 2px solid var(--hv-green); outline-offset: 1px; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act.is-on {
+    background: var(--gh-role-soft, #E6F7F1);
+    color: var(--gh-role-ink, #0A6E56);
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act.is-on .ic { fill: currentColor; fill-opacity: .2; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act-comment.is-on { background: var(--hv-blue-soft); color: var(--hv-blue-ink); }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act-save.is-on { background: var(--hv-amber-soft); color: var(--hv-amber-ink); }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act-save.is-on .ic { fill: currentColor; fill-opacity: .85; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act-repost.is-on { background: #E3F5F4; color: #0B6E63; }
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act span {
+    display: block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* When the card is narrower than the five whole labels need, the rail falls
+   back to icon + count. Nothing is ever clipped mid-word: the choice is the
+   full word or the icon, never half a word. */
+@container (max-width: 296px) {
+    :is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act span:not(.gh-act-count) { display: none; }
+}
+
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act-more { grid-column: 6; width: auto; justify-self: stretch; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act-more span { display: none; }
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act-more .ic { width: 20px; height: 20px; }
+
+/* the ⋮ menu drops from the right edge, above the rail */
+:is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-menu { z-index: 30; }
+
+/* A phone gets icon-over-label: every action keeps its word, and the rail
+   stays a single calm line. */
+@media (max-width: 430px) {
+    /* the audience reads better on its own line than clipped to three dots */
+    /* the audience sits at the end of the chip row, plain — a full-width grey
+       pill reads like an empty input field */
+    :is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-audience {
+        flex: 0 1 auto;
+        margin-left: auto;
+        padding: 0 2px;
+        background: none;
+        text-align: right;
+    }
+
+    :is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-actions {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        padding: 6px 6px;
+        gap: 0;
+    }
+
+    /* "Imenisaidia" is the longest label, so its column gets a little extra */
+    :is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-actions {
+        grid-template-columns: minmax(0, 1.3fr) repeat(4, minmax(0, 1fr)) 24px;
+    }
+
+    :is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act {
+        gap: 3px;
+        min-height: 46px;
+        padding: 4px 1px 2px;
+        font-size: 8.2px;
+        font-weight: 800;
+        letter-spacing: -0.12px;
+    }
+
+    :is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act .ic { width: 20px; height: 20px; flex: 0 0 auto; }
+    :is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act span { display: block; max-width: 100%; }
+    :is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act-more { width: auto; justify-self: stretch; padding: 4px 1px 2px; }
+    :is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-act-more .ic { width: 20px; height: 20px; }
+}
+
+/* ============================================== 10. FEED STATES + SKELETON */
+
+.page-container.gh-home .gh-feed-state,
+.page-container.gh-home .gh-feed-skel {
+    border: 1px solid var(--hv-line);
+    border-radius: var(--hv-r-xl);
+    background: var(--hv-card);
+    box-shadow: var(--hv-shadow-1);
+}
+
+.page-container.gh-home .gh-feed-state b { font-size: 14px; font-weight: 900; letter-spacing: -0.2px; }
+.page-container.gh-home .gh-feed-state span { font-size: 11.6px; font-weight: 600; line-height: 1.5; color: var(--hv-muted); }
+
+/* ===================================================== 11. TABLET / DESKTOP */
+/* The feed becomes a two-column board on a wide screen: the hero and the
+   safety card keep their own rhythm, the posts sit side by side. */
+
+/* A phone-sized column on a desktop screen looks unfinished: from a tablet up
+   the page widens to a real board and the feed becomes two columns. */
+@media (min-width: 1024px) {
+    .page-container.gh-home { max-width: 1120px; margin-left: auto; margin-right: auto; }
+
+    /* on a wide screen the greeting reads as one line of two halves: the words
+       on the left, the device-state chip on the right. The decorative tile is
+       only needed on a phone, where there is no room for the chip. */
+    .page-container.gh-home .gh-welcome {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas: "copy meta";
+        align-items: end;
+        gap: 24px;
+    }
+    .page-container.gh-home .gh-welcome-copy { grid-area: copy; }
+    .page-container.gh-home .gh-welcome-badge { display: none; }
+    .page-container.gh-home .gh-welcome-meta {
+        grid-area: meta;
+        grid-column: auto;
+        margin-top: 0;
+        padding: 6px 12px;
+        border: 1px solid var(--hv-line);
+        border-radius: 999px;
+        background: var(--hv-card);
+        font-size: 11.4px;
+        color: var(--hv-muted);
+    }
+    .page-container.gh-home .gh-welcome,
+    .page-container.gh-home .gh-section,
+    .page-container.gh-home .gh-sos,
+    .page-container.gh-home .gh-safety { max-width: none; }
+    .page-container.gh-home .gh-hero { max-width: none; }
+}
+
+@media (max-width: 619px) {
+    /* the controls sit bottom-right; the copy stops above them */
+    .page-container.gh-home .gh-hero-inner { padding-bottom: 54px; }
+    .page-container.gh-home .gh-hero-desc { max-width: 32ch; font-size: 11.6px; }
+}
+
+@media (min-width: 620px) {
+    .page-container.gh-home .gh-hero { height: 320px; }
+}
+
+@media (min-width: 900px) {
+    .page-container.gh-home .gh-hero { height: 360px; }
+    .page-container.gh-home .gh-qa-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+
+    .page-container.gh-home .gh-feed {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+        gap: 16px;
+    }
+
+    :is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post-actions { margin: 12px -14px 0; }
+}
+
+
+
+/* ================================================== 12. MOTION + A11Y GUARD */
+
+@media (prefers-reduced-motion: reduce) {
+    .page-container.gh-home *,
+    .page-container.gh-home *::before {
+        transition: none !important;
+        animation: none !important;
+    }
+    .page-container.gh-home .gh-topic:hover,
+    .page-container.gh-home .gh-qa:hover { transform: none; }
+}
+
+@media (forced-colors: active) {
+    .page-container.gh-home .gh-qa,
+    .page-container.gh-home .gh-topic,
+    :is(.page-container.gh-home, .gh-profile, #ghcPreviewHost) .gh-post { border: 1px solid CanvasText; }
+}

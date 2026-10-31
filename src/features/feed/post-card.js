@@ -50,7 +50,10 @@ export function mediaHtml(post) {
 
   if (images.length) {
     const cls = `gh-gal gh-gal-${Math.min(images.length, 4)}`;
-    html += `<div class="${cls}">` + images.map((m, idx) => {
+    const count = images.length > 1
+      ? `<span class="gh-media-count"><svg class="ic" aria-hidden="true"><use href="#i-image-plus"/></svg>${images.length}</span>`
+      : '';
+    html += `<div class="gh-media-frame">${count}<div class="${cls}">` + images.map((m, idx) => {
       if (m.placeholder) {
         return '<div class="gh-media-ph"><svg class="ic"><use href="#i-image-plus"/></svg><span>Picha (sampuli)</span></div>';
       }
@@ -60,15 +63,23 @@ export function mediaHtml(post) {
                  aria-label="Fungua picha ${idx + 1}">
                 <img src="${escapeHtml(src)}" alt="${escapeHtml(m.name || `Picha ${idx + 1}`)}" loading="lazy">
               </button>`;
-    }).join('') + '</div>';
+    }).join('') + '</div></div>';
   }
 
   if (video) {
     if (video.placeholder) {
-      html += '<div class="gh-media-ph gh-media-ph-wide"><svg class="ic"><use href="#i-video"/></svg><span>Video (sampuli)</span></div>';
+      // one label, not three: the pill already says "Video · sampuli", so the
+      // frame carries only the play mark and one honest line under it
+      html += `<div class="gh-media-frame is-video"><span class="gh-media-kind">Video · sampuli</span>
+        <div class="gh-media-ph gh-media-ph-wide is-video">
+          <span class="gh-media-play" aria-hidden="true"><svg class="ic"><use href="#i-play"/></svg></span>
+          <span class="gh-media-cap">Hakuna video halisi</span>
+        </div></div>`;
     } else {
       const src = video.url || getCachedUrl(video.id);
-      html += `<div class="gh-video-wrap"><video class="gh-video" controls preload="metadata" playsinline src="${escapeHtml(src)}"></video></div>`;
+      const poster = video.poster ? ` poster="${escapeHtml(video.poster)}"` : '';
+      html += `<div class="gh-media-frame is-video"><span class="gh-media-kind">Video</span>
+        <div class="gh-video-wrap"><video class="gh-video" controls preload="metadata" playsinline${poster} src="${escapeHtml(src)}"></video></div></div>`;
     }
   }
 
@@ -84,12 +95,19 @@ export function mediaHtml(post) {
   }
 
   if (links.length) {
-    html += links.map((l) => `
+    html += links.map((l) => {
+      let host = '';
+      try { host = new URL(l.url).hostname.replace(/^www\./, ''); } catch (_) { host = ''; }
+      return `
       <a class="gh-linkcard" href="${escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer nofollow">
-        <svg class="ic" aria-hidden="true"><use href="#i-link"/></svg>
-        <span class="gh-linkcard-t">${escapeHtml(l.title || l.url)}</span>
+        <span class="gh-linkcard-ico" aria-hidden="true"><svg class="ic"><use href="#i-link"/></svg></span>
+        <span class="gh-linkcard-body">
+          <span class="gh-linkcard-t">${escapeHtml(l.title || l.url)}</span>
+          ${host ? `<span class="gh-linkcard-d">${escapeHtml(host)}</span>` : ''}
+        </span>
         <svg class="ic gh-linkcard-go" aria-hidden="true"><use href="#i-arrow-right"/></svg>
-      </a>`).join('');
+      </a>`;
+    }).join('');
   }
   return html;
 }
@@ -241,8 +259,8 @@ export function postCard(post, ctx = {}) {
       </div>
 
       <div class="gh-post-topline">
-        <span class="gh-type-badge ${type.cls}">
-          <svg class="ic" aria-hidden="true"><use href="#${type.icon}"/></svg>${type.label}
+        <span class="gh-type-badge ${type.cls}" title="${escapeHtml(type.label)}">
+          <svg class="ic" aria-hidden="true"><use href="#${type.icon}"/></svg><span class="gh-sr">${escapeHtml(type.label)}</span>
         </span>
         ${badge}
         <span class="gh-post-topic">${escapeHtml(post.topicLabel || topicLabel(post.topic))}</span>

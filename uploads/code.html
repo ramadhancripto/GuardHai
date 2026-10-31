@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="sw"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-dim": "#d2d9f4", "on-background": "#131b2e", "surface-variant": "#dae2fd", "on-primary": "#ffffff", "surface-container-highest": "#dae2fd", "primary-container": "#18a982", "outline": "#6d7a73", "secondary-container": "#316bf3", "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "on-secondary": "#ffffff", "primary": "#006c51", "background": "#faf8ff", "secondary": "#0051d5", "on-error-container": "#93000a", "on-tertiary-fixed-variant": "#653e00", "on-primary-container": "#003527", "surface-container": "#eaedff", "error-container": "#ffdad6", "tertiary-fixed-dim": "#ffb95f", "on-secondary-fixed-variant": "#003ea8", "surface-container-high": "#e2e7ff", "on-secondary-container": "#fefcff", "on-primary-fixed": "#002116", "secondary-fixed-dim": "#b4c5ff", "on-tertiary": "#ffffff", "error": "#ba1a1a", "inverse-primary": "#5edcb1", "on-tertiary-fixed": "#2a1700", "on-secondary-fixed": "#00174b", "surface-tint": "#006c51", "tertiary-container": "#d08500", "primary-fixed": "#7df9cd", "tertiary": "#855300", "secondary-fixed": "#dbe1ff", "on-primary-fixed-variant": "#00513c", "surface": "#faf8ff", "on-tertiary-container": "#432800", "on-surface-variant": "#3d4a43", "tertiary-fixed": "#ffddb8", "inverse-surface": "#283044", "surface-container-low": "#f2f3ff", "primary-fixed-dim": "#5edcb1", "surface-bright": "#faf8ff", "on-surface": "#131b2e", "outline-variant": "#bccac2", "inverse-on-surface": "#eef0ff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-md": "1rem", "margin": "1rem", "gutter": "1rem", "margin-desktop": "3rem", "space-xs": "0.25rem", "space-sm": "0.5rem", "margin-tablet": "2rem", "space-xl": "2rem", "gutter-desktop": "2rem", "space-lg": "1.5rem", "gutter-tablet": "1.5rem" }, fontFamily: { "display-hero": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "display-hero-mobile": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"] }, fontSize: { "display-hero": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "800" }], "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "700" }], "label-sm": ["10px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "700" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "headline-sm": ["18px", { lineHeight: "24px", fontWeight: "600" }], "headline-lg": ["30px", { lineHeight: "38px", letterSpacing: "-0.01em", fontWeight: "700" }], "headline-md": ["20px", { lineHeight: "28px", fontWeight: "600" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "display-hero-mobile": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "800" }], "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col antialiased selection:bg-primary-fixed"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><div class="w-10 h-10 rounded-lg bg-primary-container/15 flex items-center justify-center"><span class="material-symbols-outlined text-primary text-[26px]">health_and_safety</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm tracking-tight text-primary leading-none">GuardHai</span><span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Afya &amp; Usalama</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Taarifa na Kengele" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/60 transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center min-w-[32px] min-h-[32px]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col flex-1 w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full px-margin space-y-space-md">
+<!-- 1. Context Sub-Header: Profile Context Switcher & System Trust Stamp -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="flex items-center justify-between gap-space-sm">
+<!-- Profile Context Dropdown Trigger -->
+<div class="relative inline-block text-left" id="profileMenuContainer">
+<button aria-expanded="false" class="flex items-center gap-space-xs bg-surface-container-high px-space-md py-space-xs rounded-full shadow-sm hover:bg-surface-variant transition-colors min-h-[44px]" id="profileDropdownBtn" type="button">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-md text-label-md text-on-surface truncate max-w-[200px]" id="currentProfileLabel">Wasifu: Mimi (Juma Nassoro)</span>
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant transition-transform" id="profileDropdownIcon">expand_more</span>
+</button>
+<!-- Dropdown Menu Sheet -->
+<div class="hidden absolute left-0 mt-space-xs w-64 rounded-xl bg-surface-container-lowest shadow-xl z-30 p-space-xs space-y-1" id="profileDropdownMenu">
+<button class="w-full text-left px-space-sm py-space-xs rounded-lg flex items-center justify-between bg-primary/10 text-primary font-label-md text-label-md" onclick="selectProfile('Mimi (Juma Nassoro)')" type="button">
+<span class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px]">person</span>
+<span>Mimi (Juma Nassoro)</span>
+</span>
+<span class="material-symbols-outlined text-[16px]">check</span>
+</button>
+<button class="w-full text-left px-space-sm py-space-xs rounded-lg flex items-center gap-space-xs text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-label-md transition-colors" onclick="selectProfile('Mtegemezi: Amina (Binti)')" type="button">
+<span class="material-symbols-outlined text-[18px]">child_care</span>
+<span>Mtegemezi: Amina (Binti)</span>
+</button>
+<button class="w-full text-left px-space-sm py-space-xs rounded-lg flex items-center gap-space-xs text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface font-label-md text-label-md transition-colors" onclick="selectProfile('Mtegemezi: Mama Juma')" type="button">
+<span class="material-symbols-outlined text-[18px]">elderly</span>
+<span>Mtegemezi: Mama Juma</span>
+</button>
+<div class="h-px bg-surface-variant my-1"></div>
+<button class="w-full text-left px-space-sm py-space-xs rounded-lg flex items-center gap-space-xs text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+<span>+ Ongeza Mtegemezi Mpya</span>
+</button>
+</div>
+</div>
+<!-- Sync Status Badge -->
+<div class="flex items-center gap-1 bg-surface-container px-space-sm py-1 rounded-full text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px] text-primary">cloud_done</span>
+<span class="hidden sm:inline">Imehifadhiwa</span>
+</div>
+</div>
+<!-- Official System Seal -->
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded-lg">
+<span class="material-symbols-outlined text-[16px] text-primary">verified_user</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant tracking-wide truncate">
+        Mfumo Salama wa Data za Afya • Hifadhi ya Kielektroniki ya Taifa
+      </p>
+</div>
+</div>
+<!-- 2. Health Profile & Medical ID Status Card -->
+<section class="rounded-xl bg-surface-container-lowest p-space-md shadow-md space-y-space-md relative overflow-hidden">
+<!-- Top colored indicator bar -->
+<div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary to-primary-container"></div>
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Kitambulisho cha Dharura</span>
+<span class="bg-primary/10 text-primary px-space-xs py-0.5 rounded-full font-label-sm text-label-sm font-bold">Hai</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Medical ID ya Haraka kwa Madaktari na Waokoaji</p>
+</div>
+<div class="w-12 h-12 rounded-xl bg-error-container text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">medical_information</span>
+</div>
+</div>
+<!-- Completion Metric -->
+<div class="space-y-1 bg-surface-container-low p-space-sm rounded-lg">
+<div class="flex justify-between items-center text-label-md font-label-md">
+<span class="text-on-surface font-semibold">Ukamilishaji wa Wasifu</span>
+<span class="text-primary font-bold">85% Kamilika</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-2 rounded-full transition-all duration-500" style="width: 85%;"></div>
+</div>
+<p class="font-label-sm text-label-sm text-tertiary flex items-center gap-1 pt-0.5">
+<span class="material-symbols-outlined text-[13px]">info</span>
+          Bado: Mizio ya Chakula &amp; Bima ya Afya
+        </p>
+</div>
+<!-- Quick Triage Snapshot Grid -->
+<div class="grid grid-cols-3 gap-space-xs pt-space-xs">
+<div class="bg-surface-container-high/60 p-space-xs rounded-lg text-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant block uppercase tracking-wider">Kundi la Damu</span>
+<span class="font-headline-sm text-headline-sm text-error font-extrabold">O+</span>
+</div>
+<div class="bg-surface-container-high/60 p-space-xs rounded-lg text-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant block uppercase tracking-wider">Mizio (Allergy)</span>
+<span class="font-label-md text-label-md text-on-surface font-bold truncate block" title="Penicillin">Penicillin</span>
+<span class="font-label-sm text-label-sm text-error leading-none">Kali</span>
+</div>
+<div class="bg-surface-container-high/60 p-space-xs rounded-lg text-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant block uppercase tracking-wider">Magonjwa Sugu</span>
+<span class="font-label-md text-label-md text-primary font-bold block">Hakuna</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-none">Imethibitishwa</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex gap-space-sm pt-space-xs">
+<button class="flex-1 bg-primary text-on-primary font-label-lg text-label-lg py-space-sm px-space-md rounded-lg flex items-center justify-center gap-space-xs shadow-sm hover:opacity-95 active:scale-[0.98] transition-transform min-h-[48px]" id="showQrBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">qr_code_2</span>
+<span>Onyesha QR Medical ID</span>
+</button>
+<button class="bg-surface-container-high text-on-surface font-label-lg text-label-lg py-space-sm px-space-md rounded-lg flex items-center justify-center gap-space-xs hover:bg-surface-variant active:scale-[0.98] transition-colors min-h-[48px]" type="button">
+<span class="material-symbols-outlined text-[20px]">edit_note</span>
+<span class="hidden sm:inline">Hariri Wasifu</span>
+</button>
+</div>
+</div>
+<!-- Collapsible Interactive QR Modal Drawer (Toggled by Show QR) -->
+<div class="hidden mt-space-md p-space-md bg-surface-container-high rounded-xl text-center space-y-space-sm" id="qrModalBox">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Nambari ya Usalama: GH-TZ-98442</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant" id="closeQrBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- SVG QR Graphic Representation -->
+<div class="w-44 h-44 mx-auto bg-surface-container-lowest p-space-sm rounded-xl shadow-inner flex items-center justify-center">
+<svg class="w-36 h-36" fill="none" viewbox="0 0 100 100">
+<rect fill="#ffffff" height="100" width="100"></rect>
+<!-- Corner Position Markers -->
+<rect fill="#131b2e" height="26" rx="4" width="26" x="10" y="10"></rect>
+<rect fill="#ffffff" height="16" rx="2" width="16" x="15" y="15"></rect>
+<rect fill="#006c51" height="8" width="8" x="19" y="19"></rect>
+<rect fill="#131b2e" height="26" rx="4" width="26" x="64" y="10"></rect>
+<rect fill="#ffffff" height="16" rx="2" width="16" x="69" y="15"></rect>
+<rect fill="#006c51" height="8" width="8" x="73" y="19"></rect>
+<rect fill="#131b2e" height="26" rx="4" width="26" x="10" y="64"></rect>
+<rect fill="#ffffff" height="16" rx="2" width="16" x="15" y="69"></rect>
+<rect fill="#006c51" height="8" width="8" x="19" y="73"></rect>
+<!-- Center Identity Cross -->
+<rect fill="#006c51" height="22" rx="2" width="8" x="46" y="20"></rect>
+<rect fill="#006c51" height="8" rx="2" width="22" x="39" y="27"></rect>
+<!-- Simulated QR Data Bits -->
+<rect fill="#131b2e" height="6" width="6" x="42" y="52"></rect>
+<rect fill="#131b2e" height="6" width="6" x="52" y="52"></rect>
+<rect fill="#131b2e" height="6" width="6" x="62" y="44"></rect>
+<rect fill="#006c51" height="6" width="6" x="72" y="44"></rect>
+<rect fill="#131b2e" height="6" width="6" x="42" y="62"></rect>
+<rect fill="#006c51" height="6" width="6" x="52" y="62"></rect>
+<rect fill="#131b2e" height="6" width="6" x="62" y="62"></rect>
+<rect fill="#131b2e" height="6" width="6" x="72" y="62"></rect>
+<rect fill="#006c51" height="6" width="6" x="42" y="74"></rect>
+<rect fill="#131b2e" height="6" width="6" x="52" y="74"></rect>
+<rect fill="#131b2e" height="6" width="6" x="62" y="74"></rect>
+<rect fill="#ba1a1a" height="6" width="6" x="72" y="74"></rect>
+</svg>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Waokoaji au watoa huduma wanaweza kusoma msimbo huu bila kufungua simu yako.</p>
+</div>
+</section>
+<!-- 3. Main Action Grid / Shortcuts (4x2 on Mobile, Responsive) -->
+<section class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Huduma za Haraka</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant">GuardHai Suite</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm pt-space-xs">
+<!-- 1. Medical ID -->
+<a class="group p-space-sm rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col items-start justify-between min-h-[104px]" href="#">
+<div class="w-10 h-10 rounded-lg bg-error-container text-error flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[24px]">badge</span>
+</div>
+<div class="mt-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold block leading-tight">Medical ID</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mt-0.5">Kitambulisho cha Dharura</span>
+</div>
+</a>
+<!-- 2. Dawa Zangu -->
+<a class="group p-space-sm rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col items-start justify-between min-h-[104px]" href="#">
+<div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[24px]">pill</span>
+</div>
+<div class="mt-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold block leading-tight">Dawa Zangu</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mt-0.5">Ratiba &amp; Vikumbusho</span>
+</div>
+</a>
+<!-- 3. Rekodi za Afya -->
+<a class="group p-space-sm rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col items-start justify-between min-h-[104px]" href="#">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest text-secondary flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[24px]">folder_shared</span>
+</div>
+<div class="mt-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold block leading-tight">Rekodi za Afya</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mt-0.5">Vipimo &amp; Risiti</span>
+</div>
+</a>
+<!-- 4. Tafuta Daktari -->
+<a class="group p-space-sm rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col items-start justify-between min-h-[104px]" href="#">
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[24px]">person_search</span>
+</div>
+<div class="mt-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold block leading-tight">Tafuta Daktari</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mt-0.5">Wataalamu &amp; Kliniki</span>
+</div>
+</a>
+<!-- 5. Upatikanaji wa Damu -->
+<a class="group p-space-sm rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col items-start justify-between min-h-[104px]" href="#">
+<div class="w-10 h-10 rounded-lg bg-error-container text-error flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[24px]">bloodtype</span>
+</div>
+<div class="mt-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold block leading-tight">Damu Salama</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mt-0.5">Benki Kuu ya Damu</span>
+</div>
+</a>
+<!-- 6. Miadi ya Kliniki -->
+<a class="group p-space-sm rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col items-start justify-between min-h-[104px]" href="#">
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[24px]">calendar_month</span>
+</div>
+<div class="mt-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold block leading-tight">Miadi ya Kliniki</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mt-0.5">Ushauri &amp; Rufaa</span>
+</div>
+</a>
+<!-- 7. Dharura ya Kimatibabu -->
+<a class="group p-space-sm rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col items-start justify-between min-h-[104px]" href="#">
+<div class="w-10 h-10 rounded-lg bg-error text-on-error flex items-center justify-center group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[24px]">e911_emergency</span>
+</div>
+<div class="mt-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold block leading-tight">Huduma ya Kwanza</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mt-0.5">Msaada wa Haraka</span>
+</div>
+</a>
+<!-- 8. Clinical Network -->
+<a class="group p-space-sm rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col items-start justify-between min-h-[104px] relative" href="#">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center group-hover:scale-105 transition-transform relative">
+<span class="material-symbols-outlined text-[24px]">local_hospital</span>
+<span class="absolute -top-1 -right-1 bg-surface-container-lowest text-primary rounded-full p-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[12px] block">lock</span>
+</span>
+</div>
+<div class="mt-space-xs">
+<div class="flex items-center gap-1">
+<span class="font-label-lg text-label-lg text-on-surface font-bold leading-tight">Clinical Portal</span>
+<span class="bg-primary/10 text-primary text-[9px] px-1 rounded font-bold">MCT</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mt-0.5">Wataalamu Pekee</span>
+</div>
+</a>
+</div>
+</section>
+<!-- 4. Today's Medication Tracker (Ratiba ya Dawa Leo) -->
+<section class="rounded-xl bg-surface-container-lowest p-space-md shadow-md space-y-space-md">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Ratiba ya Dawa Leo</h2>
+<span class="bg-primary/10 text-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full font-semibold">1/3 Zimenywewa</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Jumanne, 22 Oktoba 2024</p>
+</div>
+<button aria-label="Ongeza Dawa" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-surface-variant transition-colors" type="button">
+<span class="material-symbols-outlined text-[22px]">add</span>
+</button>
+</div>
+<!-- Tracker Progress Bar -->
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full transition-all duration-300" id="medProgressBar" style="width: 33.33%;"></div>
+</div>
+<!-- Doses Stack -->
+<div class="space-y-space-xs">
+<!-- Dose 1: Completed -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-low transition-all">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-lg bg-primary/15 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold truncate">Amoxicillin 500mg</span>
+<span class="line-through text-on-surface-variant font-label-sm text-label-sm hidden sm:inline">Kibonge 1</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">08:00 Asubuhi • Baada ya Chakula</p>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<span class="font-label-sm text-label-sm text-primary font-bold bg-primary/10 px-2 py-1 rounded-full flex items-center gap-1">
+<span>Saa 08:15</span>
+<span class="material-symbols-outlined text-[14px]">done</span>
+</span>
+</div>
+</div>
+<!-- Dose 2: Pending / Actionable -->
+<div class="p-space-sm rounded-xl bg-surface-container shadow-sm space-y-space-xs transition-all" id="doseCardPending">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">medication</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold truncate">Paracetamol 500mg</span>
+<span class="bg-tertiary-container/20 text-on-tertiary-container font-label-sm text-label-sm px-1.5 py-0.2 rounded font-semibold">Inasubiriwa</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">14:00 Mchana • Kwa ajili ya maumivu ya kichwa</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary font-bold shrink-0">Mchana</span>
+</div>
+<div class="flex items-center gap-space-sm pt-space-xs" id="doseActionsRow">
+<button class="flex-1 bg-primary text-on-primary font-label-md text-label-md py-2 px-space-sm rounded-lg flex items-center justify-center gap-1 hover:opacity-90 active:scale-[0.98] transition-all min-h-[44px]" id="takeDoseBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">done_all</span>
+<span>Kunywa Dozi Sasa</span>
+</button>
+<button class="bg-surface-container-highest text-on-surface-variant font-label-md text-label-md py-2 px-space-md rounded-lg hover:text-on-surface transition-colors min-h-[44px]" id="skipDoseBtn" type="button">
+            Ruka
+          </button>
+</div>
+<div class="hidden text-primary font-label-sm text-label-sm font-bold flex items-center gap-1 pt-1" id="doseSuccessMsg">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Umethibitisha: Imenywewa saa hii! Afya njema.</span>
+</div>
+</div>
+<!-- Dose 3: Evening Schedule -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-low opacity-80">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-variant text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">nightlight</span>
+</div>
+<div class="min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface font-bold truncate block">Cetirizine 10mg</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">20:00 Usiku • Kabla ya Kulala</p>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">
+            Bado masaa 6
+          </span>
+</div>
+</div>
+</div>
+<!-- Advisory Micro-copy -->
+<div class="flex items-start gap-space-xs p-space-xs bg-surface-container-low rounded-lg text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-tertiary shrink-0 mt-0.5">tips_and_updates</span>
+<p class="font-label-sm text-label-sm leading-tight">
+        Vikumbusho hivi ni kwa ajili ya mwongozo binafsi, sio ushauri wa kubadilisha maelekezo ya daktari.
+      </p>
+</div>
+</section>
+<!-- 5. Upcoming Medical Appointment Card -->
+<section class="rounded-xl bg-surface-container-lowest p-space-md shadow-md space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[22px]">event_upcoming</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Miadi Inayokuja</h2>
+</div>
+<span class="bg-secondary-fixed text-on-secondary-fixed-variant px-2.5 py-1 rounded-full font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+        Imeombwa (Inasubiri Uhakiki)
+      </span>
+</div>
+<!-- Doctor & Facility Layout -->
+<div class="bg-surface-container-low p-space-sm rounded-xl space-y-space-sm">
+<div class="flex items-start gap-space-sm">
+<div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-headline-sm shrink-0">
+          NK
+        </div>
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Dkt. Neema Kimaro</span>
+<span class="bg-primary/10 text-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded font-semibold">MCT #48102</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Afisa Afya ya Jamii • Hospitali ya Rufaa ya Mkoa, Dar es Salaam</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-space-xs pt-1 font-label-md text-label-md">
+<div class="bg-surface-container-lowest p-space-xs rounded-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-secondary">calendar_today</span>
+<div class="min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Tarehe na Saa</span>
+<span class="text-on-surface font-bold truncate block">Alhamisi, 24 Oktoba • 10:30 Asubuhi</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-xs rounded-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">stethoscope</span>
+<div class="min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Aina ya Huduma</span>
+<span class="text-on-surface font-bold truncate block">Ushauri &amp; Shinikizo la Damu</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 bg-surface-container-high text-on-surface font-label-md text-label-md py-space-xs px-space-sm rounded-lg hover:bg-surface-variant transition-colors min-h-[44px]" type="button">
+        Tazama Maelezo
+      </button>
+<button class="flex-1 bg-surface-container text-on-surface-variant font-label-md text-label-md py-space-xs px-space-sm rounded-lg hover:text-on-surface transition-colors min-h-[44px]" type="button">
+        Badili Tarehe
+      </button>
+</div>
+</section>
+<!-- 6. Clinical Network Portal Card (Verified MCT Portal for Clinicians) -->
+<section class="rounded-xl bg-gradient-to-br from-primary to-on-primary-container p-space-md text-on-primary shadow-lg relative overflow-hidden">
+<!-- Ambient Pattern Background -->
+<div class="absolute -right-8 -bottom-8 w-40 h-40 rounded-full bg-white/5 pointer-events-none"></div>
+<div class="relative z-10 space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="bg-white/20 p-1.5 rounded-lg backdrop-blur-sm">
+<span class="material-symbols-outlined text-[20px] text-white">stethoscope</span>
+</span>
+<span class="font-label-md text-label-md font-bold uppercase tracking-wider text-primary-fixed">Mtandao wa Kitaalamu</span>
+</div>
+<span class="bg-white/20 px-2 py-0.5 rounded-full font-label-sm text-label-sm text-white font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+          MCT Verified
+        </span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-white">Clinical Network Portal</h3>
+<p class="font-body-sm text-body-sm text-primary-fixed-dim mt-1 leading-snug">
+          Jukwaa salama la wataalamu wa afya wenye usajili wa MCT kujadili kesi ngumu za kimatibabu na mikutano ya kliniki.
+        </p>
+</div>
+<div class="bg-black/20 backdrop-blur-sm p-space-xs rounded-lg flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed animate-ping"></span>
+<span class="font-label-sm text-label-sm text-white font-medium">Mada 3 Mpya za Kliniki • Mkutano wa Kesho wa Rufaa</span>
+</div>
+<button class="w-full bg-surface-container-lowest text-primary font-label-lg text-label-lg py-space-sm px-space-md rounded-lg flex items-center justify-center gap-space-xs shadow-md hover:bg-surface-container transition-all active:scale-[0.98] min-h-[48px]" type="button">
+<span>Fungua Lango la Wataalamu</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- 7. Blood Availability Quick Widget (Benki ya Damu Salama) -->
+<section class="rounded-xl bg-surface-container-lowest p-space-md shadow-md space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-error-container text-error flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">water_drop</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Benki ya Damu Salama</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Kanda ya Mashariki (Muhimbili Hub)</span>
+</div>
+</div>
+<span class="bg-error-container text-on-error-container font-label-sm text-label-sm font-bold px-2 py-1 rounded-full animate-pulse">
+        Uhitaji Mkubwa
+      </span>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded-xl space-y-space-xs">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface font-semibold">Makundi Yenye Uhitaji wa Haraka Leo:</span>
+<span class="font-label-md text-label-md text-error font-extrabold">O- na B-</span>
+</div>
+<!-- Mini Stock Bar Visual -->
+<div class="grid grid-cols-4 gap-2 pt-1 text-center font-label-sm text-label-sm">
+<div class="bg-surface-container-lowest p-1.5 rounded-lg">
+<span class="block text-error font-bold text-label-md">O+</span>
+<span class="text-primary font-semibold">Inatosha</span>
+</div>
+<div class="bg-surface-container-lowest p-1.5 rounded-lg border-b-2 border-error">
+<span class="block text-error font-bold text-label-md">O-</span>
+<span class="text-error font-semibold">Pungufu!</span>
+</div>
+<div class="bg-surface-container-lowest p-1.5 rounded-lg">
+<span class="block text-error font-bold text-label-md">A+</span>
+<span class="text-primary font-semibold">Inatosha</span>
+</div>
+<div class="bg-surface-container-lowest p-1.5 rounded-lg border-b-2 border-error">
+<span class="block text-error font-bold text-label-md">B-</span>
+<span class="text-error font-semibold">Pungufu!</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 bg-surface-container-high text-on-surface font-label-md text-label-md py-space-xs px-space-sm rounded-lg hover:bg-surface-variant transition-colors min-h-[44px]" type="button">
+        Angalia Vituo vya Damu
+      </button>
+<button class="flex-1 bg-error/10 text-error font-label-md text-label-md py-space-xs px-space-sm rounded-lg hover:bg-error/20 font-bold transition-colors min-h-[44px]" type="button">
+        Jitolee Kuchangia
+      </button>
+</div>
+</section>
+<!-- 8. Emergency Notice & Disclaimer Banner -->
+<section class="rounded-xl bg-error-container/40 p-space-md shadow-sm space-y-space-xs">
+<div class="flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-error text-[24px] shrink-0 mt-0.5">notification_important</span>
+<div class="space-y-1">
+<h4 class="font-label-lg text-label-lg text-on-error-container font-bold">Kumbuka Kuhusu Dharura Kubwa</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+          Kwa dharura kubwa inayohitaji msaada wa papo hapo (kama vile ajali, kukosa pumzi, au kupoteza fahamu), tumia kitufe chekundu cha <span class="font-bold text-error">SOS</span> kilicho chini au piga moja kwa moja namba za uokoaji <span class="font-bold text-on-surface">112</span> au <span class="font-bold text-on-surface">114</span> bila kusubiri.
+        </p>
+</div>
+</div>
+</section>
+</div>
+<!-- Inline Interactive Micro-Interactions Script -->
+<script>
+  // 1. Profile Dropdown Interactivity
+  const profileDropdownBtn = document.getElementById('profileDropdownBtn');
+  const profileDropdownMenu = document.getElementById('profileDropdownMenu');
+  const profileDropdownIcon = document.getElementById('profileDropdownIcon');
+  const currentProfileLabel = document.getElementById('currentProfileLabel');
+
+  if (profileDropdownBtn && profileDropdownMenu) {
+    profileDropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = profileDropdownMenu.classList.contains('hidden');
+      if (isHidden) {
+        profileDropdownMenu.classList.remove('hidden');
+        profileDropdownIcon.classList.add('rotate-180');
+      } else {
+        profileDropdownMenu.classList.add('hidden');
+        profileDropdownIcon.classList.remove('rotate-180');
+      }
+    });
+
+    document.addEventListener('click', () => {
+      if (!profileDropdownMenu.classList.contains('hidden')) {
+        profileDropdownMenu.classList.add('hidden');
+        profileDropdownIcon.classList.remove('rotate-180');
+      }
+    });
+  }
+
+  function selectProfile(name) {
+    if (currentProfileLabel) {
+      currentProfileLabel.textContent = 'Wasifu: ' + name;
+    }
+    if (profileDropdownMenu) {
+      profileDropdownMenu.classList.add('hidden');
+      profileDropdownIcon.classList.remove('rotate-180');
+    }
+  }
+
+  // 2. Interactive Medical ID QR Toggle
+  const showQrBtn = document.getElementById('showQrBtn');
+  const closeQrBtn = document.getElementById('closeQrBtn');
+  const qrModalBox = document.getElementById('qrModalBox');
+
+  if (showQrBtn && qrModalBox) {
+    showQrBtn.addEventListener('click', () => {
+      qrModalBox.classList.toggle('hidden');
+      if (!qrModalBox.classList.contains('hidden')) {
+        qrModalBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  }
+
+  if (closeQrBtn && qrModalBox) {
+    closeQrBtn.addEventListener('click', () => {
+      qrModalBox.classList.add('hidden');
+    });
+  }
+
+  // 3. Medication Dose Action Micro-Interactions
+  const takeDoseBtn = document.getElementById('takeDoseBtn');
+  const skipDoseBtn = document.getElementById('skipDoseBtn');
+  const doseActionsRow = document.getElementById('doseActionsRow');
+  const doseSuccessMsg = document.getElementById('doseSuccessMsg');
+  const medProgressBar = document.getElementById('medProgressBar');
+  const doseCardPending = document.getElementById('doseCardPending');
+
+  if (takeDoseBtn) {
+    takeDoseBtn.addEventListener('click', () => {
+      if (doseActionsRow && doseSuccessMsg) {
+        doseActionsRow.classList.add('hidden');
+        doseSuccessMsg.classList.remove('hidden');
+        if (medProgressBar) {
+          medProgressBar.style.width = '66.6%';
+        }
+        if (doseCardPending) {
+          doseCardPending.classList.remove('bg-surface-container');
+          doseCardPending.classList.add('bg-surface-container-low');
+        }
+      }
+    });
+  }
+
+  if (skipDoseBtn && doseActionsRow) {
+    skipDoseBtn.addEventListener('click', () => {
+      doseActionsRow.innerHTML = '<span class="text-on-surface-variant font-label-sm text-label-sm italic">Dozi hii imerukwa kwa leo. Taarifa imerekodiwa.</span>';
+    });
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.06)]" data-active-classes="text-primary font-bold"><div class="flex items-end justify-between h-20 px-space-xs relative"><a class="flex-1 flex flex-col items-center justify-center h-full min-w-[44px] min-h-[44px] gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="nyumbani" href="#"><span class="material-symbols-outlined text-[24px]">home</span><span class="font-label-sm text-label-sm leading-tight">Nyumbani</span></a><a aria-current="page" class="flex-1 flex flex-col items-center justify-center h-full min-w-[44px] min-h-[44px] gap-0.5 transition-colors text-primary font-bold" data-path="afya" href="#"><span class="material-symbols-outlined text-[24px]">favorite</span><span class="font-label-sm text-label-sm leading-tight">Afya</span></a><div class="flex-1 flex flex-col items-center justify-start h-full"><a aria-label="SOS Dharura" class="-top-4 relative flex flex-col items-center justify-center w-14 h-14 min-w-[56px] min-h-[56px] rounded-full bg-error text-on-error shadow-[0_4px_14px_rgba(186,26,26,0.38)] active:scale-95 transition-transform" data-path="sos" href="#"><span class="material-symbols-outlined text-[28px] font-bold">emergency</span></a><span class="font-label-sm text-label-sm text-error font-bold leading-tight mt-[-8px]">SOS</span></div><a class="flex-1 flex flex-col items-center justify-center h-full min-w-[44px] min-h-[44px] gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="ulinzi" href="#"><span class="material-symbols-outlined text-[24px]">shield</span><span class="font-label-sm text-label-sm leading-tight">Ulinzi</span></a><a class="flex-1 flex flex-col items-center justify-center h-full min-w-[44px] min-h-[44px] gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="jamii" href="#"><span class="material-symbols-outlined text-[24px]">groups</span><span class="font-label-sm text-label-sm leading-tight">Jamii</span></a></div></nav></body></html>

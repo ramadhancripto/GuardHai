@@ -25,7 +25,11 @@ import { countDrafts } from '../../services/drafts.service.js';
 import { createLogger } from '../../core/logger.js';
 import { init as initHero } from '../hero/hero-slideshow.js';
 import { initSearchBar, syncSearchBar } from './search-bar.js';
+import { initHealth } from '../health/health-view.js';
+import { initNetwork, enter as enterNetwork } from '../network/network-view.js';
 import { bus, EVENTS } from '../../core/bus.js';
+import { searchAll } from '../../services/discover.service.js';
+import { markAlertsRead } from '../../services/alerts.service.js';
 
 const log = createLogger('home');
 
@@ -42,20 +46,22 @@ export function setActiveTab(id) {
  */
 export function openSearch() {
   closeMore();
-  openSheet('Tafuta kwenye Uwanja', `
+  openSheet('Tafuta', `
     <div class="gh-search">
-      <label class="ghc-label" for="ghSearchInput">Neno au jina la mwandishi</label>
+      <label class="ghc-label" for="ghSearchInput">Chapisho, mtu au jina la mwandishi</label>
       <input id="ghSearchInput" class="ghc-input" type="search" autocomplete="off"
              placeholder="mf. mafuriko, lishe, Afya" aria-describedby="ghSearchHelp">
       <p id="ghSearchHelp" class="ghc-note-sm">
         Utafutaji unafanyika kwenye kifaa hiki pekee — hakuna kinachotumwa mtandaoni.
       </p>
       <div id="ghSearchResults" class="gh-search-results" aria-live="polite"></div>
+      <div id="ghSearchNetwork" class="gh-search-results" aria-live="polite"></div>
     </div>`);
 
   const input = document.getElementById('ghSearchInput');
   const out = document.getElementById('ghSearchResults');
   if (!input || !out) return;
+  const netOut = document.getElementById('ghSearchNetwork');
   let timer = null;
   input.addEventListener('input', () => {
     clearTimeout(timer);
@@ -66,6 +72,25 @@ export function openSearch() {
       out.textContent = term
         ? `${n} chapisho ${n === 1 ? 'limepatikana' : 'yamepatikana'} kwenye kifaa hiki.`
         : '';
+      // the same term is offered to the network (people, communities, providers)
+      if (netOut) {
+        if (!term) { netOut.innerHTML = ''; return; }
+        try {
+          const r = await searchAll(term);
+          const lines = [
+            r.people.length ? `${r.people.length} mtu/watu` : '',
+            r.communities.length ? `${r.communities.length} jamii` : '',
+            r.providers.length ? `${r.providers.length} watoa huduma` : ''
+          ].filter(Boolean);
+          if (!lines.length) { netOut.innerHTML = ''; return; }
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'gh-btn gh-btn-outline';
+          button.dataset.networkSearch = term;
+          button.textContent = `Mawasiliano: ${lines.join(' · ')} — fungua Gundua`;
+          netOut.replaceChildren(button);
+        } catch (err) { netOut.innerHTML = ''; }
+      }
     }, 180);
   });
   input.focus();
@@ -76,7 +101,7 @@ export function searchFeed(term) {
   return setQuery(term);
 }
 
-export function go(target) {
+export function go(target, options = {}) {
   closeMore();
   const switchTo = window.switchTab || (() => {});
   switch (target) {
@@ -86,23 +111,44 @@ export function go(target) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       break;
     case 'health':
-      // Afya is an existing Shield sub-tab — reused, never duplicated.
-      switchTo('shield');
-      if (window.ProtectEngine) window.ProtectEngine.switchSubTab('health');
+      // Afya now has its own screen (#healthPage). The Shield screen keeps its
+      // own "Protection Health" sub-tab — that is system health, not this section.
+      switchTo('health');
       setActiveTab('tab-health');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       break;
     case 'shield':
       switchTo('shield');
-      if (window.ProtectEngine) window.ProtectEngine.switchSubTab('dashboard');
+      // Shield opens on its own Center (dashboard → device → personal …).
+      if (window.ShieldCenter) window.ShieldCenter.paint();
       setActiveTab('tab-shield');
+      break;
+    case 'sos':
+      // SOS is a page, not a modal: it must be reachable, linkable and printable.
+      switchTo('sos');
+      setActiveTab(null);
+      if (window.GHSosPage) window.GHSosPage.paint();
+      window.scrollTo({ top: 0, behavior: 'auto' });
       break;
     case 'chat':
       switchTo('comm');
       setActiveTab('tab-chat');
+      // the Communication & Support Network paints itself on first entry
+      if (window.GHNetwork) window.GHNetwork.enter();
       break;
     case 'map':
       switchTo('map');
       setActiveTab(null);       // Map has no bottom-nav slot by design
+      break;
+    case 'storage':
+      // The Universal Secure Storage Center has a page of its own. It sits
+      // behind the More menu and the Shield app row, so it has no nav slot.
+      // `options.screen` lands on a specific screen (the old Storage sheet’s
+      // numbers live on `storage.usage`).
+      switchTo('storage');
+      setActiveTab(null);
+      if (window.GHStorage) window.GHStorage.enter(options.screen || null);
+      window.scrollTo({ top: 0, behavior: 'auto' });
       break;
     default:
       switchTo('home');
@@ -111,13 +157,14 @@ export function go(target) {
 
   // The quick search bar belongs to the Uwanja; on other pages it would be a
   // control that filters a feed the reader cannot see.
-  const onFeed = target === 'home' || !['shield', 'health', 'chat', 'map'].includes(target);
+  const onFeed = target === 'home' || !['shield', 'health', 'chat', 'map', 'sos', 'storage'].includes(target);
   const bar = document.getElementById('ghSearchBar');
   if (bar) (onFeed ? bar.removeAttribute('hidden') : bar.setAttribute('hidden', ''));
 }
 
 export function goFind() {
   (window.switchTab || (() => {}))('shield');
+  if (window.ShieldCenter) window.ShieldCenter.go('device');
   if (typeof window.switchShieldPillar === 'function') window.switchShieldPillar('find');
   setActiveTab('tab-shield');
 }
@@ -278,11 +325,34 @@ function wireSheetActionHandlers() {
     'ask-notifications': () => {
       if (window.RemoteShield?.requestNotifications) window.RemoteShield.requestNotifications();
     },
+    'open-guardians': () => {
+      closeSheet();
+      go('chat');
+      window.GHNetwork?.select('guardians');
+    },
+    'mark-alerts': async () => {
+      const n = await markAlertsRead();
+      closeSheet();
+      toast(n ? `Arifa ${n} zimewekwa kama zimesomwa.` : 'Hakuna arifa mpya.');
+    },
     'open-menu': () => { closeSheet(); if (window.toggleSidebar) window.toggleSidebar(true); },
     'open-profile': () => { closeSheet(); openMyProfile(); },
     'sign-out': () => { closeSheet(); if (window.handleSignOut) window.handleSignOut(); },
     'add-comment': () => submitComment(),
     'submit-report': () => submitReport()
+  });
+
+  // "Mawasiliano" result in the search sheet opens Discover with the same term
+  document.addEventListener('click', (e) => {
+    const hit = e.target.closest('[data-network-search]');
+    if (!hit) return;
+    const term = hit.dataset.networkSearch;
+    closeSheet();
+    go('chat');
+    const net = window.GHNetwork;
+    if (!net) return;
+    net.state.filter.q = term;
+    net.select('discover').then(() => { net.state.filter.q = term; net.paint(); });
   });
 
   const draftRow = document.getElementById('ghcDraftRow');
@@ -322,6 +392,8 @@ export async function initHome() {
     wireSheetActionHandlers();
     initHeroSlideshow();
     initSearchBar();
+    initHealth();
+    initNetwork();
     initProfileView();
     initProfileEditor();
     initCommentThread();

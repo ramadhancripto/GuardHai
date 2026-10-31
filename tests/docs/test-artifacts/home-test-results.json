@@ -1,0 +1,380 @@
+{
+  "url": "http://127.0.0.1:8123/index.html",
+  "at": "2026-10-31T13:07:43.917Z",
+  "results": [
+    {
+      "id": "A1",
+      "name": "Top nav is Storage → Notifications → Account → More (search lives in the field)",
+      "ok": true,
+      "detail": "Storage > Notifications > Account > More"
+    },
+    {
+      "id": "A2",
+      "name": "Logo + brand name present on the left",
+      "ok": true,
+      "detail": "GuardHai"
+    },
+    {
+      "id": "A3",
+      "name": "All top-nav targets >= 32px",
+      "ok": true,
+      "detail": "36x36 36x36 36x36 36x36"
+    },
+    {
+      "id": "A4",
+      "name": "More menu opens and has Map / full menu / logout",
+      "ok": true,
+      "detail": "Ramani | Wasifu wangu | Menyu kamili | Ondoka"
+    },
+    {
+      "id": "B1",
+      "name": "Welcome heading + subtitle in Swahili",
+      "ok": true,
+      "detail": "Karibu GuardHai / Usalama wako, afya yako, maisha yako."
+    },
+    {
+      "id": "B2",
+      "name": "Safety card does NOT claim the user is protected",
+      "ok": true,
+      "detail": "state=\"Haijapimwa bado\""
+    },
+    {
+      "id": "B3",
+      "name": "Disclaimer text survives JS device detection",
+      "ok": true,
+      "detail": "Hakuna huduma ya dharura iliyounganishwa. Kagua mazingira ya"
+    },
+    {
+      "id": "B4",
+      "name": "Safety CTA opens the review sheet",
+      "ok": true,
+      "detail": "Kagua usalama"
+    },
+    {
+      "id": "B5",
+      "name": "Review sheet states emergency services are not connected",
+      "ok": true,
+      "detail": "GuardHai haijaunganishwa na huduma yoyote ya dharura, polisi, hospitali au walezi. Hakuna hali ya usalama inayopimwa kwa sasa — kwa hiyo app haidai kuwa umelindwa."
+    },
+    {
+      "id": "C1",
+      "name": "Home SOS: no dispatch claim, real emergency numbers shown",
+      "ok": true,
+      "detail": "Hakuna msaada unaotumwa kwa njia ya app. GuardHai haijaunganishwa na p"
+    },
+    {
+      "id": "C2",
+      "name": "Bottom-nav SOS opens the SOS page: same numbers, still no dispatch claim",
+      "ok": true,
+      "detail": "page · 2 modes · numbers true"
+    },
+    {
+      "id": "C3",
+      "name": "Visible note under the SOS button states no help is sent",
+      "ok": true,
+      "detail": "Hakuna msaada unaotumwa kwa mtu yeyote — simu ndiyo njia pekee."
+    },
+    {
+      "id": "D1",
+      "name": "Six quick actions in the showcased order (Ramani kept as the sixth)",
+      "ok": true,
+      "detail": "Afya | Usalama | Tafuta Kifaa | Walezi | Elimu ya Usalama | Ramani"
+    },
+    {
+      "id": "D2",
+      "name": "Afya opens the Health screen (own page since the Health build)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "D3",
+      "name": "Tafuta Kifaa opens the existing Find pillar",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "D4",
+      "name": "Walezi shows the real local guardian state and says delivery is not connected",
+      "ok": true,
+      "detail": "Walezi ni watu unaowachagua wewe na wanaokubali. Mwaliko si "
+    },
+    {
+      "id": "D5",
+      "name": "Elimu ya Usalama scrolls to Uwanja",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "E1",
+      "name": "Feed renders sample posts",
+      "ok": true,
+      "detail": "8 posts"
+    },
+    {
+      "id": "E2",
+      "name": "Every sample post carries a SAMPULI badge",
+      "ok": true,
+      "detail": "8/8"
+    },
+    {
+      "id": "E3",
+      "name": "No fake verification badge",
+      "ok": true,
+      "detail": "0 found"
+    },
+    {
+      "id": "E4",
+      "name": "Five required topics present",
+      "ok": true,
+      "detail": "Zote | Afya | Usalama | Taasisi | Kusaidiana | Majanga"
+    },
+    {
+      "id": "E5",
+      "name": "Feed carries an explicit sample-content note",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "E6",
+      "name": "Topic filter works",
+      "ok": true,
+      "detail": "Afya,Afya"
+    },
+    {
+      "id": "F1",
+      "name": "\"Imenisaidia\" toggles",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "F2",
+      "name": "Follow author toggles",
+      "ok": true,
+      "detail": "Unafuata"
+    },
+    {
+      "id": "F3",
+      "name": "Comments open a real local thread, labelled device-only",
+      "ok": true,
+      "detail": "input+send+honesty note"
+    },
+    {
+      "id": "F4",
+      "name": "Share falls back to copy-link and says the link is a sample",
+      "ok": true,
+      "detail": "Kunakili moja kwa moja hakupatikana. Nakili kiungo hiki:"
+    },
+    {
+      "id": "F5",
+      "name": "Save/bookmark toggles",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "F6",
+      "name": "Three-dot menu keeps Follow / Copy / Report and adds profile + send",
+      "ok": true,
+      "detail": "Acha kufuata | Fungua wasifu | Tuma kwa mtu (haipatikani) | Nakili kiungo | Ripoti | Vitendo vyote"
+    },
+    {
+      "id": "F7",
+      "name": "Report flow has reasons and says it is not transmitted",
+      "ok": true,
+      "detail": "5 reasons"
+    },
+    {
+      "id": "F8",
+      "name": "Repost adds a second feed card that names the original author",
+      "ok": true,
+      "detail": "8 → 9 · Umerudia kutoka kwa Dkt. Neema Mushi"
+    },
+    {
+      "id": "F9",
+      "name": "Reposting again removes the copy and says it stays on this device",
+      "ok": true,
+      "detail": "9 → 8 · Umerudia chapisho — kwenye kifaa hiki pekee."
+    },
+    {
+      "id": "F1c",
+      "name": "Composer opens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "F2c",
+      "name": "Five post types present (short showcase labels, same five types)",
+      "ok": true,
+      "detail": "elimu,swali,uzoefu,taarifa,fursa → Elimu | Swali | Uzoefu | Taarifa | Kusaidia"
+    },
+    {
+      "id": "F3c",
+      "name": "Topic + audience selectors present",
+      "ok": true,
+      "detail": "5 topics / 3 audiences"
+    },
+    {
+      "id": "F4c",
+      "name": "Photo/video/audio/record/link controls present",
+      "ok": true,
+      "detail": "Picha | Video | Sauti | Rekodi | Kiungo"
+    },
+    {
+      "id": "F5c",
+      "name": "Composer states it is a local prototype",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "F6c",
+      "name": "Text entry + draft button present",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "F7c",
+      "name": "Photo button opens a real file picker (no mock attachment)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "F8c",
+      "name": "Publish adds the post to the local feed",
+      "ok": true,
+      "detail": "8 -> 9"
+    },
+    {
+      "id": "F9c",
+      "name": "User post is not marked verified, badge says not published online",
+      "ok": true,
+      "detail": "HAIJACHAPISHWA MTANDAONI"
+    },
+    {
+      "id": "F10c",
+      "name": "Save draft writes to this device only (IndexedDB)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "F11c",
+      "name": "Empty post is rejected",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "F12c",
+      "name": "Saved draft can be loaded back into the editor",
+      "ok": true,
+      "detail": "\"Rasimu ya jaribio\""
+    },
+    {
+      "id": "G1",
+      "name": "Exactly 5 items in order: home, health, SOS, shield, chat",
+      "ok": true,
+      "detail": "tab-home | tab-health | tab-sos | tab-shield | tab-chat"
+    },
+    {
+      "id": "G2",
+      "name": "SOS is a raised red circle",
+      "ok": true,
+      "detail": "raised 25px"
+    },
+    {
+      "id": "G3.tab-shield",
+      "name": "tab-shield switches view and shows as active",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G3.tab-chat",
+      "name": "tab-chat switches view and shows as active",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G3.tab-home",
+      "name": "tab-home switches view and shows as active",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G4",
+      "name": "Bottom-nav labels use the same font size across tabs",
+      "ok": true,
+      "detail": "9.5px"
+    },
+    {
+      "id": "H1",
+      "name": "Home strings switch to English",
+      "ok": true,
+      "detail": "Welcome to GuardHai / Uwanja – Learn and Help Each Other / Health"
+    },
+    {
+      "id": "I1.320",
+      "name": "No horizontal overflow @ 320px",
+      "ok": true,
+      "detail": "320 vs 320"
+    },
+    {
+      "id": "I1.360",
+      "name": "No horizontal overflow @ 360px",
+      "ok": true,
+      "detail": "360 vs 360"
+    },
+    {
+      "id": "I1.390",
+      "name": "No horizontal overflow @ 390px",
+      "ok": true,
+      "detail": "390 vs 390"
+    },
+    {
+      "id": "I1.430",
+      "name": "No horizontal overflow @ 430px",
+      "ok": true,
+      "detail": "430 vs 430"
+    },
+    {
+      "id": "I1.768",
+      "name": "No horizontal overflow @ 768px",
+      "ok": true,
+      "detail": "768 vs 768"
+    },
+    {
+      "id": "I1.1024",
+      "name": "No horizontal overflow @ 1024px",
+      "ok": true,
+      "detail": "1024 vs 1024"
+    },
+    {
+      "id": "I1.1440",
+      "name": "No horizontal overflow @ 1440px",
+      "ok": true,
+      "detail": "1440 vs 1440"
+    },
+    {
+      "id": "I2",
+      "name": "No duplicate element ids",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "id": "I3",
+      "name": "All inline object handlers resolve",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "I4",
+      "name": "No page errors",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "I5",
+      "name": "No console errors",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": []
+}

@@ -123,10 +123,15 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
   let dlg = null;
   page.once('dialog', async d => { dlg = d.message(); await d.dismiss(); });
   await page.click('#tab-sos');
-  await page.waitForTimeout(600);
+  await page.waitForTimeout(700);
   // The SOS handler must never claim to have dispatched anything, and it must
-  // offer a channel that really works (the phone).
-  const sosText = await page.$eval('#ghSheetBody', e => e.innerText).catch(() => '');
+  // offer a channel that really works (the phone). Since R1 the bottom-nav slot
+  // opens the SOS *page*; the quick sheet is still reachable from it.
+  const sosText = await page.evaluate(() => {
+    const page_ = document.getElementById('sosPage');
+    if (page_ && page_.classList.contains('active')) return document.getElementById('sosStage')?.innerText || '';
+    return document.getElementById('ghSheetBody')?.innerText || '';
+  });
   const sosOk = !dlg
     && /haijaunganishwa/i.test(sosText)
     && /112/.test(sosText)
@@ -204,7 +209,9 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
 
   await page.click('#tab-health');
   await page.waitForTimeout(400);
-  rec('R5', 'Afya tab -> Health sub-tab still works', await page.$eval('#protect-view-health', e => getComputedStyle(e).display !== 'none'));
+  rec('R5', 'Afya tab -> Health screen still works',
+      await page.$eval('#healthPage', e => e.classList.contains('active'))
+        && await page.$eval('#tab-health', e => e.classList.contains('active')));
 
   const beforeErr = pageErrors.length;
   await page.evaluate(() => ProtectEngine.runReal7StepSecurityCheck());

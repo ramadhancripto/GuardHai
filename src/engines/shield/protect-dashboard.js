@@ -53,7 +53,11 @@ export const ProtectDashboard = {
         const riskKpi = document.getElementById('lbl-system-risk-kpi');
 
         if (scoreEl) scoreEl.innerText = score + '%';
-        if (riskKpi) riskKpi.innerText = (100 - score) + '% Risk';
+        // keep the KPI in the UI language: Swahili screens must not read "% Risk"
+        if (riskKpi) {
+            const en = window.I18N && I18N.lang === 'en';
+            riskKpi.innerText = `${100 - score}% ${en ? 'Risk' : 'Hatari'}`;
+        }
         if (badgeEl) {
             badgeEl.innerHTML = statusText;
             if (score < 50) {

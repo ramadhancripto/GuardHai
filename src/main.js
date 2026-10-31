@@ -13,6 +13,9 @@ import { appConfig } from './config.js';
 import './engines/index.js';
 
 import { initHome } from './features/home/home-controller.js';
+import { initShield } from './features/shield/shield-center.js';
+import { initSosPage } from './features/emergency/sos-page.js';
+import { initStorage } from './features/storage/storage-view.js';
 import { integrationStatus } from './mocks/index.js';
 import { createLogger } from './core/logger.js';
 
@@ -29,6 +32,9 @@ async function start() {
 
   try {
     await initHome();
+    initShield();
+    initSosPage();
+    initStorage();          // Universal Secure Storage Center (#storagePage)
   } catch (err) {
     log.error('home init failed', err);
   } finally {

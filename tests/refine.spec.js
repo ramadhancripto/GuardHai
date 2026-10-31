@@ -61,9 +61,10 @@ async function boot(page) {
 
   await page.click('#ghTopics .gh-topic[data-topic="afya"]');
   await page.waitForTimeout(350);
-  const filtered = await page.$$eval('#ghFeed .gh-post-topic', (els) => els.map((e) => e.innerText.trim()));
+  // textContent: the topic pill is uppercased by CSS, so innerText would read AFYA
+  const filtered = await page.$$eval('#ghFeed .gh-post-topic', (els) => els.map((e) => e.textContent.trim()));
   rec('R3', 'Clicking a tile still filters the feed by that topic',
-      filtered.length > 0 && filtered.every((t) => t === 'Afya'), filtered.join(','));
+      filtered.length > 0 && filtered.every((t) => t.toLowerCase() === 'afya'), filtered.join(','));
   await page.click('#ghTopics .gh-topic[data-topic="all"]');
   await page.waitForTimeout(350);
 

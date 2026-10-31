@@ -1,20 +1,20 @@
 # GuardHai
 
-Mfumo wa ulinzi wa kifaa na jamii ya usalama: dashibodi ya Shield, uwanja wa
-elimu (feed), wasifu wenye majukumu (afya, usalama, taasisi, kujitolea,
-mwanajamii), kihariri cha machapisho, mawasiliano na ramani — kwa Kiswahili na
-Kiingereza.
+Mfumo wa usalama na afya wa jamii: Shield Center, SOS, Afya (kadi ya afya,
+rekodi, dawa, wataalamu), Uwanja wa elimu, wasifu wenye majukumu, kihariri cha
+machapisho, mtandao wa mawasiliano (Chat · Walezi · Msaada · Jamii · Gundua) na
+ramani — kwa Kiswahili na Kiingereza.
 
 The app is a **local-first web system**: every module is real code, and state is
-stored on the device (IndexedDB + localStorage). There is no backend yet, so the
-few features that need one say so plainly instead of pretending to work.
+stored on the device (IndexedDB v4 + localStorage). There is no backend yet, so
+the few features that need one say so plainly instead of pretending to work.
 
 ---
 
 ## Quick start
 
 ```bash
-cd /home/user
+cd GuardHai
 python3 -m http.server 8123 --bind 0.0.0.0
 # open http://127.0.0.1:8123/index.html
 ```
@@ -28,84 +28,114 @@ It must be served over HTTP (`file://` breaks ES modules). No build step, no
 
 | Area | Behaviour |
 |---|---|
-| Feed (Uwanja) | posts from IndexedDB + clearly-labelled sample posts, type badges, topic filter, in-device search, expand/collapse, photo lightbox |
-| Composer | title/text/type/topic/audience, image·video·audio·link attachments, microphone recording, live validation, preview step, publish |
+| **Shield Center** | dashboard answering *emergency? · what is on? · what needs attention? · where next?*, then 7 sections: Overview, Device, Personal Safety, Digital, Assets (declared pending), History, Settings |
+| **Device Protection** | preserved engine: 3 pillars (Protect · Find · Recover), 10 sub-views, wizard, travel protection, communication modules, recovery console |
+| **Personal Safety** | guardians, safety journey (with overdue state), daily check-in + streak, risk & safety plans (3 templates), incident reports, preferences — all persisted |
+| **SOS** | a full page: personal emergency vs disaster alert, the three working numbers as tap-to-call rows above the fold, "what GuardHai sends" table, attempt log |
+| **Afya** | 6 partitions / 37 screens: Medical ID + QR, records, medication + adherence, appointments, cases, meetings, communities, referrals, blood, emergency, education |
+| **Chat & support** | 5 partitions / 22 screens: chats, guardians + permissions, support requests + providers, communities + moderation + events, discover |
+| Feed (Uwanja) | posts from IndexedDB + clearly-labelled samples, type badges, topic filter, in-device search, photo lightbox |
+| Composer | title/text/type/topic/audience, image·video·audio·link attachments, microphone recording, validation, preview, publish |
 | Media | validated by `domain/media.js`, stored as Blobs in IndexedDB, previewed through object URLs — nothing is uploaded |
-| Engagement | five labelled icon actions per post (helpful, comments, share, save, more), follow toggles, one-level comment replies, per-post and per-comment report — all stored on the device |
-| Profiles | five role identities with their own accent, icon, photo cover and photo avatar; two role-shaped info cards (facility + hours, unit + area, kind + coverage, service areas + availability, place + topics); four tabs (posts, notices, photos, about); a photo can be picked from the device and is downscaled locally |
-| Verification | a request is recorded, but nothing is ever shown as verified without a reviewer's evidence; licence and institution are separate kinds |
+| Engagement | labelled actions per post (helpful, comments, share, save, more), follows, one-level replies, per-item report |
+| Profiles | five role identities with their own accent and cards, four tabs, local photo pick with downscale |
 | Drafts | saved to IndexedDB, reloadable, media intentionally dropped (the UI says so) |
-| Shield | dashboard, confidence score, device list, protection profiles, wizard, travel protection, communication screen |
-| i18n | sw/en dictionaries applied to every `data-i18n` element |
-| Map | Leaflet map with the safety layers |
+| i18n | sw/en dictionaries, 130 keys, applied to every `data-i18n` element; sections re-render on `guardhai:lang` |
+| Map | Leaflet map with safety layers (loaded on demand) |
 
 ## What is not connected (and is labelled as such)
 
 SOS dispatch, push notifications (FCM/APNs), Bluetooth companion pairing,
-guardian roster, media upload, and network accounts. Each one has a small,
-honest stand-in under `src/mocks/` that returns `{ ok: false, simulated: true }`
-so the UI can show the real status — never a fake success.
+guardian notices, media upload, network accounts and asset verification. Each one
+names itself in the UI (`Hakuna seva iliyounganishwa`, `haiwezi kuwashwa`) and in
+`src/mocks/` (`{ ok: false, simulated: true }`) — there is no invented success.
 
-Firebase **auth** is the one external integration that exists
-(`src/services/firebase.service.js`, loaded dynamically and optional).
+Shield settings make this explicit: **"Share with guardians" cannot be switched
+on** while no transport is registered, and it says why.
 
 ---
 
-## Structure
+## Design language
 
-```
-index.html                  markup + SVG sprite + one <script type="module">
-assets/css/                 fifteen ordered stylesheets (00-tokens … 14-identity)
-src/
-  main.js                   entry: engines → home → ready event
-  config.js                 runtime switches (<meta name="guardhai:…">)
-  core/                     bus, store, dom, format, id, logger, capacitor bridge
-  domain/                   Post, media rules, engagement, comments, profiles/roles (pure logic)
-  data/                     IndexedDB wrapper, repositories per entity, sample personas + posts
-  services/                 use-cases: posts, engagement, drafts, media, profiles, session
-  ui/                       toast, sheet, icons, sidebar
-  i18n/                     sw/en dictionary + applier
-  engines/                  shield engine (7 mixes), auth, navigation, boot
-  features/                 home, feed, composer, engagement, profile, emergency, map
-assets/img/                 the photographs shipped with the build (local, no hotlinks)
-  mocks/                    the only simulated seam (SOS, push, BLE, guardians)
-tests/                      Playwright suites: home, composer, bugfix, profile, showcase, refine, posttypes, hero, identity
-tools/                      verify_app.py, pkg_redact.py, run_tests.sh
-docs/                       architecture, audits, reports (tokens, post schema, hero slideshow…)
-backup/                     archived single-file version + pre-change checkpoints
-```
+**GDS v1 "Calm Signal"** — `assets/css/17-system.css` (tokens + 22 components,
+namespaced `gds-`). Light by default, one colour = one meaning (green = a real
+check passed, blue = reference/health, amber = not connected/sample, red =
+emergency only), body 14 px with a 11.6 px floor, 44 px touch targets, motion
+disabled under `prefers-reduced-motion`.
 
-Dependency direction — never reversed:
+Full reference: `docs/DESIGN-SYSTEM.md`.
 
-```
-features → services → data → domain → core
-engines  → core
-```
+---
 
-## Commands
+## Verify it
 
 ```bash
-python3 tools/verify_app.py                       # 12 integrity checks
-bash tools/run_tests.sh                           # 307 Playwright checks
-python3 tools/pkg_redact.py <package-root>        # strip credentials before shipping
+python3 tools/verify_app.py          # 12/12 static checks (375 ids, 130 i18n keys, no file > 600 lines)
+bash tools/run_tests.sh 8123         # 12 Playwright suites, 471 checks, RESULT: all checks passed
 ```
 
-Current status: `verify_app.py` **12/12** · home **60/60** · composer **72/72** ·
-bugfix **23/23** · profile **20/20** · showcase **20/20** · refine **29/29** ·
-posttypes **33/33** · hero **23/23** · identity **25/25** (307 total).
+| Suite | Checks | Covers |
+|---|---|---|
+| home | 62 | hero, SOS card, 6 quick actions, feed, search |
+| composer | 72 | all post types, media, drafts, validation |
+| bugfix | 23 | regressions from earlier phases |
+| profile | 20 | role profiles, tabs, photo |
+| showcase | 20 | visual guarantees, no server calls on search |
+| refine | 29 | spacing, type, contrast fixes |
+| posttypes | 33 | the five post types and their badges |
+| hero | 23 | slideshow, controls, honesty |
+| identity | 25 | colour system, bands, gradients |
+| health | 54 | 37 screens, empty states, no fake verification |
+| network | 65 | 22 screens, permissions, deliverables, clearDemo |
+| **shield** | **45** | Shield Center, Personal Safety persistence, SOS page, a11y, responsive |
 
-## Rules for growing this codebase
+`tools/serve.py` and `tools/preview.sh` are convenience wrappers if you prefer
+them over `python3 -m http.server`.
 
-1. A feature gets its own folder under `src/features/`; a screen is a view module
-   plus a controller.
-2. Business rules go in `src/domain/`, never in a view.
-3. Storage changes go through a repository in `src/data/`; the interface stays
-   stable so `local` can become `http` without touching the UI.
-4. Anything that needs a server goes in `src/mocks/` until the server exists,
-   and it must report `simulated: true`.
-5. No file above ~600 lines — split instead (`tools/verify_app.py` enforces it).
-6. State changes announce themselves on `core/bus.js`; views subscribe.
-7. A badge is earned by evidence (`checkedBy` + `reference`), never by a role the
-   person selected — `domain/profile.js` is the only place that decides this.
+---
 
-See `docs/ARCHITECTURE.md` for the full map.
+## Documentation
+
+| File | What it holds |
+|---|---|
+| `START-HERE.md` | the 5-minute tour and the rules for growing the code |
+| `docs/ARCHITECTURE.md` | layers, data, events, module map |
+| `docs/DESIGN-SYSTEM.md` | GDS v1: tokens, components, contrast table, rules |
+| `docs/REDESIGN-AUDIT.md` | the measured audit and the decisions taken |
+| `docs/REDESIGN-R1.md` | what the redesign delivered, tested, and what it did not |
+| `docs/REDESIGN-R2.md` | the chat rebuild: inbox, thread, composer, and the wiring behind them |
+| `docs/HEALTH-P2.md`, `docs/NETWORK-P2.md` | the two earlier section builds |
+| `docs/STORAGE-CENTER.md` | the storage center: data model, 15 screens, honesty rules |
+| `docs/TEST-LOG.md` | results of every phase |
+| `docs/screens/` | screenshots (Health, Network, R1/R2 redesign, Storage `s1-*`) |
+
+---
+
+## Layout
+
+```
+index.html                  markup, icon sprite, one module entry (src/main.js)
+assets/css/                 00-tokens … 17-system (loaded in filename order)
+src/core/                   bus, dom, format, id, logger, capacitor bridge
+src/domain/                 posts, media, engagement, comment, profile, network rules
+src/data/                   IndexedDB v4 wrapper + repositories
+src/services/               session, posts, profile, chat, guardian, support,
+                            community, safety, discover, transport, personal-safety …
+src/ui/                     toast, sheet, icons, sidebar
+src/i18n/                   sw/en dictionary
+src/engines/                shield (16 modules), auth, navigation, boot
+src/features/               home, feed, composer, engagement, profile, emergency,
+                            map, hero, health (16), network (10), shield (3)
+src/mocks/                  SOS, push, BLE, guardians — the only simulated seam
+tests/                      the 12 suites above
+tools/                      verify_app.py · run_tests.sh · serve.py · preview.sh · pkg_redact.py
+docs/                       architecture, design system, phase reports, screenshots
+```
+
+## Note about this package
+
+Firebase web-config values in `src/services/firebase.service.js` (and the
+standalone `uploads/index.html` mock-up) are replaced with `YOUR_…`
+placeholders. Firebase is optional and loaded with a dynamic import, so an
+unconfigured build runs fully offline; replace the six values from your own
+Firebase project before deploying.

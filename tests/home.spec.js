@@ -107,13 +107,26 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
   await page.keyboard.press('Escape');
   await page.waitForTimeout(200);
 
+  // The bottom-nav SOS is now a dedicated page (SOS is a first-class slot), so
+  // the same honesty facts are asserted on that surface instead of a sheet.
   await page.click('#tab-sos');
-  await page.waitForTimeout(500);
-  const navSheet = await page.$eval('#ghSheetBody', e => e.innerText).catch(() => '');
-  rec('C2', 'Bottom-nav SOS uses the same shared handler', navSheet === heroSheet,
-      (navSheet || '').replace(/\s+/g, ' ').slice(0, 50));
-  await page.keyboard.press('Escape');
-  await page.waitForTimeout(200);
+  await page.waitForTimeout(700);
+  const navSos = await page.evaluate(() => {
+    const page_ = document.getElementById('sosPage');
+    const text = document.getElementById('sosStage')?.innerText || '';
+    return {
+      active: !!page_ && page_.classList.contains('active'),
+      numbers: ['112', '114', '110'].every((n) => text.includes(n)),
+      honest: /haitumwi|hakuna|not sent|none/i.test(text),
+      claim: /imetumwa kwa|alert sent/i.test(text),
+      modes: document.querySelectorAll('[data-sos-mode]').length
+    };
+  });
+  rec('C2', 'Bottom-nav SOS opens the SOS page: same numbers, still no dispatch claim',
+      navSos.active && navSos.numbers && navSos.honest && !navSos.claim && navSos.modes === 2,
+      `${navSos.active ? 'page' : 'missing'} · ${navSos.modes} modes · numbers ${navSos.numbers}`);
+  await page.evaluate(() => HomeUI.go('home'));
+  await page.waitForTimeout(300);
 
   const sosNote = await page.$eval('.gh-sos-note', e => e.innerText);
   rec('C3', 'Visible note under the SOS button states no help is sent',
@@ -131,10 +144,10 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
   await page.click('.gh-qa[data-qa="health"]');
   await page.waitForTimeout(500);
   const healthOk = await page.evaluate(() =>
-    document.getElementById('shieldPage').classList.contains('active') &&
-    getComputedStyle(document.getElementById('protect-view-health')).display !== 'none');
+    document.getElementById('healthPage').classList.contains('active'));
   const healthTabActive = await page.$eval('#tab-health', e => e.classList.contains('active'));
-  rec('D2', 'Afya opens existing Shield → Health sub-tab', healthOk && healthTabActive);
+  rec('D2', 'Afya opens the Health screen (own page since the Health build)',
+      healthOk && healthTabActive);
 
   await page.evaluate(() => HomeUI.go('home'));
   await page.waitForTimeout(400);
@@ -148,8 +161,9 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
   await page.click('.gh-qa[data-qa="guardians"]');
   await page.waitForTimeout(350);
   const guardianSheet = await page.$eval('#ghSheetBody', e => e.innerText);
-  rec('D4', 'Walezi states guardians are NOT connected (no fake list)',
-      /hawajaunganishwa/i.test(guardianSheet), guardianSheet.split('\n')[0].slice(0, 60));
+  rec('D4', 'Walezi shows the real local guardian state and says delivery is not connected',
+      /hakuna seva|haijaunganishwa/i.test(guardianSheet) && /kukubali|ruhusa/i.test(guardianSheet),
+      guardianSheet.split('\n').slice(0, 2).join(' ').slice(0, 60));
   await page.keyboard.press('Escape');
   await page.waitForTimeout(250);
 
@@ -180,8 +194,10 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
 
   await page.click('#ghTopics .gh-topic[data-topic="afya"]');
   await page.waitForTimeout(300);
-  const filtered = await page.$$eval('.gh-post-topic', els => els.map(e => e.innerText.trim()));
-  rec('E6', 'Topic filter works', filtered.length > 0 && filtered.every(t => t === 'Afya'), filtered.join(','));
+  // the pill is uppercased by CSS; compare case-insensitively
+  const filtered = await page.$$eval('.gh-post-topic', els => els.map(e => e.textContent.trim()));
+  rec('E6', 'Topic filter works',
+      filtered.length > 0 && filtered.every(t => t.toLowerCase() === 'afya'), filtered.join(','));
   await page.click('#ghTopics .gh-topic[data-topic="all"]');
   await page.waitForTimeout(300);
 
@@ -405,7 +421,9 @@ const rec = (id, name, ok, detail = '') => R.push({ id, name, ok, detail });
   const en = await page.evaluate(() => ({
     welcome: document.querySelector('.gh-welcome-title')?.innerText.trim(),
     sos: document.querySelector('.gh-sos-note span')?.innerText.trim(),
-    uwanja: document.getElementById('ghUwanjaTitle')?.innerText.trim(),
+    // textContent, not innerText: the section title is uppercased by CSS now,
+    // so innerText would return the rendered capitals instead of the string.
+    uwanja: document.getElementById('ghUwanjaTitle')?.textContent.trim(),
     navHealth: document.querySelector('#tab-health .tab-label')?.innerText.trim()
   }));
   rec('H1', 'Home strings switch to English',

@@ -124,6 +124,8 @@
     box-shadow: var(--gh-shadow-1);
 }
 
+/* Shield Center now opens with a GDS page head; keep the same identity band so
+   Shield, Health and Map read as one product. */
 #shieldPage > div:first-child {
     background: var(--gh-grad-band);
     border: 1px solid var(--gh-grad-band-line);

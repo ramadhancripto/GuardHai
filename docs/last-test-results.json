@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:8123/index.html",
-  "at": "2026-10-27T18:50:01.817Z",
+  "at": "2026-10-31T15:44:27.753Z",
   "results": [
     {
       "id": "B1",
@@ -18,7 +18,7 @@
       "id": "B3",
       "name": "Language switch changes UI text (sw <-> en, symmetric)",
       "ok": true,
-      "detail": "wired=98 | sw: home=\"Nyumbani\" hero=\"Karibu GuardHai\" | en: home=\"Home\" hero=\"Welcome to GuardHai\""
+      "detail": "wired=122 | sw: home=\"Nyumbani\" hero=\"Karibu GuardHai\" | en: home=\"Home\" hero=\"Welcome to GuardHai\""
     },
     {
       "id": "B3b",
@@ -36,7 +36,7 @@
       "id": "B4",
       "name": "SOS states no dispatch + shows real emergency numbers (no false \"sent\")",
       "ok": true,
-      "detail": "Hakuna msaada unaotumwa kwa njia ya app. GuardHai haijaunganishwa na polisi, hospitali au "
+      "detail": "NAMBA ZINAZOFANYA KAZI Piga simu sasa Bonyeza namba kupiga simu moja kwa moja. Polisi 112 "
     },
     {
       "id": "B5",
@@ -100,7 +100,7 @@
     },
     {
       "id": "R5",
-      "name": "Afya tab -> Health sub-tab still works",
+      "name": "Afya tab -> Health screen still works",
       "ok": true,
       "detail": ""
     },

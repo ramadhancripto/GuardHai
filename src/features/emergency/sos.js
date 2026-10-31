@@ -13,8 +13,9 @@ import { createLogger } from '../../core/logger.js';
 
 const log = createLogger('sos');
 
-/** Emergency numbers published for Tanzania; shown, never auto-dialled. */
-const NUMBERS = [
+/** Emergency numbers published for Tanzania; shown, never auto-dialled.
+ *  Exported so the Health section reuses this one list instead of copying it. */
+export const NUMBERS = [
   { label: 'Polisi', number: '112' },
   { label: 'Ambulance / Moto', number: '114' },
   { label: 'Polisi (TTCL)', number: '110' }

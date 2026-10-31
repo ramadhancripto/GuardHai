@@ -128,7 +128,32 @@ const I18N = {
             'gh_topicchip_digital': 'Kidijitali',
             'gh_aud_public': 'Watu Wote',
             'gh_aud_community': 'Community',
-            'gh_aud_guardians': 'Walezi'
+            'gh_aud_guardians': 'Walezi',
+
+            // ---- HEALTH SECTION (P1) ----
+            'gh_health_head_sub': 'Afya · huduma · maandalizi ya dharura',
+            'gh_health_intro_title': 'Afya yako, sehemu moja.',
+            'gh_health_intro_text': 'Taarifa za afya, huduma na maandalizi ya dharura.',
+            'gh_health_eyebrow': 'Muhtasari wa afya',
+            'gh_shield_title': 'Shield Center',
+            'gh_shield_sub': 'Ulinzi wa kifaa na usalama',
+            'gh_net_tab_chats': 'Chat',
+            'gh_net_tab_guardians': 'Walezi',
+            'gh_net_tab_support': 'Msaada',
+            'gh_net_tab_communities': 'Jamii',
+            'gh_net_tab_discover': 'Gundua',
+            'gh_health_cta_medical': 'Tengeneza Medical ID',
+            'gh_health_cta_doctors': 'Tafuta mtaalamu',
+            'gh_health_demo_banner': 'Sampuli za majaribio zimewekwa — kila kipengele kina alama “Sampuli”. Hakuna mgonjwa halisi anayewakilishwa.',
+            'gh_health_chip_device': 'Kwenye kifaa hiki pekee',
+            'gh_health_chip_control': 'Wewe unadhibiti anayeona',
+            'gh_health_chip_server': 'Hakuna seva iliyounganishwa',
+            'gh_health_tab_overview': 'Muhtasari',
+            'gh_health_tab_medical': 'Kadi ya afya',
+            'gh_health_tab_records': 'Rekodi',
+            'gh_health_tab_meds': 'Dawa',
+            'gh_health_tab_experts': 'Wataalamu',
+            'gh_health_tab_more': 'Zaidi',
         },
         en: {
             // Top Bar & Navigation
@@ -248,7 +273,32 @@ const I18N = {
             'gh_topicchip_digital': 'Digital',
             'gh_aud_public': 'Everyone',
             'gh_aud_community': 'Community',
-            'gh_aud_guardians': 'Guardians'
+            'gh_aud_guardians': 'Guardians',
+
+            // ---- HEALTH SECTION (P1) ----
+            'gh_health_head_sub': 'Health · services · emergency readiness',
+            'gh_health_intro_title': 'Your health, one place.',
+            'gh_health_intro_text': 'Health information, services and emergency readiness.',
+            'gh_health_eyebrow': 'Health overview',
+            'gh_shield_title': 'Shield Center',
+            'gh_shield_sub': 'Device, personal and digital safety',
+            'gh_net_tab_chats': 'Chats',
+            'gh_net_tab_guardians': 'Guardians',
+            'gh_net_tab_support': 'Support',
+            'gh_net_tab_communities': 'Communities',
+            'gh_net_tab_discover': 'Discover',
+            'gh_health_cta_medical': 'Create Medical ID',
+            'gh_health_cta_doctors': 'Find a professional',
+            'gh_health_demo_banner': 'Sample data is loaded — every item is tagged “Sample”. No real patient is represented.',
+            'gh_health_chip_device': 'On this device only',
+            'gh_health_chip_control': 'You decide who sees',
+            'gh_health_chip_server': 'No server connected',
+            'gh_health_tab_overview': 'Overview',
+            'gh_health_tab_medical': 'Medical ID',
+            'gh_health_tab_records': 'Records',
+            'gh_health_tab_meds': 'Medication',
+            'gh_health_tab_experts': 'Experts',
+            'gh_health_tab_more': 'More',
         }
     },
 
@@ -280,6 +330,9 @@ const I18N = {
                 }
             }
         });
+
+        // Let sections that build their HTML in JS (e.g. Health) re-render.
+        document.dispatchEvent(new CustomEvent('guardhai:lang', { detail: { lang } }));
 
         // Re-render UI elements
         if (window.ProtectEngine) {

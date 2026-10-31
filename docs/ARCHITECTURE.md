@@ -138,6 +138,7 @@ Each write emits an event; nothing else needs to know who else is listening.
 |---|---|---|
 | `home/` | `home-controller.js`, `home-sheets.js`, `search-bar.js` | navigation, menus, backdrops, sheet actions, the quick search row under the top nav, `HomeUI` façade |
 | `feed/` | `feed-view.js`, `post-card.js` | feed loading/rendering, topic filter, expand, lightbox |
+| `health/` | `health-modules.js`, `health-view.js` | Health section: six top partitions, panels, states, Medical SOS sheet, P2–P5 data contracts |
 | `composer/` | `composer-view.js`, `composer-media.js` | form state, steps, attachments, recording, publish, drafts |
 | `engagement/` | `engagement-actions.js`, `comment-thread.js` | like/save/follow/share/report, comments |
 | `profile/` | `profile-view.js`, `profile-edit.js` | the profile overlay (photo cover, role accent, four tabs, evidence panel) and the edit/verification sheet with a local photo picker |
@@ -233,9 +234,18 @@ the smoke tests wait on it.
 
 ```bash
 python3 tools/verify_app.py                  # static integrity, 12 checks
-bash tools/run_tests.sh                      # 307 browser checks
+bash tools/preview.sh                        # serve on 8123, no-store caching
+bash tools/setup_tests.sh                    # install/repair the browser harness
+bash tools/run_tests.sh                      # 510 browser checks (13 suites)
 NODE_PATH=/tmp/pw/node_modules node tests/home.spec.js http://127.0.0.1:8123/index.html
 ```
+
+`tools/run_tests.sh` is now self-healing: it starts the server when nothing
+answers on the port (`tools/preview.sh`) and runs `tools/setup_tests.sh` before
+the first suite. The harness lives outside the repo — `/tmp/pw` for the driver,
+`$HOME/.cache/ms-playwright` for the browser — because only `/home/user` is
+kept between sessions, so a missing harness must never be read as a failing
+app. `bash tools/setup_tests.sh --check` answers "ready or not" in ~50 ms.
 
 | Suite | Covers |
 |---|---|
@@ -246,6 +256,7 @@ NODE_PATH=/tmp/pw/node_modules node tests/home.spec.js http://127.0.0.1:8123/ind
 | `tests/refine.spec.js` (29) | topic tiles, post head (author left / Fuata + ⋮ right), the six-action rail, the full action sheet, role-shaped profile info cards, editing the optional profile fields, composer topic/audience chips, the 2,000-character limit, attachment tiles, keep-a-draft, 320→1024px without overflow, no undocumented external request |
 | `tests/bugfix.spec.js` (23) | status bar, zoom, language symmetry, SOS honesty, dead references, sprite symbols, GHIcon, navigation, map, health tab, overflow |
 | `tests/hero.spec.js` (23) | five-photo hero: structure, crossfade timing, loop, pause/reduced-motion/visibility, missing-photo fallback, responsive widths, SOS + nav still work |
+| `tests/health.spec.js` (28) | Health P1: own screen, shared bottom nav not duplicated, header + agreed copy, six ARIA partitions, content swap without reload, keyboard, sessionStorage holds only the tab id, seven overview entries, honest empty state, no invented clinical data, phase labels, Medical SOS separate from SOS, error/retry, sw↔en, 320→1280, contracts with no store, no external requests |
 | `tests/identity.spec.js` (25) | single search icon inside the search field + live filtering + scope, one icon family (sprite refs, 5-step sizes, single stroke), single identity gradient, hero overlay green+blue, white hero text, white content surfaces, profile band, chip contrast, SOS red, repost + undo, page/console errors |
 
 Tests read the shipped code (all of `src/`) rather than a single bundle, so a
@@ -262,7 +273,7 @@ module that disappears is caught.
 5. Wire it in `home-controller.js` (or the owning controller) — no inline `onclick`
    for new work; use `data-*` + delegation.
 6. Add i18n keys to **both** dictionaries.
-7. Add a check to `tools/verify_app.py` or a test, then run all nine suites (`tools/run_tests.sh`).
+7. Add a check to `tools/verify_app.py` or a test, then run all ten suites (`tools/run_tests.sh`).
 
 ### Trust rules that new work must keep
 

@@ -14,6 +14,8 @@ import { currentUser } from '../../services/session.service.js';
 import { storageUsage } from '../../services/media.service.js';
 import { countPosts } from '../../services/posts.service.js';
 import { countDrafts } from '../../services/drafts.service.js';
+import { listAlerts } from '../../services/alerts.service.js';
+import { guardianStats } from '../../services/guardian.service.js';
 
 const row = (label, value) =>
   `<div class="gh-sheet-row"><span>${escapeHtml(label)}</span><b>${escapeHtml(String(value))}</b></div>`;
@@ -55,55 +57,71 @@ export function reviewSafety() {
 }
 
 /* ----------------------------------------------------------------- storage */
+/**
+ * Storage used to be a sheet that only counted bytes. It is now a page: the
+ * Universal Secure Storage Center. The measured device figures the sheet showed
+ * did not disappear with it — they are the first thing the page's Space screen
+ * prints (device total, browser quota, posts, drafts, IndexedDB blobs and the
+ * guardhai* localStorage keys). Same numbers, one place to act on them.
+ */
 export async function openStorage() {
-  openSheet('Storage', '<p class="gh-sheet-p">Inapima…</p>');
-
-  const localKeys = [];
-  let localBytes = 0;
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (!key || key.indexOf('guardhai') !== 0) continue;
-    const bytes = (localStorage.getItem(key) || '').length * 2;   // UTF-16
-    localKeys.push({ key, bytes });
-    localBytes += bytes;
+  if (window.GHStorage) {
+    // go() is what hides the Home quick-search bar and sets the page; the screen
+    // argument keeps the measured device figures the sheet always showed.
+    window.HomeUI?.go?.('storage', { screen: 'storage.usage' });
+    return;
   }
-  localKeys.sort((a, b) => b.bytes - a.bytes);
-
+  // The page module did not load (very old cached bundle): keep a working sheet
+  // rather than a dead button.
+  openSheet('Storage', '<p class="gh-sheet-p">Inapima…</p>');
   let estimate = { bytes: 0, quota: 0 };
   try { if (navigator.storage?.estimate) estimate = await navigator.storage.estimate(); } catch { /* ignore */ }
-
   const blobs = await storageUsage();
   const [posts, drafts] = await Promise.all([countPosts(), countDrafts()]);
-
   openSheet('Storage', `
     <p class="gh-sheet-p">Nafasi inayotumiwa na data ya GuardHai <b>kwenye kifaa hiki</b>.
     Hakuna faili linalopakiwa kwenye wingu.</p>
-    ${row('Jumla (kifaa hiki)', fmtBytes(estimate.bytes || localBytes + blobs))}
+    ${row('Jumla (kifaa hiki)', fmtBytes(estimate.bytes || blobs))}
     ${estimate.quota ? row('Kikomo cha browser', fmtBytes(estimate.quota)) : ''}
     ${row('Chapisho zilizohifadhiwa', posts)}
     ${row('Rasimu', drafts)}
     ${row('Viambatisho (IndexedDB)', fmtBytes(blobs))}
-    ${row('Data ya shield (localStorage)', fmtBytes(localBytes))}
-    ${localKeys.slice(0, 6).map((k) => row(k.key, fmtBytes(k.bytes))).join('')
-      || row('Hakuna data ya GuardHai', '0 B')}
     ${note('Takwimu hizi zinapimwa kutoka kifaa chako — si makadirio ya kubuni.')}
     ${actions('<button type="button" class="gh-btn gh-btn-outline" data-sheet-action="close-sheet">Funga</button>')}
   `);
 }
 
 /* ------------------------------------------------------------ notifications */
-export function openNotifications() {
+export async function openNotifications() {
   const perm = (typeof Notification !== 'undefined' && Notification.permission)
     ? Notification.permission : 'hapana msaada';
   const canAsk = !!(window.RemoteShield && typeof window.RemoteShield.requestNotifications === 'function');
+
+  let alerts = [];
+  try { alerts = await listAlerts(); } catch (err) { alerts = []; }
+  const unread = alerts.filter((a) => !a.read).length;
+
+  const rows = alerts.length
+    ? alerts.slice(0, 12).map((a) => `
+        <div class="gh-notif-row${a.read ? '' : ' is-unread'}">
+          <b>${escapeHtml(a.title)}</b>
+          ${a.body ? `<span>${escapeHtml(a.body)}</span>` : ''}
+          <small>${new Date(a.createdAt).toLocaleString('sw-TZ', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</small>
+        </div>`).join('')
+    : `<p class="gh-sheet-p">Hakuna arifa bado. Arifa za kifaa hiki zitaonekana hapa.</p>`;
+
   openSheet('Notifications', `
     <p class="gh-sheet-p">Arifa halisi za dharura (push/FCM) <b>hazijaunganishwa</b>.
-    Unachoweza kufanya ni kuomba ruhusa ya arifa ya browser.</p>
+    Unachoweza kufanya ni kuona arifa zilizoundwa kwenye kifaa hiki na kuomba ruhusa ya arifa ya browser.</p>
+    ${alerts.length ? `<div class="gh-notif-list">${rows}</div>` : rows}
     ${row('Ruhusa ya browser', perm)}
     ${row('Arifa za mbali (FCM)', 'Haijaunganishwa')}
+    ${row('Arifa za kifaa', `${unread} hazijasomwa / ${alerts.length}`)}
     ${note('Hata ukiruhusu, hakuna arifa ya dharura itakayotumwa — hakuna seva iliyounganishwa.')}
-    ${actions(canAsk ? `<button type="button" class="gh-btn gh-btn-outline" data-sheet-action="ask-notifications">
-      Omba ruhusa ya browser</button>` : '')}
+    ${actions(`
+      ${alerts.length ? '<button type="button" class="gh-btn gh-btn-outline" data-sheet-action="mark-alerts">Weka zote kama zimesomwa</button>' : ''}
+      ${canAsk ? `<button type="button" class="gh-btn gh-btn-outline" data-sheet-action="ask-notifications">
+      Omba ruhusa ya browser</button>` : ''}`)}
   `);
 }
 
@@ -125,14 +143,20 @@ export function openAccount() {
 }
 
 /* --------------------------------------------------------------- guardians */
-export function openGuardians() {
+export async function openGuardians() {
+  let stats = { active: 0, incoming: 0, outgoing: 0, asGuardian: 0 };
+  try { stats = await guardianStats(); } catch (err) { stats.unavailable = true; }
+
   openSheet('Walezi / Guardians', `
-    <p class="gh-sheet-p">Walezi <b>hawajaunganishwa</b>. Hakuna orodha ya walezi,
-    hakuna uidhinishaji na hakuna arifa inayotumwa kwao.</p>
-    ${row('Walezi waliosajiliwa', 0)}
-    ${row('Arifa kwa walezi', 'Haijaunganishwa')}
-    ${note('Kipengele hiki hakijawashwa. Kinaonekana kwa uwazi ili usidhani walezi wanapokea taarifa.')}
-    ${actions('<button type="button" class="gh-btn gh-btn-outline" data-sheet-action="go-shield">Fungua Shield</button>')}
+    <p class="gh-sheet-p">Walezi ni watu <b>unaowachagua wewe</b> na wanaokubali. Mwaliko si ruhusa:
+    hadi mtu akubali, hakuna ruhusa inayotumika.</p>
+    ${row('Walezi hai', stats.active)}
+    ${row('Mialiko inayokusubiri', stats.incoming)}
+    ${row('Mialiko uliyotuma', stats.outgoing)}
+    ${row('Wewe ni mlezi wa', stats.asGuardian)}
+    ${row('Uwasilishaji wa taarifa', 'Haijaunganishwa')}
+    ${note('Ruhusa za mlezi zinahifadhiwa kwenye kifaa hiki. Hakuna taarifa ya dharura inayotumwa kwa mlezi yeyote — hakuna seva iliyounganishwa.')}
+    ${actions('<button type="button" class="gh-btn gh-btn-primary" data-sheet-action="open-guardians">Fungua Walezi</button>')}
   `);
 }
 

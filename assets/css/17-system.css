@@ -1,0 +1,750 @@
+/* ==========================================================================
+   GuardHai · assets/css/17-system.css
+   GDS v1 — "Calm Signal" design language.
+
+   Every rule below is namespaced `gds-` on purpose: the app still carries the
+   older families (.glass-card, .item-row-card, .btn-gradient, .gh-health-*,
+   .gh-net-*). New and redesigned surfaces use GDS only, and sections migrate one
+   at a time. Same file, same vocabulary, no big-bang rewrite.
+
+   Rules of the language
+   1. Light by default. Colour is information, never decoration: green = a real
+      check passed, blue = reference/health, amber = not connected / sample,
+      red = emergency only.
+   2. One type scale (30 → 22 → 17 → 15 → 14 → 12.6 → 11.6). Nothing below 11.6.
+   3. Hairline borders, not heavy shadows. One radius ladder (12 / 18 / 24).
+   4. Every status is a sentence, not a coloured dot alone.
+   5. Motion is short and only on entry (180 ms) and honours reduced-motion.
+   ========================================================================== */
+
+/* ------------------------------------------------------------------ tokens */
+:root {
+    /* neutral ground */
+    --gds-canvas:      #F7FAF9;
+    --gds-surface:     #FFFFFF;
+    --gds-surface-2:   #F2F7F5;
+    --gds-line:        #E3EDE9;
+    --gds-line-soft:   #EEF5F2;
+    --gds-ink:         #0A1F2A;
+    --gds-text:        #22323D;
+    --gds-muted:       #64757F;
+    --gds-faint:       #8B9AA3;
+
+    /* meaning */
+    --gds-green:       #0F8A6A;
+    --gds-green-ink:   #07604A;
+    --gds-green-soft:  #E8F5EF;
+    --gds-blue:        #1B54C8;
+    --gds-blue-ink:    #173F94;
+    --gds-blue-soft:   #EAF1FD;
+    --gds-red:         #C42020;
+    --gds-red-ink:     #8E1414;
+    --gds-red-soft:    #FDEDEC;
+    --gds-amber:       #8A5B00;
+    --gds-amber-soft:  #FBF3E0;
+
+    /* geometry */
+    --gds-r-sm: 12px;
+    --gds-r-md: 18px;
+    --gds-r-lg: 24px;
+    --gds-r-pill: 999px;
+    --gds-shadow: 0 1px 2px rgba(9, 30, 46, .04), 0 14px 28px -24px rgba(9, 30, 46, .45);
+    --gds-shadow-lift: 0 2px 4px rgba(9, 30, 46, .05), 0 18px 34px -22px rgba(9, 30, 46, .4);
+
+    /* type */
+    --gds-fs-display: 30px;
+    --gds-fs-h1: 22px;
+    --gds-fs-h2: 17px;
+    --gds-fs-h3: 15px;
+    --gds-fs-body: 14px;
+    --gds-fs-sm: 12.6px;
+    --gds-fs-xs: 11.6px;
+    --gds-lh: 1.5;
+
+    /* rhythm — 4 pt */
+    --gds-1: 4px;  --gds-2: 8px;  --gds-3: 12px;
+    --gds-4: 16px; --gds-5: 20px; --gds-6: 24px;
+    --gds-7: 32px; --gds-8: 40px;
+
+    /* motion */
+    --gds-ease: cubic-bezier(.22, .61, .36, 1);
+    --gds-dur: 180ms;
+
+    --gds-tap: 44px;
+}
+
+/* -------------------------------------------------------------------- page */
+.gds-page {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 var(--gds-4) calc(var(--gh-tap) + 92px);
+    font-family: var(--gh-font);
+    color: var(--gds-text);
+    font-size: var(--gds-fs-body);
+    line-height: var(--gds-lh);
+}
+
+.gds-page * { box-sizing: border-box; }
+
+.gds-stack { display: flex; flex-direction: column; gap: var(--gds-3); }
+.gds-stack.is-tight { gap: var(--gds-2); }
+.gds-stack.is-loose { gap: var(--gds-5); }
+
+/* -------------------------------------------------------------------- head */
+.gds-head {
+    display: flex;
+    align-items: center;
+    gap: var(--gds-3);
+    padding: var(--gds-3);
+    margin: 0 0 var(--gds-3);
+    border: 1px solid var(--gh-grad-band-line);
+    border-radius: var(--gds-r-md);
+    background: var(--gh-grad-band);
+}
+
+.gds-head-mark {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex: none;
+    border-radius: var(--gds-r-sm);
+    background: var(--gds-surface);
+    color: var(--gds-green);
+    border: 1px solid var(--gds-line);
+}
+
+.gds-head-mark .ic { width: 20px; height: 20px; }
+.gds-head-copy { min-width: 0; flex: 1 1 auto; }
+.gds-head-title {
+    margin: 0;
+    font-size: var(--gds-fs-h1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+    font-weight: 800;
+    color: var(--gds-ink);
+    letter-spacing: -.2px;
+}
+.gds-head-sub {
+    margin: 2px 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--gds-fs-sm);
+    color: var(--gds-muted);
+}
+.gds-head-actions { display: flex; align-items: center; gap: var(--gds-2); flex: none; }
+
+.gds-back {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex: none;
+    border-radius: var(--gds-r-sm);
+    border: 1px solid var(--gds-line);
+    background: var(--gds-surface);
+    color: var(--gds-ink);
+    cursor: pointer;
+}
+.gds-back .ic { width: 18px; height: 18px; }
+
+/* ------------------------------------------------------------------ section */
+.gds-sect {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--gds-3);
+    margin: var(--gds-5) 0 var(--gds-2);
+}
+.gds-sect:first-child { margin-top: 0; }
+.gds-sect-copy { min-width: 0; }
+.gds-eyebrow {
+    display: block;
+    font-size: var(--gds-fs-xs);
+    font-weight: 800;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    color: var(--gds-green);
+    margin-bottom: 2px;
+}
+.gds-sect-title {
+    margin: 0;
+    font-size: var(--gds-fs-h2);
+    font-weight: 800;
+    color: var(--gds-ink);
+    line-height: 1.25;
+}
+.gds-sect-sub {
+    margin: 3px 0 0;
+    font-size: var(--gds-fs-sm);
+    color: var(--gds-muted);
+}
+
+/* --------------------------------------------------------------------- card */
+.gds-card {
+    background: var(--gds-surface);
+    border: 1px solid var(--gds-line);
+    border-radius: var(--gds-r-md);
+    box-shadow: var(--gds-shadow);
+    overflow: hidden;
+}
+.gds-card.is-flush { box-shadow: none; }
+.gds-card.is-lift:hover { box-shadow: var(--gds-shadow-lift); }
+
+.gds-card-head {
+    display: flex;
+    align-items: center;
+    gap: var(--gds-3);
+    padding: var(--gds-3) var(--gds-4);
+    border-bottom: 1px solid var(--gds-line-soft);
+    background: var(--gds-surface);
+}
+.gds-card-head.is-plain { border-bottom: 0; }
+.gds-card-title {
+    margin: 0;
+    font-size: var(--gds-fs-h3);
+    font-weight: 800;
+    color: var(--gds-ink);
+    min-width: 0;
+    flex: 1;
+}
+.gds-card-sub {
+    display: block;
+    font-size: var(--gds-fs-sm);
+    font-weight: 500;
+    color: var(--gds-muted);
+    margin-top: 2px;
+}
+.gds-card-body { padding: var(--gds-4); }
+.gds-card-body.is-tight { padding: var(--gds-3); }
+.gds-card-foot {
+    padding: var(--gds-3) var(--gds-4);
+    border-top: 1px solid var(--gds-line-soft);
+    background: var(--gds-surface-2);
+}
+
+/* accent edges — one 3px rule on the leading edge of a card that carries a role */
+.gds-card.is-emergency { border-color: #F3C9C6; }
+.gds-card.is-emergency .gds-card-head { background: var(--gds-red-soft); }
+.gds-card.is-info .gds-card-head { background: var(--gds-blue-soft); }
+.gds-card.is-quiet { background: var(--gds-surface-2); box-shadow: none; }
+
+/* ---------------------------------------------------------------- icon tile */
+.gds-tile {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border-radius: var(--gds-r-sm);
+    background: var(--gds-green-soft);
+    color: var(--gds-green-ink);
+}
+.gds-tile .ic { width: 20px; height: 20px; }
+.gds-tile.is-blue { background: var(--gds-blue-soft); color: var(--gds-blue-ink); }
+.gds-tile.is-red { background: var(--gds-red-soft); color: var(--gds-red-ink); }
+.gds-tile.is-amber { background: var(--gds-amber-soft); color: var(--gds-amber); }
+.gds-tile.is-muted { background: var(--gds-surface-2); color: var(--gds-muted); }
+.gds-tile.is-sm { width: 34px; height: 34px; border-radius: 10px; }
+.gds-tile.is-sm .ic { width: 17px; height: 17px; }
+
+/* --------------------------------------------------------------------- rows */
+.gds-rows { display: flex; flex-direction: column; }
+.gds-row {
+    display: flex;
+    align-items: center;
+    gap: var(--gds-3);
+    width: 100%;
+    padding: var(--gds-3) var(--gds-4);
+    border: 0;
+    border-bottom: 1px solid var(--gds-line-soft);
+    background: transparent;
+    text-align: left;
+    font-family: var(--gh-font);
+    font-size: var(--gds-fs-body);
+    color: inherit;
+    cursor: pointer;
+    transition: background var(--gds-dur) var(--gds-ease);
+}
+.gds-row:last-child { border-bottom: 0; }
+.gds-row:hover { background: var(--gds-surface-2); }
+.gds-row.is-static { cursor: default; }
+.gds-row.is-static:hover { background: transparent; }
+.gds-row.is-tall { align-items: flex-start; }
+
+.gds-row-copy { flex: 1; min-width: 0; }
+.gds-row-title {
+    display: block;
+    font-size: var(--gds-fs-body);
+    font-weight: 700;
+    color: var(--gds-ink);
+    line-height: 1.35;
+}
+.gds-row-note {
+    display: block;
+    font-size: var(--gds-fs-sm);
+    color: var(--gds-muted);
+    margin-top: 2px;
+    line-height: 1.45;
+}
+.gds-row-right { display: flex; align-items: center; gap: var(--gds-2); flex: none; }
+.gds-row-right .ic { width: 16px; height: 16px; color: var(--gds-faint); }
+
+/* -------------------------------------------------------------------- chips */
+.gds-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: var(--gds-r-pill);
+    border: 1px solid transparent;
+    font-size: var(--gds-fs-xs);
+    font-weight: 700;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+.gds-chip .ic { width: 12px; height: 12px; }
+.gds-chip.is-ok { background: var(--gds-green-soft); color: var(--gds-green-ink); border-color: #CDE9DE; }
+.gds-chip.is-info { background: var(--gds-blue-soft); color: var(--gds-blue-ink); border-color: #D3E0FA; }
+.gds-chip.is-warn { background: var(--gds-amber-soft); color: var(--gds-amber); border-color: #EFDFB8; }
+.gds-chip.is-danger { background: var(--gds-red-soft); color: var(--gds-red-ink); border-color: #F3C9C6; }
+.gds-chip.is-muted { background: var(--gds-surface-2); color: var(--gds-muted); border-color: var(--gds-line); }
+
+/* ------------------------------------------------------------------ buttons */
+.gds-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gds-2);
+    min-height: var(--gds-tap);
+    padding: 0 var(--gds-4);
+    border-radius: var(--gds-r-pill);
+    border: 1px solid var(--gds-line);
+    background: var(--gds-surface);
+    color: var(--gds-ink);
+    font-family: var(--gh-font);
+    font-size: var(--gds-fs-body);
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform var(--gds-dur) var(--gds-ease), background var(--gds-dur) var(--gds-ease),
+                box-shadow var(--gds-dur) var(--gds-ease);
+}
+.gds-btn .ic { width: 18px; height: 18px; }
+.gds-btn:active { transform: scale(.985); }
+.gds-btn.is-primary { background: var(--gds-green); border-color: var(--gds-green); color: #fff; }
+.gds-btn.is-primary:hover { background: var(--gds-green-ink); border-color: var(--gds-green-ink); }
+.gds-btn.is-blue { background: var(--gds-blue); border-color: var(--gds-blue); color: #fff; }
+.gds-btn.is-danger { background: var(--gds-red); border-color: var(--gds-red); color: #fff; }
+.gds-btn.is-danger-soft { background: var(--gds-red-soft); border-color: #F3C9C6; color: var(--gds-red-ink); }
+.gds-btn.is-ghost { background: transparent; border-color: transparent; color: var(--gds-green-ink); }
+.gds-btn.is-ghost:hover { background: var(--gds-green-soft); }
+.gds-btn.is-sm { min-height: 36px; padding: 0 var(--gds-3); font-size: var(--gds-fs-sm); }
+.gds-btn.is-sm .ic { width: 15px; height: 15px; }
+.gds-btn.is-block { width: 100%; }
+.gds-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.gds-btnrow { display: flex; flex-wrap: wrap; gap: var(--gds-2); }
+
+/* --------------------------------------------------------------------- tabs */
+.gds-tabs {
+    display: flex;
+    gap: var(--gds-2);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 0 var(--gds-2);
+    margin: 0 0 var(--gds-3);
+    scroll-behavior: smooth;
+}
+.gds-tabs::-webkit-scrollbar { display: none; }
+.gds-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+    min-height: 40px;
+    padding: 0 var(--gds-4);
+    border-radius: var(--gds-r-pill);
+    border: 1px solid var(--gds-line);
+    background: var(--gds-surface);
+    color: var(--gds-text);
+    font-family: var(--gh-font);
+    font-size: var(--gds-fs-sm);
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background var(--gds-dur) var(--gds-ease), color var(--gds-dur) var(--gds-ease),
+                border-color var(--gds-dur) var(--gds-ease);
+}
+.gds-tab .ic { width: 16px; height: 16px; }
+.gds-tab[aria-selected="true"] {
+    background: var(--gds-green);
+    border-color: var(--gds-green);
+    color: #fff;
+}
+
+/* -------------------------------------------------------------------- stats */
+.gds-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gds-2);
+}
+.gds-stat {
+    padding: var(--gds-3);
+    border: 1px solid var(--gds-line);
+    border-radius: var(--gds-r-sm);
+    background: var(--gds-surface);
+}
+.gds-stat-value {
+    display: block;
+    font-size: var(--gds-fs-h1);
+    font-weight: 800;
+    color: var(--gds-ink);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.4px;
+}
+.gds-stat-label {
+    display: block;
+    margin-top: 3px;
+    font-size: var(--gds-fs-xs);
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: var(--gds-muted);
+}
+.gds-stat-note { display: block; margin-top: 2px; font-size: var(--gds-fs-sm); color: var(--gds-faint); }
+
+/* ------------------------------------------------------------------- ledger */
+/* The honesty strip: says where the data lives and what is not connected.
+   Never a decoration — every chip is a fact read at paint time. */
+.gds-ledger {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: var(--gds-2) var(--gds-3);
+    border: 1px dashed var(--gds-line);
+    border-radius: var(--gds-r-sm);
+    background: var(--gds-surface-2);
+}
+.gds-ledger .gds-chip { background: var(--gds-surface); }
+
+/* -------------------------------------------------------------------- meter */
+.gds-meter {
+    height: 8px;
+    border-radius: var(--gds-r-pill);
+    background: var(--gds-surface-2);
+    overflow: hidden;
+}
+.gds-meter-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--gds-green);
+    transition: width 260ms var(--gds-ease);
+}
+.gds-meter-fill.is-warn { background: var(--gds-amber); }
+.gds-meter-fill.is-danger { background: var(--gds-red); }
+
+/* ----------------------------------------------------------------- timeline */
+.gds-timeline { list-style: none; margin: 0; padding: 0 0 0 var(--gds-4); position: relative; }
+.gds-timeline::before {
+    content: '';
+    position: absolute;
+    left: 5px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: var(--gds-line);
+    border-radius: 2px;
+}
+.gds-tl { position: relative; padding: 0 0 var(--gds-4) 0; }
+.gds-tl:last-child { padding-bottom: 0; }
+.gds-tl::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--gds-4) + 1px);
+    top: 5px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--gds-surface);
+    border: 2px solid var(--gds-green);
+}
+.gds-tl.is-warn::before { border-color: var(--gds-amber); }
+.gds-tl.is-danger::before { border-color: var(--gds-red); }
+.gds-tl.is-muted::before { border-color: var(--gds-line); }
+.gds-tl-title { display: block; font-size: var(--gds-fs-body); font-weight: 700; color: var(--gds-ink); }
+.gds-tl-meta { display: block; font-size: var(--gds-fs-sm); color: var(--gds-muted); margin-top: 1px; }
+
+/* -------------------------------------------------------------------- forms */
+.gds-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: var(--gds-3); }
+.gds-label {
+    font-size: var(--gds-fs-sm);
+    font-weight: 700;
+    color: var(--gds-ink);
+}
+.gds-input,
+.gds-select,
+.gds-textarea {
+    width: 100%;
+    min-height: var(--gds-tap);
+    padding: 10px var(--gds-3);
+    border: 1px solid var(--gds-line);
+    border-radius: var(--gds-r-sm);
+    background: var(--gds-surface);
+    color: var(--gds-text);
+    font-family: var(--gh-font);
+    font-size: var(--gds-fs-body);
+    outline: none;
+    transition: border-color var(--gds-dur) var(--gds-ease), box-shadow var(--gds-dur) var(--gds-ease);
+}
+.gds-textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+.gds-input:focus, .gds-select:focus, .gds-textarea:focus {
+    border-color: var(--gds-green);
+    box-shadow: 0 0 0 3px rgba(15, 138, 106, .16);
+}
+.gds-input[aria-invalid="true"], .gds-textarea[aria-invalid="true"] { border-color: var(--gds-red); }
+.gds-hint { font-size: var(--gds-fs-sm); color: var(--gds-muted); }
+.gds-error { font-size: var(--gds-fs-sm); color: var(--gds-red-ink); font-weight: 600; }
+
+/* switch */
+.gds-switch {
+    position: relative;
+    width: 48px; height: 28px;
+    flex: none;
+    border-radius: var(--gds-r-pill);
+    border: 1px solid var(--gds-line);
+    background: var(--gds-surface-2);
+    cursor: pointer;
+    transition: background var(--gds-dur) var(--gds-ease), border-color var(--gds-dur) var(--gds-ease);
+}
+.gds-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(9, 30, 46, .25);
+    transition: transform var(--gds-dur) var(--gds-ease);
+}
+.gds-switch[aria-checked="true"] { background: var(--gds-green); border-color: var(--gds-green); }
+.gds-switch[aria-checked="true"]::after { transform: translateX(20px); }
+
+/* ---------------------------------------------------------- empty / states */
+.gds-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--gds-2);
+    padding: var(--gds-6) var(--gds-4);
+    border: 1px dashed var(--gds-line);
+    border-radius: var(--gds-r-md);
+    background: var(--gds-surface);
+}
+.gds-empty .gds-tile { background: var(--gds-surface-2); color: var(--gds-muted); }
+.gds-empty-title { margin: 0; font-size: var(--gds-fs-h3); font-weight: 800; color: var(--gds-ink); }
+.gds-empty-note { margin: 0; font-size: var(--gds-fs-sm); color: var(--gds-muted); max-width: 34ch; }
+
+.gds-skeleton {
+    border-radius: var(--gds-r-sm);
+    background: linear-gradient(90deg, #EEF4F2 0%, #F7FAF9 50%, #EEF4F2 100%);
+    background-size: 200% 100%;
+    animation: gds-shimmer 1.4s linear infinite;
+    min-height: 14px;
+}
+@keyframes gds-shimmer { to { background-position: -200% 0; } }
+
+.gds-alert {
+    display: flex;
+    gap: var(--gds-3);
+    padding: var(--gds-3);
+    border-radius: var(--gds-r-sm);
+    border: 1px solid var(--gds-line);
+    background: var(--gds-surface);
+    font-size: var(--gds-fs-sm);
+    line-height: 1.5;
+    color: var(--gds-text);
+}
+.gds-alert .ic { width: 18px; height: 18px; flex: none; margin-top: 1px; }
+.gds-alert.is-warn { background: var(--gds-amber-soft); border-color: #EFDFB8; color: #6B4700; }
+.gds-alert.is-danger { background: var(--gds-red-soft); border-color: #F3C9C6; color: var(--gds-red-ink); }
+.gds-alert.is-info { background: var(--gds-blue-soft); border-color: #D3E0FA; color: var(--gds-blue-ink); }
+.gds-alert.is-ok { background: var(--gds-green-soft); border-color: #CDE9DE; color: var(--gds-green-ink); }
+.gds-alert b { font-weight: 800; }
+
+/* --------------------------------------------------------------- dashboard */
+/* One column on a phone (a two-column tile grid on 390 px wraps every word),
+   two columns from 720 px up. `.is-mobile-2` is the exception: a short chooser
+   with two equal options reads better side by side. */
+.gds-grid { display: grid; gap: var(--gds-3); grid-template-columns: 1fr; }
+.gds-grid.is-mobile-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (min-width: 720px) {
+    .gds-grid.is-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* a section tile: one per Shield module on the dashboard */
+.gds-tilecard {
+    display: flex;
+    align-items: center;
+    gap: var(--gds-3);
+    width: 100%;
+    padding: var(--gds-3) var(--gds-4);
+    border: 1px solid var(--gds-line);
+    border-radius: var(--gds-r-md);
+    background: var(--gds-surface);
+    text-align: left;
+    font-family: var(--gh-font);
+    cursor: pointer;
+    transition: border-color var(--gds-dur) var(--gds-ease), box-shadow var(--gds-dur) var(--gds-ease);
+}
+.gds-tilecard:hover { border-color: #CFE3DB; box-shadow: var(--gds-shadow); }
+.gds-tilecard[aria-disabled="true"] { cursor: not-allowed; opacity: .72; }
+
+/* -------------------------------------------------------------------- SOS */
+.gds-emergency {
+    border-radius: var(--gds-r-md);
+    border: 1px solid #F3C9C6;
+    background: linear-gradient(180deg, #FFF7F6 0%, var(--gds-red-soft) 100%);
+    padding: var(--gds-4);
+}
+.gds-emergency-title {
+    display: flex; align-items: center; gap: var(--gds-2);
+    margin: 0;
+    font-size: var(--gds-fs-h2);
+    font-weight: 800;
+    color: var(--gds-red-ink);
+}
+.gds-emergency-title .ic { width: 20px; height: 20px; }
+
+/* big tap-to-call row — the fastest possible path on a phone */
+.gds-call {
+    display: flex;
+    align-items: center;
+    gap: var(--gds-3);
+    padding: var(--gds-3) var(--gds-4);
+    min-height: 64px;
+    border: 1px solid #F3C9C6;
+    border-radius: var(--gds-r-md);
+    background: var(--gds-surface);
+    text-decoration: none;
+    color: inherit;
+    transition: background var(--gds-dur) var(--gds-ease);
+}
+.gds-call:hover { background: #FFF8F7; }
+.gds-call-name { flex: 1; min-width: 0; font-size: var(--gds-fs-h3); font-weight: 700; color: var(--gds-ink); }
+.gds-call-num {
+    font-size: var(--gds-fs-h1);
+    font-weight: 800;
+    color: var(--gds-red-ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.5px;
+}
+
+/* two-mode chooser */
+.gds-mode {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gds-2);
+    padding: var(--gds-4);
+    border-radius: var(--gds-r-md);
+    border: 1px solid var(--gds-line);
+    background: var(--gds-surface);
+    text-align: left;
+    font-family: var(--gh-font);
+    cursor: pointer;
+    transition: border-color var(--gds-dur) var(--gds-ease), box-shadow var(--gds-dur) var(--gds-ease);
+}
+.gds-mode:hover { box-shadow: var(--gds-shadow); }
+.gds-mode.is-active { border-color: var(--gds-red); box-shadow: 0 0 0 3px rgba(196, 32, 32, .12); }
+.gds-mode.is-active.is-calm { border-color: var(--gds-amber); box-shadow: 0 0 0 3px rgba(138, 91, 0, .12); }
+.gds-mode-title { font-size: var(--gds-fs-h3); font-weight: 800; color: var(--gds-ink); }
+.gds-mode-note { font-size: var(--gds-fs-sm); color: var(--gds-muted); line-height: 1.45; }
+
+/* ------------------------------------------------------------------- table */
+.gds-table { width: 100%; border-collapse: collapse; font-size: var(--gds-fs-sm); }
+.gds-table th {
+    text-align: left;
+    font-size: var(--gds-fs-xs);
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: var(--gds-muted);
+    padding: var(--gds-2) var(--gds-3);
+    border-bottom: 1px solid var(--gds-line);
+}
+.gds-table td { padding: var(--gds-3); border-bottom: 1px solid var(--gds-line-soft); color: var(--gds-text); }
+.gds-table tr:last-child td { border-bottom: 0; }
+.gds-table td.is-num { font-variant-numeric: tabular-nums; text-align: right; }
+
+/* ------------------------------------------------------------------ avatar */
+.gds-avatar {
+    display: grid;
+    place-items: center;
+    width: 40px; height: 40px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--gds-green-soft);
+    color: var(--gds-green-ink);
+    font-weight: 800;
+    font-size: var(--gds-fs-sm);
+    overflow: hidden;
+}
+.gds-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* -------------------------------------------------------------- responsive */
+@media (min-width: 720px) {
+    .gds-page { padding-left: var(--gds-5); padding-right: var(--gds-5); }
+    .gds-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (min-width: 900px) {
+    /* an intentional desktop: two content columns, wider rhythm */
+    .gds-grid.is-dash { grid-template-columns: 1.35fr 1fr; align-items: start; }
+    .gds-grid.is-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .gds-page.is-wide { max-width: 1180px; }
+    .gds-row { padding: var(--gds-3) var(--gds-5); }
+    .gds-card-head { padding: var(--gds-3) var(--gds-5); }
+    .gds-card-body { padding: var(--gds-5); }
+}
+
+@media (min-width: 1280px) {
+    .gds-page { max-width: 1240px; }
+}
+
+/* Motion is a courtesy, never a requirement. */
+@media (prefers-reduced-motion: reduce) {
+    .gds-btn, .gds-row, .gds-tab, .gds-tilecard, .gds-switch, .gds-meter-fill, .gds-input, .gds-select, .gds-textarea {
+        transition: none !important;
+    }
+    .gds-skeleton { animation: none; }
+    .gds-tabs { scroll-behavior: auto; }
+}
+
+/* ============================================================== shell glue */
+/* `hidden` must always win over a display rule — the Shield views and the
+   Device Protection console rely on it. */
+[hidden] { display: none !important; }
+
+/* The redesigned pages are their own container: `.page-container` already
+   handles show/hide, GDS handles rhythm. */
+#shieldPage.gds-page,
+#sosPage.gds-page {
+    padding: 15px 15px 120px;
+}
+
+.gh-shield .gds-viewhead { margin: 0 0 var(--gds-3); }
+.gh-shield .gds-head + .gds-tabs { margin-top: var(--gds-2); }
+
+/* Device Protection keeps its own dense console; only its frame is GDS. */
+#shieldView-device > .shield-pillars-grid { margin-top: var(--gds-2); }
+
+/* the SOS page is a single calm column even on a wide screen */
+#sosPage .gds-stack,
+#sosPage .gds-grid { max-width: 560px; }
+
+#sosPage .gds-head { border-color: #F3C9C6; background: linear-gradient(180deg, #FFF7F6 0%, #FDEDEC 100%); }
